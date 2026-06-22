@@ -201,7 +201,8 @@ function LaptopDemo() {
 
     const typeNextWord = () => {
       if (wordIdx < wordsToType.length) {
-        setVisibleRawWords((prev) => [...prev, wordsToType[wordIdx]]);
+        const word = wordsToType[wordIdx];
+        setVisibleRawWords((prev) => [...prev, word]);
         wordIdx++;
         const delay = 160 + Math.random() * 80;
         const tId = setTimeout(typeNextWord, delay);
@@ -217,7 +218,7 @@ function LaptopDemo() {
       setShowStrikes(true);
 
       const tId = setTimeout(() => {
-        setVisibleRawWords((prev) => prev.filter((w) => !w.isFiller));
+        setVisibleRawWords((prev) => prev.filter((w) => w && !w.isFiller));
         setShowStrikes(false);
 
         const tId2 = setTimeout(startInjecting, 700);
@@ -735,6 +736,7 @@ function LaptopDemo() {
                   {/* Raw word blocks with strikethrough logic */}
                   {visibleRawWords.length === 0 && <span style={{ color: "#a29b91" }}>Initializing speech capture...</span>}
                   {visibleRawWords.map((w, idx) => {
+                    if (!w) return null;
                     const isWordFiller = w.isFiller;
                     const showStrike = showStrikes && isWordFiller;
                     return (
