@@ -440,3 +440,485 @@ body {
 .hero-loaded .strike-after::after {
   animation: strike 0.8s cubic-bezier(0.7, 0, 0.3, 1) 1.2s forwards;
 }
+
+/* ===================== LAPTOP DEMO MOCKUP ===================== */
+
+.laptop-wrapper {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.laptop-lid {
+  background: #252423;
+  border-radius: 20px 20px 0 0;
+  border: 4px solid #1c1b1a;
+  border-bottom: none;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.15), 0 20px 50px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 62.5%; /* 16:10 aspect ratio */
+  transform: rotateX(0deg);
+  transform-origin: bottom center;
+  transition: transform 0.6s ease;
+  z-index: 2;
+}
+
+.laptop-screen-content {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  background: #1e1e1e;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.laptop-notch {
+  background: #1c1b1a;
+  border-radius: 0 0 5px 5px;
+  height: 10px;
+  left: 50%;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  width: 90px;
+  z-index: 10;
+}
+
+.laptop-glare {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+  z-index: 8;
+}
+
+.laptop-base {
+  background: #c2c0bd;
+  border-radius: 0 0 16px 16px;
+  border: 2px solid #a6a4a1;
+  border-top: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 24px;
+  position: relative;
+  width: 108%;
+  margin-left: -4%;
+  z-index: 3;
+}
+
+.laptop-base::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.laptop-base::after {
+  content: '';
+  background: #e2dfdb;
+  border-radius: 0 0 12px 12px;
+  height: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.laptop-trackpad {
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 4px 4px 8px 8px;
+  height: 12px;
+  left: 50%;
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+  width: 110px;
+}
+
+.laptop-lip {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 4px;
+  background: #8e8c89;
+  border-radius: 0 0 4px 4px;
+}
+
+/* ===================== MOCK APPLICATIONS ===================== */
+
+.mock-window-header {
+  height: 38px;
+  background: #2a2826;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mock-window-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.mock-window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mock-window-dot.red { background: #ff5f56; }
+.mock-window-dot.yellow { background: #ffbd2e; }
+.mock-window-dot.green { background: #27c93f; }
+
+.mock-window-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 20px;
+}
+
+.mock-window-tab {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-bottom: none;
+  padding: 5px 14px;
+  border-radius: 6px 6px 0 0;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  color: #a29b91;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mock-window-tab.active {
+  background: #1e1e1e;
+  color: #fdf6f0;
+}
+
+.mock-app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* SLACK MOCKUP */
+.slack-sidebar {
+  width: 160px;
+  background: #3f0e40;
+  color: #bcabbd;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px;
+  gap: 12px;
+  font-size: 11.5px;
+  border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+.slack-channels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.slack-channel-item {
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slack-channel-item.active {
+  background: #1164a3;
+  color: #fff;
+}
+
+.slack-content {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  color: #26231F;
+}
+
+.slack-messages {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.slack-message-bubble {
+  display: flex;
+  gap: 10px;
+}
+
+.slack-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #e07b39;
+  flex-shrink: 0;
+}
+
+.slack-msg-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.slack-sender {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.slack-msg-body {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #3a3a3a;
+}
+
+.slack-input-container {
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid #ece8e2;
+}
+
+.slack-input-box {
+  border: 1px solid #ccd5e0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #26231F;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: #fff;
+}
+
+/* NOTION MOCKUP */
+.notion-sidebar {
+  width: 170px;
+  background: #f7f5f3;
+  color: #4a453e;
+  border-right: 1px solid #edebe9;
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.notion-sidebar-item {
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #5f5a54;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.notion-sidebar-item.active {
+  background: #edeae6;
+  color: #26231F;
+  font-weight: 600;
+}
+
+.notion-content {
+  flex: 1;
+  background: #fff;
+  color: #26231F;
+  padding: 30px 48px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notion-title {
+  font-family: var(--font-bricolage), sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #26231F;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #edebe9;
+  padding-bottom: 8px;
+}
+
+.notion-text-block {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.notion-editor-input {
+  min-height: 24px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #1a1a1a;
+  position: relative;
+  outline: none;
+}
+
+/* VS CODE MOCKUP */
+.vscode-sidebar {
+  width: 150px;
+  background: #252526;
+  color: #858585;
+  border-right: 1px solid #3c3c3c;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+}
+
+.vscode-sidebar-item {
+  padding: 4px 6px;
+  border-radius: 3px;
+  color: #8c8c8c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vscode-sidebar-item.active {
+  background: #37373d;
+  color: #fff;
+}
+
+.vscode-content {
+  flex: 1;
+  background: #1e1e1e;
+  padding: 20px 24px;
+  overflow-y: auto;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #d4d4d4;
+  position: relative;
+}
+
+.vscode-line {
+  display: flex;
+  gap: 16px;
+}
+
+.vscode-line-num {
+  width: 24px;
+  color: #858585;
+  text-align: right;
+  user-select: none;
+}
+
+.vscode-code {
+  flex: 1;
+}
+
+.vscode-keyword { color: #569cd6; }
+.vscode-string { color: #ce9178; }
+.vscode-comment { color: #6a9955; }
+.vscode-function { color: #dcdcaa; }
+.vscode-editor-cursor-inline {
+  color: #ce9178;
+  position: relative;
+}
+
+/* CORE TYPING CURSOR */
+.demo-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+/* SCREEN LISUP WIDGET */
+.mock-lisup-widget {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(236, 232, 226, 0.7);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+  padding: 12px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+
+.mock-lisup-widget.hidden {
+  transform: translateY(110%) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.widget-wave-bar {
+  flex: 1;
+  background: var(--accent);
+  border-radius: 1px;
+  height: 4px;
+  transform-origin: center;
+}
+
+.widget-highlight-word {
+  color: #C9A48A;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.widget-highlight-word.strike {
+  color: var(--accent);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Control tabs for switching simulation sentence options */
+.demo-control-tab {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.demo-control-tab.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+}
+

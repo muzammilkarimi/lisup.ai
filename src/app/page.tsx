@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { 
   SiNotion, 
   SiSlack, 
@@ -90,7 +90,717 @@ const TYPER_LINES = [
   "Translate this note into Spanish.",
 ];
 
+// ===================== INTERACTIVE LAPTOP SIMULATION DATA =====================
+const DEMO_SENTENCES = [
+  {
+    id: 0,
+    label: "Casual Speech (Slack)",
+    app: "slack" as const,
+    raw: [
+      { text: "um ", isFiller: true },
+      { text: "so ", isFiller: false },
+      { text: "i ", isFiller: false },
+      { text: "think ", isFiller: false },
+      { text: "we ", isFiller: false },
+      { text: "should ", isFiller: false },
+      { text: "like ", isFiller: true },
+      { text: "ship ", isFiller: false },
+      { text: "the ", isFiller: false },
+      { text: "redesign ", isFiller: false },
+      { text: "by ", isFiller: false },
+      { text: "friday.", isFiller: false }
+    ],
+    clean: "so i think we should ship the redesign by friday."
+  },
+  {
+    id: 1,
+    label: "Formal Speech (Notion)",
+    app: "notion" as const,
+    raw: [
+      { text: "uh ", isFiller: true },
+      { text: "actually ", isFiller: false },
+      { text: "i ", isFiller: false },
+      { text: "was ", isFiller: false },
+      { text: "thinking ", isFiller: false },
+      { text: "we ", isFiller: false },
+      { text: "should ", isFiller: false },
+      { text: "maybe ", isFiller: true },
+      { text: "push ", isFiller: false },
+      { text: "the ", isFiller: false },
+      { text: "sync ", isFiller: false },
+      { text: "to ", isFiller: false },
+      { text: "11:30.", isFiller: false }
+    ],
+    clean: "actually i was thinking we should push the sync to 11:30."
+  },
+  {
+    id: 2,
+    label: "Coding Speech (VS Code)",
+    app: "vscode" as const,
+    raw: [
+      { text: "so ", isFiller: true },
+      { text: "basically ", isFiller: true },
+      { text: "we ", isFiller: false },
+      { text: "should ", isFiller: false },
+      { text: "write ", isFiller: false },
+      { text: "a ", isFiller: false },
+      { text: "unit ", isFiller: false },
+      { text: "test ", isFiller: false },
+      { text: "here ", isFiller: false },
+      { text: "like ", isFiller: true },
+      { text: "right ", isFiller: false },
+      { text: "now.", isFiller: false }
+    ],
+    clean: "we should write a unit test here right now."
+  }
+];
+
+function LaptopDemo() {
+  const [activeApp, setActiveApp] = useState<"slack" | "notion" | "vscode">("slack");
+  const [activeSentenceIdx, setActiveSentenceIdx] = useState(0);
+  const [animState, setAnimState] = useState<"idle" | "listening" | "cleaning" | "injecting" | "done">("idle");
+  const [visibleRawWords, setVisibleRawWords] = useState<{ text: string; isFiller: boolean }[]>([]);
+  const [showStrikes, setShowStrikes] = useState(false);
+  const [injectedText, setInjectedText] = useState("");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [autoplay, setAutoplay] = useState(true);
+  const [waveHeights, setWaveHeights] = useState<number[]>(Array(15).fill(8));
+
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+
+  const clearAllTimeouts = useCallback(() => {
+    timeoutsRef.current.forEach((t) => clearTimeout(t));
+    timeoutsRef.current = [];
+  }, []);
+
+  // Wave heights rendering for Listening state
+  useEffect(() => {
+    if (animState !== "listening") {
+      setWaveHeights(Array(15).fill(4));
+      return;
+    }
+    const interval = setInterval(() => {
+      setWaveHeights(Array.from({ length: 15 }, () => 4 + Math.random() * 24));
+    }, 90);
+    return () => clearInterval(interval);
+  }, [animState]);
+
+  // Main animation engine
+  const startDemo = useCallback((sentenceIdx: number, appType: "slack" | "notion" | "vscode") => {
+    clearAllTimeouts();
+    setInjectedText("");
+    setVisibleRawWords([]);
+    setShowStrikes(false);
+    
+    const sentence = DEMO_SENTENCES[sentenceIdx];
+    setAnimState("listening");
+    setIsPlaying(true);
+
+    let wordIdx = 0;
+    const wordsToType = sentence.raw;
+
+    const typeNextWord = () => {
+      if (wordIdx < wordsToType.length) {
+        setVisibleRawWords((prev) => [...prev, wordsToType[wordIdx]]);
+        wordIdx++;
+        const delay = 160 + Math.random() * 80;
+        const tId = setTimeout(typeNextWord, delay);
+        timeoutsRef.current.push(tId);
+      } else {
+        const tId = setTimeout(startCleaning, 600);
+        timeoutsRef.current.push(tId);
+      }
+    };
+
+    const startCleaning = () => {
+      setAnimState("cleaning");
+      setShowStrikes(true);
+
+      const tId = setTimeout(() => {
+        setVisibleRawWords((prev) => prev.filter((w) => !w.isFiller));
+        setShowStrikes(false);
+
+        const tId2 = setTimeout(startInjecting, 700);
+        timeoutsRef.current.push(tId2);
+      }, 1000);
+      timeoutsRef.current.push(tId);
+    };
+
+    const startInjecting = () => {
+      setAnimState("injecting");
+
+      let charIdx = 0;
+      const cleanText = sentence.clean;
+
+      const typeChar = () => {
+        if (charIdx <= cleanText.length) {
+          setInjectedText(cleanText.substring(0, charIdx));
+          charIdx++;
+          const tId = setTimeout(typeChar, 35 + Math.random() * 20);
+          timeoutsRef.current.push(tId);
+        } else {
+          const tId = setTimeout(finishDemo, 600);
+          timeoutsRef.current.push(tId);
+        }
+      };
+
+      typeChar();
+    };
+
+    const finishDemo = () => {
+      setAnimState("done");
+
+      const tId = setTimeout(() => {
+        setAnimState("idle");
+        setIsPlaying(false);
+      }, 2200);
+      timeoutsRef.current.push(tId);
+    };
+
+    const startTimeout = setTimeout(typeNextWord, 400);
+    timeoutsRef.current.push(startTimeout);
+
+  }, [clearAllTimeouts]);
+
+  // Autoplay handler
+  useEffect(() => {
+    if (!autoplay || isPlaying) return;
+
+    const tId = setTimeout(() => {
+      const nextIdx = (activeSentenceIdx + 1) % DEMO_SENTENCES.length;
+      setActiveSentenceIdx(nextIdx);
+      const nextSentence = DEMO_SENTENCES[nextIdx];
+      setActiveApp(nextSentence.app);
+      startDemo(nextIdx, nextSentence.app);
+    }, 2800);
+
+    return () => clearTimeout(tId);
+  }, [autoplay, isPlaying, activeSentenceIdx, startDemo]);
+
+  // External trigger for "Watch it work" click
+  useEffect(() => {
+    const handleExternalTrigger = () => {
+      setAutoplay(false);
+      const sentence = DEMO_SENTENCES[activeSentenceIdx];
+      setActiveApp(sentence.app);
+      startDemo(activeSentenceIdx, sentence.app);
+    };
+    window.addEventListener("start-laptop-demo", handleExternalTrigger);
+    return () => {
+      window.removeEventListener("start-laptop-demo", handleExternalTrigger);
+    };
+  }, [activeSentenceIdx, startDemo]);
+
+  // Clean up timeouts on unmount
+  useEffect(() => {
+    return () => clearAllTimeouts();
+  }, [clearAllTimeouts]);
+
+  const handleAppChange = (app: "slack" | "notion" | "vscode") => {
+    setAutoplay(false);
+    setActiveApp(app);
+    const sIdx = DEMO_SENTENCES.findIndex((s) => s.app === app);
+    const useIdx = sIdx !== -1 ? sIdx : 0;
+    setActiveSentenceIdx(useIdx);
+    startDemo(useIdx, app);
+  };
+
+  const handleSentenceChange = (idx: number) => {
+    setAutoplay(false);
+    setActiveSentenceIdx(idx);
+    const sentence = DEMO_SENTENCES[idx];
+    setActiveApp(sentence.app);
+    startDemo(idx, sentence.app);
+  };
+
+  const handleManualPlay = () => {
+    setAutoplay(false);
+    startDemo(activeSentenceIdx, activeApp);
+  };
+
+  return (
+    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+      {/* SECTION HEADER */}
+      <div
+        data-reveal
+        style={{
+          transition: "opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+          gap: "16px",
+          marginBottom: "50px",
+        }}
+      >
+        <span
+          className="font-jetbrains"
+          style={{
+            fontSize: "12px",
+            color: "#E07B39",
+            fontWeight: 600,
+            background: "rgba(224,123,57,0.08)",
+            padding: "6px 14px",
+            borderRadius: "999px",
+            letterSpacing: ".06em",
+          }}
+        >
+          LIVE PRODUCT SIMULATOR
+        </span>
+        <h2
+          className="font-bricolage"
+          style={{
+            fontWeight: 800,
+            fontSize: "clamp(34px, 5vw, 50px)",
+            lineHeight: 1.05,
+            letterSpacing: "-.03em",
+            color: "#26231F",
+            margin: 0,
+            maxWidth: "680px",
+          }}
+        >
+          Watch voice turn to text <span style={{ color: "#E07B39" }}>everywhere</span> you write
+        </h2>
+        <p
+          style={{
+            fontSize: "16.5px",
+            color: "#6B6560",
+            maxWidth: "520px",
+            lineHeight: 1.5,
+            margin: 0,
+          }}
+        >
+          Select an application below, or click any voice script to see Lisup filter fillers and type directly in real-time.
+        </p>
+      </div>
+
+      {/* TABS & CONTROLS ROW */}
+      <div
+        data-reveal
+        style={{
+          transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "30px",
+          marginBottom: "38px",
+        }}
+      >
+        {/* App Switcher Tabs */}
+        <div style={{ display: "flex", background: "#f2f0ec", padding: "4px", borderRadius: "12px", border: "1px solid #edebe7" }}>
+          <button
+            onClick={() => handleAppChange("slack")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              border: "none",
+              background: activeApp === "slack" ? "#fff" : "transparent",
+              color: activeApp === "slack" ? "#26231F" : "#A29B91",
+              fontSize: "13px",
+              fontWeight: 600,
+              padding: "8px 16px",
+              borderRadius: "9px",
+              cursor: "pointer",
+              boxShadow: activeApp === "slack" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              transition: "all 0.2s",
+            }}
+          >
+            <SiSlack size={14} color={activeApp === "slack" ? "#E07B39" : "#A29B91"} />
+            Slack
+          </button>
+          <button
+            onClick={() => handleAppChange("notion")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              border: "none",
+              background: activeApp === "notion" ? "#fff" : "transparent",
+              color: activeApp === "notion" ? "#26231F" : "#A29B91",
+              fontSize: "13px",
+              fontWeight: 600,
+              padding: "8px 16px",
+              borderRadius: "9px",
+              cursor: "pointer",
+              boxShadow: activeApp === "notion" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              transition: "all 0.2s",
+            }}
+          >
+            <SiNotion size={14} color={activeApp === "notion" ? "#1A1A1A" : "#A29B91"} />
+            Notion
+          </button>
+          <button
+            onClick={() => handleAppChange("vscode")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              border: "none",
+              background: activeApp === "vscode" ? "#fff" : "transparent",
+              color: activeApp === "vscode" ? "#26231F" : "#A29B91",
+              fontSize: "13px",
+              fontWeight: 600,
+              padding: "8px 16px",
+              borderRadius: "9px",
+              cursor: "pointer",
+              boxShadow: activeApp === "vscode" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+              transition: "all 0.2s",
+            }}
+          >
+            <VscVscode size={14} color={activeApp === "vscode" ? "#007acc" : "#A29B91"} />
+            VS Code
+          </button>
+        </div>
+
+        {/* Script Selection */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+          <span className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", fontWeight: 600, marginRight: "4px" }}>
+            SPEECH SCRIPT:
+          </span>
+          {DEMO_SENTENCES.map((s, idx) => (
+            <button
+              key={s.id}
+              onClick={() => handleSentenceChange(idx)}
+              className={`demo-control-tab ${activeSentenceIdx === idx ? "active" : ""}`}
+              style={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "#6B6560",
+                background: "#fff",
+                border: "1px solid #ECE8E2",
+                padding: "8px 14px",
+                borderRadius: "999px",
+                cursor: "pointer",
+              }}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Play/Autoplay controls */}
+        <div style={{ display: "flex", alignItems: "center", gap: "14px", borderLeft: "1px solid #ECE8E2", paddingLeft: "20px" }}>
+          <button
+            onClick={handleManualPlay}
+            disabled={isPlaying}
+            style={{
+              background: isPlaying ? "#EDE8E2" : "#1A1A1A",
+              color: isPlaying ? "#A29B91" : "#fff",
+              border: "none",
+              fontSize: "12.5px",
+              fontWeight: 700,
+              padding: "8px 16px",
+              borderRadius: "8px",
+              cursor: isPlaying ? "default" : "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              transition: "background 0.2s",
+            }}
+          >
+            {isPlaying ? "Simulating..." : "▶ Run Demo"}
+          </button>
+          <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12.5px", color: "#6B6560", cursor: "pointer", userSelect: "none" }}>
+            <input
+              type="checkbox"
+              checked={autoplay}
+              onChange={(e) => setAutoplay(e.target.checked)}
+              style={{ accentColor: "#E07B39", width: "14px", height: "14px" }}
+            />
+            Autoplay
+          </label>
+        </div>
+      </div>
+
+      {/* LAPTOP GRAPHIC FRAME */}
+      <div
+        data-reveal
+        style={{
+          transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .2s, transform .7s cubic-bezier(.2,.7,.2,1) .2s",
+        }}
+        className="laptop-wrapper"
+      >
+        <div className="laptop-lid">
+          <div className="laptop-notch"></div>
+          <div className="laptop-glare"></div>
+
+          {/* APPLICATION DISPLAY SCREEN */}
+          <div className="laptop-screen-content">
+            {/* WINDOW TOP HEADER */}
+            <div className="mock-window-header">
+              <div className="mock-window-dots">
+                <div className="mock-window-dot red"></div>
+                <div className="mock-window-dot yellow"></div>
+                <div className="mock-window-dot green"></div>
+              </div>
+              <div className="mock-window-tabs">
+                <div className={`mock-window-tab ${activeApp === "slack" ? "active" : ""}`}>
+                  <SiSlack size={10} color="#E07B39" />
+                  slack
+                </div>
+                <div className={`mock-window-tab ${activeApp === "notion" ? "active" : ""}`}>
+                  <SiNotion size={10} color="#fff" />
+                  notion
+                </div>
+                <div className={`mock-window-tab ${activeApp === "vscode" ? "active" : ""}`}>
+                  <VscVscode size={10} color="#007acc" />
+                  vscode
+                </div>
+              </div>
+            </div>
+
+            {/* SCREEN BODY BASED ON ACTIVE APP */}
+            <div className="mock-app-body">
+              {/* SLACK MOCK */}
+              {activeApp === "slack" && (
+                <div style={{ display: "flex", flex: 1, background: "#fff" }}>
+                  <div className="slack-sidebar font-hanken">
+                    <div style={{ fontWeight: 800, fontSize: "13px", color: "#fff", marginBottom: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                      Lisup Workspace
+                    </div>
+                    <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>CHANNELS</div>
+                    <div className="slack-channels-list">
+                      <div className="slack-channel-item active"># design-team</div>
+                      <div className="slack-channel-item"># general</div>
+                      <div className="slack-channel-item"># announcements</div>
+                    </div>
+                    <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "10px" }}>DIRECT MESSAGES</div>
+                    <div className="slack-channels-list">
+                      <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                        Sarah (Designer)
+                      </div>
+                      <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                        Alex (Dev)
+                      </div>
+                    </div>
+                  </div>
+                  <div className="slack-content font-hanken">
+                    <div className="slack-messages">
+                      <div className="slack-message-bubble">
+                        <div className="slack-avatar" style={{ background: "#4a154b", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>S</div>
+                        <div className="slack-msg-text-wrap">
+                          <span className="slack-sender">Sarah <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:24 AM</span></span>
+                          <span className="slack-msg-body">Hey team, are we ready to sign off on the design assets? We need to get the final build ready.</span>
+                        </div>
+                      </div>
+                      <div className="slack-message-bubble">
+                        <div className="slack-avatar" style={{ background: "#1164a3", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>A</div>
+                        <div className="slack-msg-text-wrap">
+                          <span className="slack-sender">Alex <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:25 AM</span></span>
+                          <span className="slack-msg-body">Yeah, we are just waiting to finalize the release date details. What&apos;s the plan?</span>
+                        </div>
+                      </div>
+
+                      {/* Animated injection message indicator */}
+                      {injectedText && (
+                        <div className="slack-message-bubble" style={{ opacity: animState === "done" ? 1 : 0.6, transition: "opacity 0.3s" }}>
+                          <div className="slack-avatar" style={{ background: "#e07b39", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>U</div>
+                          <div className="slack-msg-text-wrap">
+                            <span className="slack-sender">You <span style={{ fontWeight: 400, fontSize: "10px", color: "#e07b39", marginLeft: "4px" }}>Drafting...</span></span>
+                            <span className="slack-msg-body" style={{ color: animState === "done" ? "#1a1a1a" : "#6B6560" }}>
+                              {injectedText}
+                              {animState === "injecting" && <span className="demo-cursor"></span>}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="slack-input-container">
+                      <div className="slack-input-box">
+                        <span style={{ color: injectedText ? "#1a1a1a" : "#a29b91", display: "flex", alignItems: "center", width: "100%" }}>
+                          {!injectedText && animState !== "injecting" && "Message #design-team"}
+                          {animState === "injecting" && injectedText}
+                          {animState === "done" && injectedText}
+                          {animState === "injecting" && <span className="demo-cursor"></span>}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* NOTION MOCK */}
+              {activeApp === "notion" && (
+                <div style={{ display: "flex", flex: 1, background: "#fff" }}>
+                  <div className="notion-sidebar font-hanken">
+                    <div style={{ fontWeight: 800, fontSize: "12px", color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                      🧑‍💻 Muzammil&apos;s Notion
+                    </div>
+                    <div style={{ color: "#a29b91", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>PRIVATE</div>
+                    <div className="notion-sidebar-item active">📄 Product Spec</div>
+                    <div className="notion-sidebar-item">📝 Meeting Notes</div>
+                    <div className="notion-sidebar-item">🚀 Release Planner</div>
+                  </div>
+                  <div className="notion-content font-hanken">
+                    <div className="notion-title">📄 Product Spec</div>
+                    <div className="notion-text-block">
+                      We are developing the core landing page design details for the Lisup website. The site needs to showcase the voice-to-text widget.
+                    </div>
+                    <div className="notion-text-block" style={{ fontWeight: 600, color: "#1a1a1a" }}>
+                      Key Product Release Notes:
+                    </div>
+                    <div className="notion-editor-input">
+                      <span style={{ color: injectedText ? "#1a1a1a" : "#A29B91" }}>
+                        {injectedText || (animState === "injecting" ? "" : "Type '/' for commands...")}
+                        {animState === "injecting" && <span className="demo-cursor"></span>}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* VS CODE MOCK */}
+              {activeApp === "vscode" && (
+                <div style={{ display: "flex", flex: 1, background: "#1e1e1e" }}>
+                  <div className="vscode-sidebar">
+                    <div style={{ color: "#d4d4d4", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>EXPLORER</div>
+                    <div className="vscode-sidebar-item active">📄 page.tsx</div>
+                    <div className="vscode-sidebar-item">📄 layout.tsx</div>
+                    <div className="vscode-sidebar-item">📄 globals.css</div>
+                  </div>
+                  <div className="vscode-content">
+                    <div className="vscode-line">
+                      <span className="vscode-line-num">1</span>
+                      <span className="vscode-code">
+                        <span className="vscode-keyword">import</span> React, &#123; useState &#125; <span className="vscode-keyword">from</span> <span className="vscode-string">&apos;react&apos;</span>;
+                      </span>
+                    </div>
+                    <div className="vscode-line">
+                      <span className="vscode-line-num">2</span>
+                      <span className="vscode-code">
+                        <span className="vscode-keyword">export default function</span> <span className="vscode-function">App</span>() &#123;
+                      </span>
+                    </div>
+                    <div className="vscode-line">
+                      <span className="vscode-line-num">3</span>
+                      <span className="vscode-code">
+                        <span className="vscode-comment" style={{ color: animState === "injecting" || animState === "done" ? "#ce9178" : "#6a9955" }}>
+                          &nbsp;&nbsp;<span style={{ color: "#6a9955" }}>// TODO:</span> {injectedText || ""}
+                          {animState === "injecting" && <span className="demo-cursor" style={{ background: "#ce9178" }}></span>}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="vscode-line">
+                      <span className="vscode-line-num">4</span>
+                      <span className="vscode-code">
+                        &nbsp;&nbsp;<span className="vscode-keyword">return</span> &lt;<span className="vscode-keyword">div</span>&gt;Lisup Simulation&lt;/<span className="vscode-keyword">div</span>&gt;;
+                      </span>
+                    </div>
+                    <div className="vscode-line">
+                      <span className="vscode-line-num">5</span>
+                      <span className="vscode-code">&#125;</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SCREEN FLOATING LISUP WIDGET OVERLAY */}
+            <div className={`mock-lisup-widget font-hanken ${animState === "idle" ? "hidden" : ""}`}>
+              {/* Widget Header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)", paddingBottom: "6px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <img src="/logo.png" alt="Lisup" width="16" height="16" style={{ borderRadius: "4px" }} />
+                  <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "12.5px", color: "#26231F" }}>
+                    Lis<span style={{ color: "#E07B39" }}>up</span>
+                  </span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <span
+                    style={{
+                      width: "6px",
+                      height: "6px",
+                      borderRadius: "50%",
+                      background: animState === "done" ? "#2C9A5E" : "#E07B39",
+                      animation: animState === "done" ? "none" : "dotpulse 1.2s infinite"
+                    }}
+                  ></span>
+                  <span className="font-jetbrains" style={{ fontSize: "9.5px", fontWeight: 700, color: animState === "done" ? "#2C9A5E" : "#C0631F", letterSpacing: ".04em" }}>
+                    {animState === "listening" && "LISTENING..."}
+                    {animState === "cleaning" && "CLEANING..."}
+                    {animState === "injecting" && "INJECTING..."}
+                    {animState === "done" && "INJECTED ✓"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Transcription Area */}
+              <div style={{ background: "rgba(0,0,0,0.03)", borderRadius: "8px", padding: "8px 10px", minHeight: "56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <p className="font-jetbrains" style={{ fontSize: "11.5px", lineHeight: "1.45", color: "#26231F", margin: 0 }}>
+                  {/* Raw word blocks with strikethrough logic */}
+                  {visibleRawWords.length === 0 && <span style={{ color: "#a29b91" }}>Initializing speech capture...</span>}
+                  {visibleRawWords.map((w, idx) => {
+                    const isWordFiller = w.isFiller;
+                    const showStrike = showStrikes && isWordFiller;
+                    return (
+                      <span
+                        key={idx}
+                        className={isWordFiller ? "widget-highlight-word" : ""}
+                        style={{
+                          textDecoration: showStrike ? "line-through" : "none",
+                          color: showStrike ? "#E07B39" : (isWordFiller ? "#C9A48A" : "#26231F"),
+                          opacity: showStrike ? 0.6 : 1,
+                          transition: "all 0.25s ease",
+                          display: "inline-block",
+                          marginRight: "4px"
+                        }}
+                      >
+                        {w.text}
+                      </span>
+                    );
+                  })}
+                  {animState === "listening" && <span className="demo-cursor" style={{ height: "11px" }}></span>}
+                </p>
+              </div>
+
+              {/* Bottom Visualizer / Waveform */}
+              {animState === "listening" && (
+                <div style={{ display: "flex", alignItems: "center", gap: "3px", height: "26px", padding: "0 8px" }}>
+                  {waveHeights.map((h, i) => (
+                    <div
+                      key={i}
+                      className="widget-wave-bar"
+                      style={{
+                        height: `${h}px`,
+                        transition: "height 0.1s ease"
+                      }}
+                    ></div>
+                  ))}
+                </div>
+              )}
+
+              {animState !== "listening" && (
+                <div style={{ height: "3px", background: "rgba(0,0,0,0.05)", borderRadius: "2px", position: "relative", overflow: "hidden", marginTop: "2px" }}>
+                  <div
+                    style={{
+                      height: "100%",
+                      background: animState === "done" ? "#2C9A5E" : "var(--accent)",
+                      width: animState === "cleaning" ? "50%" : (animState === "injecting" ? "85%" : "100%"),
+                      transition: "width 0.8s ease"
+                    }}
+                  ></div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        {/* LAPTOP KEYBOARD BASE */}
+        <div className="laptop-base">
+          <div className="laptop-lip"></div>
+          <div className="laptop-trackpad"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
+
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasHeroRef = useRef<HTMLCanvasElement>(null);
   const canvasWaveRef = useRef<HTMLCanvasElement>(null);
@@ -981,12 +1691,22 @@ export default function Home() {
               >
                 Download free
               </div>
-              <div
+              <button
                 data-cursor
+                onClick={() => {
+                  const el = document.getElementById("demo-section");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent("start-laptop-demo"));
+                    }, 600);
+                  }
+                }}
                 style={{
                   fontSize: "16px",
                   fontWeight: 600,
                   color: "#26231F",
+                  background: "transparent",
                   padding: "16px 24px",
                   borderRadius: "999px",
                   border: "1px solid #E2DDD5",
@@ -996,7 +1716,7 @@ export default function Home() {
                 className="hover-bg-white"
               >
                 &#9654; Watch it work
-              </div>
+              </button>
             </div>
 
             <div
@@ -1154,6 +1874,11 @@ export default function Home() {
             <path d="M7 1v14M2 11l5 5 5-5" stroke="#E07B39" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
+      </section>
+
+      {/* ===================== LAPTOP DEMO SECTION ===================== */}
+      <section id="demo-section" style={{ background: "#FDF6F0", padding: "100px 0 60px", borderBottom: "1px solid #ECE8E2", overflow: "hidden" }}>
+        <LaptopDemo />
       </section>
 
       {/* ===================== FILLER FILTER BAND ===================== */}
