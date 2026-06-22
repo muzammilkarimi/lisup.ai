@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎙️ Lisup AI (lisup.ai)
 
-## Getting Started
+> **Lisup AI** is an ultra-premium, interactive web landing page demonstrating an AI-powered voice assistant and real-time voice correction layer. It showcases how spoken language with filler words can be dynamically cleaned up, tone-translated (e.g., formal, casual, funny, polite, social), and injected directly into target productivity platforms.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Key Features
+
+- **🌀 Real-Time Filler Word Sweeper:** An interactive visualizer demonstrating how filler words like *"um"*, *"uh"*, and *"like"* are detected, swept out, and replaced with clean, professional text.
+- **🎭 Dynamic Tone Changer:** Translate spoken sentences into 5 distinct tones: **Formal**, **Casual**, **Funny**, **Polite**, and **Social**, and watch the output adapt in real-time.
+- **🎨 Ultra-Premium Interactive UI:**
+  - Smooth custom cursor tracker with inertia-based ring physics.
+  - Custom HTML5 Canvas audio wave and fingerprint ripple animations.
+  - Scroll-linked horizontal gallery layout.
+  - Modern typography powered by Bricolage Grotesque and JetBrains Mono.
+  - Elegant glassmorphism and HSL-based cream-orange palette.
+- **🔗 Productivity Integrations Showcase:** Visual integration badges for Slack, Notion, Gmail, WhatsApp, Figma, Discord, VS Code, Word, Excel, and Outlook.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (v16.2.9)
+- **Core Library:** [React](https://react.dev/) (v19.2.4)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Icons:** [React Icons](https://react-icons.github.io/react-icons/)
+- **Animations:** Custom HTML5 Canvas rendering & CSS micro-animations
+- **Styles:** Vanilla CSS / Global stylesheet system
+
+---
+
+## 🚀 Getting Started
+
+### 📋 Prerequisites
+
+Make sure you have [Node.js](https://nodejs.org/) (v18+ recommended) installed.
+
+### ⚙️ Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/muzammilkarimi/lisup.ai.git
+   cd lisup.ai
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### 🏃‍♂️ Running the Development Server
+
+Start the development server locally:
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to explore the interactive dashboard.
+
+### 🏗️ Production Build
+
+Generate the production bundle:
+   ```bash
+   npm run build
+   ```
+
+Start the production server:
+   ```bash
+   npm start
+   ```
+
+---
+
+## 📁 Directory Structure
+
+```text
+├── public/                 # Static assets (logo, etc.)
+├── src/
+│   └── app/
+│       ├── globals.css     # Global CSS styles & design tokens
+│       ├── layout.tsx      # Main application entry layout
+│       └── page.tsx        # Dynamic landing page component & canvas animations
+├── package.json            # Scripts & dependencies
+├── tsconfig.json           # TypeScript configuration
+└── next.config.ts          # Next.js configurations
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🤝 Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/muzammilkarimi/lisup.ai/issues).
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.

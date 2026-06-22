@@ -1,66 +1,2044 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import { 
+  SiNotion, 
+  SiSlack, 
+  SiGmail, 
+  SiWhatsapp, 
+  SiFigma, 
+  SiDiscord, 
+  SiGoogledocs,
+  SiGoogle
+} from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
+import { 
+  PiMicrosoftWordLogo, 
+  PiMicrosoftExcelLogo, 
+  PiMicrosoftOutlookLogo 
+} from "react-icons/pi";
+
+const SENTENCES = [
+  [
+    ["So", 1],
+    ["um,", 1],
+    ["I", 0],
+    ["think", 0],
+    ["we", 0],
+    ["should", 0],
+    ["just", 1],
+    ["ship", 0],
+    ["the", 0],
+    ["redesign", 0],
+    ["by", 0],
+    ["Friday.", 0],
+  ],
+  [
+    ["Can", 0],
+    ["you", 0],
+    ["uh,", 1],
+    ["like,", 1],
+    ["push", 0],
+    ["our", 0],
+    ["call", 0],
+    ["to", 0],
+    ["tomorrow?", 0],
+  ],
+  [
+    ["The", 0],
+    ["budget", 0],
+    ["is", 0],
+    ["like", 1],
+    ["um", 1],
+    ["basically", 1],
+    ["approved", 0],
+    ["already.", 0],
+  ],
+];
+
+const TONES = {
+  Formal: "I wanted to confirm whether our call scheduled for tomorrow is still going ahead.",
+  Casual: "Hey! Are we still good for the call tomorrow?",
+  Funny: "Knock knock — is tomorrow's call still alive, or did it quietly ghost us?",
+  Polite: "Just a gentle note to check whether tomorrow's call still works for you.",
+  Social: "Still on for tomorrow's call? Drop me a quick yes and we're set.",
+};
+
+const WH_STEPS = [
+  { status: "READY", text: "", prog: "12%" },
+  {
+    status: "LISTENING…",
+    text: "um so i think we should ship the… the redesign by friday",
+    prog: "45%",
+  },
+  {
+    status: "CLEANING UP…",
+    text: "Let's ship the redesign by Friday.",
+    prog: "78%",
+  },
+  {
+    status: "INJECTED ✓",
+    text: "Let's ship the redesign by Friday.",
+    prog: "100%",
+  },
+];
+
+const TYPER_LINES = [
+  "Let's ship the redesign by Friday.",
+  "Schedule the sync for 11:30, not 11.",
+  "Draft a reply and sign it for me.",
+  "Translate this note into Spanish.",
+];
 
 export default function Home() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const canvasHeroRef = useRef<HTMLCanvasElement>(null);
+  const canvasWaveRef = useRef<HTMLCanvasElement>(null);
+  const cursorRingRef = useRef<HTMLDivElement>(null);
+  const cursorDotRef = useRef<HTMLDivElement>(null);
+  const progBarRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const galSectionRef = useRef<HTMLDivElement>(null);
+  const galTrackRef = useRef<HTMLDivElement>(null);
+  const heroTypedElRef = useRef<HTMLSpanElement>(null);
+  const toneElRef = useRef<HTMLParagraphElement>(null);
+  const fillerStageRef = useRef<HTMLDivElement>(null);
+
+  // React State for interactive components
+  const [tone, setTone] = useState<keyof typeof TONES>("Formal");
+  const [toneText, setToneText] = useState(TONES.Formal);
+  const [activeStep, setActiveStep] = useState(0);
+  const [whText, setWhText] = useState("");
+  const [whStatus, setWhStatus] = useState("READY");
+  const [whProg, setWhProg] = useState("12%");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Animation values stored in refs to avoid triggering render cycles
+  const pointerRef = useRef({ x: -100, y: -100 });
+  const ringRef = useRef({ x: -100, y: -100 });
+  const fillerIdxRef = useRef(0);
+  const typerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const fillerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const distRef = useRef<number>(0);
+
+  // Handle cursor hover states
+  useEffect(() => {
+    const rootEl = rootRef.current;
+    if (!rootEl) return;
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest && target.closest("[data-cursor]") && cursorRingRef.current) {
+        cursorRingRef.current.style.width = "58px";
+        cursorRingRef.current.style.height = "58px";
+        cursorRingRef.current.style.background = "rgba(224,123,57,.1)";
+      }
+    };
+
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest && target.closest("[data-cursor]") && cursorRingRef.current) {
+        cursorRingRef.current.style.width = "38px";
+        cursorRingRef.current.style.height = "38px";
+        cursorRingRef.current.style.background = "transparent";
+      }
+    };
+
+    rootEl.addEventListener("mouseover", handleMouseOver);
+    rootEl.addEventListener("mouseout", handleMouseOut);
+
+    return () => {
+      rootEl.removeEventListener("mouseover", handleMouseOver);
+      rootEl.removeEventListener("mouseout", handleMouseOut);
+    };
+  }, []);
+
+  // Typer effect for the floating widget
+  useEffect(() => {
+    const setTypedText = (s: string) => {
+      if (heroTypedElRef.current) heroTypedElRef.current.textContent = s;
+    };
+
+    const step = (lines: string[], li: number, ci: number, dir: number) => {
+      const full = lines[li];
+      if (dir > 0) {
+        ci++;
+        setTypedText(full.slice(0, ci));
+        if (ci >= full.length) {
+          typerTimeoutRef.current = setTimeout(() => step(lines, li, full.length, -1), 1900);
+        } else {
+          typerTimeoutRef.current = setTimeout(() => step(lines, li, ci, 1), 36 + Math.random() * 46);
+        }
+      } else {
+        ci--;
+        setTypedText(full.slice(0, Math.max(0, ci)));
+        if (ci <= 0) {
+          const nl = (li + 1) % lines.length;
+          typerTimeoutRef.current = setTimeout(() => step(lines, nl, 0, 1), 360);
+        } else {
+          typerTimeoutRef.current = setTimeout(() => step(lines, li, ci, -1), 17);
+        }
+      };
+    };
+
+    typerTimeoutRef.current = setTimeout(() => step(TYPER_LINES, 0, TYPER_LINES[0].length, -1), 2000);
+
+    return () => {
+      if (typerTimeoutRef.current) clearTimeout(typerTimeoutRef.current);
+    };
+  }, []);
+
+  // Filler word sweep animation
+  useEffect(() => {
+    const runFiller = () => {
+      const stage = fillerStageRef.current;
+      if (!stage) {
+        fillerTimeoutRef.current = setTimeout(runFiller, 300);
+        return;
+      }
+      const sentence = SENTENCES[fillerIdxRef.current % SENTENCES.length];
+      stage.innerHTML = "";
+      stage.style.opacity = "1";
+      const spans: { el: HTMLSpanElement; filler: boolean }[] = [];
+
+      sentence.forEach((w) => {
+        const el = document.createElement("span");
+        el.textContent = w[0] as string;
+        el.style.cssText =
+          "display:inline-block;white-space:pre;margin-right:.3em;max-width:400px;opacity:0;transform:translateY(10px);transition:opacity .4s ease,max-width .45s ease,margin .45s ease,transform .45s ease,color .35s ease;" +
+          (w[1] ? "color:#C9A48A;" : "color:#26231F;");
+        stage.appendChild(el);
+        spans.push({ el, filler: !!w[1] });
+      });
+
+      let i = 0;
+      const reveal = () => {
+        if (i < spans.length) {
+          spans[i].el.style.opacity = "1";
+          spans[i].el.style.transform = "none";
+          i++;
+          fillerTimeoutRef.current = setTimeout(reveal, 85);
+        } else {
+          fillerTimeoutRef.current = setTimeout(() => filterSweep(spans), 750);
+        }
+      };
+      reveal();
+    };
+
+    const filterSweep = (spans: { el: HTMLSpanElement; filler: boolean }[]) => {
+      const fillers = spans.filter((s) => s.filler);
+      let k = 0;
+      const drop = () => {
+        if (k < fillers.length) {
+          const el = fillers[k].el;
+          el.style.color = "#E07B39";
+          setTimeout(() => {
+            el.style.opacity = "0";
+            el.style.maxWidth = "0";
+            el.style.marginRight = "0";
+            el.style.transform = "translateY(-12px)";
+          }, 200);
+          k++;
+          fillerTimeoutRef.current = setTimeout(drop, 280);
+        } else {
+          fillerTimeoutRef.current = setTimeout(() => {
+            const stage = fillerStageRef.current;
+            if (stage) stage.style.opacity = "0";
+            fillerTimeoutRef.current = setTimeout(() => {
+              fillerIdxRef.current++;
+              runFiller();
+            }, 650);
+          }, 1800);
+        }
+      };
+      drop();
+    };
+
+    runFiller();
+
+    return () => {
+      if (fillerTimeoutRef.current) clearTimeout(fillerTimeoutRef.current);
+    };
+  }, []);
+
+  // Main Canvas drawing loop and custom cursor interpolation
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      pointerRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+    // Initialize canvas sizes
+    const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+    let hw = 0, hh = 0, ww = 0, wh = 0;
+    let hctx: CanvasRenderingContext2D | null = null;
+    let wctx: CanvasRenderingContext2D | null = null;
+
+    const adjustGalleryHeight = () => {
+      const sec = galSectionRef.current;
+      const track = galTrackRef.current;
+      if (sec && track) {
+        if (window.innerWidth > 900) {
+          const dist = track.scrollWidth - window.innerWidth;
+          distRef.current = dist;
+          if (dist > 100) {
+            sec.style.height = `${dist + window.innerHeight}px`;
+          }
+        } else {
+          sec.style.height = "auto";
+          distRef.current = 0;
+        }
+      }
+    };
+
+    const initCanvas = () => {
+      adjustGalleryHeight();
+      const ch = canvasHeroRef.current;
+      if (ch) {
+        hw = ch.clientWidth;
+        hh = ch.clientHeight;
+        ch.width = hw * dpr;
+        ch.height = hh * dpr;
+        hctx = ch.getContext("2d");
+        if (hctx) {
+          hctx.resetTransform();
+          hctx.scale(dpr, dpr);
+        }
+      }
+
+      const cw = canvasWaveRef.current;
+      if (cw) {
+        ww = cw.clientWidth;
+        wh = cw.clientHeight;
+        cw.width = ww * dpr;
+        cw.height = wh * dpr;
+        wctx = cw.getContext("2d");
+        if (wctx) {
+          wctx.resetTransform();
+          wctx.scale(dpr, dpr);
+        }
+      }
+    };
+
+    initCanvas();
+    setTimeout(adjustGalleryHeight, 150);
+    setTimeout(adjustGalleryHeight, 500);
+    setTimeout(adjustGalleryHeight, 1500);
+    window.addEventListener("resize", initCanvas);
+
+    // Render Canvas drawings
+    const drawFinger = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, mx: number, my: number) => {
+      ctx.clearRect(0, 0, w, h);
+      let cx = w / 2, cy = h / 2;
+      if (isFinite(mx) && isFinite(my)) {
+        cx += Math.max(-40, Math.min(40, (mx - cx) * 0.06));
+        cy += Math.max(-40, Math.min(40, (my - cy) * 0.06));
+      }
+      const rings = 13, step = 0.12;
+      for (let r = 0; r < rings; r++) {
+        const baseR = 26 + r * 17;
+        ctx.beginPath();
+        for (let a = 0; a <= Math.PI * 2 + step; a += step) {
+          let rad = baseR + (4 + r * 0.8) * Math.sin(a * (2 + r * 0.4) + t * 1.3 + r * 0.5);
+          if (isFinite(mx)) {
+            const pa = Math.atan2(my - cy, mx - cx);
+            const da = Math.cos(a - pa);
+            rad += Math.max(0, da) * 10 * Math.max(0, da);
+          }
+          const x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad;
+          if (a === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = "#E07B39";
+        ctx.globalAlpha = Math.max(0.04, 0.4 - r * 0.028);
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    const drawWave = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
+      ctx.clearRect(0, 0, w, h);
+      const n = 30, bw = w / n, cy = h / 2;
+      for (let i = 0; i < n; i++) {
+        let v = Math.sin(i * 0.5 + t * 5) + 0.6 * Math.sin(i * 0.2 - t * 3);
+        v = Math.abs(v) / 1.6;
+        const bh = h * 0.14 + h * 0.7 * v;
+        const bwidth = bw * 0.42;
+        ctx.fillStyle = "#E07B39";
+        ctx.globalAlpha = 0.9;
+        const x = i * bw + (bw - bwidth) / 2, y = cy - bh / 2;
+        ctx.beginPath();
+        ctx.roundRect(x, y, bwidth, bh, bwidth / 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    const tick = (timestamp: number) => {
+      const t = timestamp / 1000;
+
+      // Custom cursor movement interpolation
+      ringRef.current.x += (pointerRef.current.x - ringRef.current.x) * 0.18;
+      ringRef.current.y += (pointerRef.current.y - ringRef.current.y) * 0.18;
+
+      if (cursorRingRef.current) {
+        cursorRingRef.current.style.transform = `translate(${ringRef.current.x}px,${ringRef.current.y}px) translate(-50%,-50%)`;
+      }
+      if (cursorDotRef.current) {
+        cursorDotRef.current.style.transform = `translate(${pointerRef.current.x}px,${pointerRef.current.y}px) translate(-50%,-50%)`;
+      }
+
+      // Draw canvas visuals
+      if (hctx && canvasHeroRef.current) {
+        const r = canvasHeroRef.current.getBoundingClientRect();
+        const mx = pointerRef.current.x - r.left, my = pointerRef.current.y - r.top;
+        drawFinger(hctx, hw, hh, t, mx, my);
+      }
+
+      if (wctx) {
+        drawWave(wctx, ww, wh, t);
+      }
+
+      // Horizontal gallery animation (scroll linked)
+      const sec = galSectionRef.current;
+      const track = galTrackRef.current;
+      if (sec && track && window.innerWidth > 900) {
+        const dist = distRef.current;
+        const rect = sec.getBoundingClientRect();
+        let p = dist > 0 ? (-rect.top / dist) : 0;
+        p = Math.max(0, Math.min(1, p));
+        track.style.transform = `translateX(${-p * Math.max(0, dist)}px)`;
+      } else if (track) {
+        track.style.transform = "";
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", initCanvas);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  // Handle Page Scroll progress bar & Nav sticky state
+  useEffect(() => {
+    const handleScroll = () => {
+      const sc = window.scrollY || document.documentElement.scrollTop;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+
+      if (progBarRef.current) {
+        progBarRef.current.style.width = (h > 0 ? (sc / h) * 100 : 0) + "%";
+      }
+
+      if (navRef.current) {
+        if (sc > 12) {
+          navRef.current.style.background = "rgba(253,246,240,.85)";
+          navRef.current.style.backdropFilter = "blur(12px)";
+          navRef.current.style.borderColor = "#E8E2DA";
+          navRef.current.style.boxShadow = "0 8px 30px rgba(0,0,0,0.03)";
+        } else {
+          navRef.current.style.background = "rgba(253,246,240,0)";
+          navRef.current.style.backdropFilter = "none";
+          navRef.current.style.borderColor = "transparent";
+          navRef.current.style.boxShadow = "none";
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // IntersectionObservers (Fades, Count-up, Step Tracker)
+  useEffect(() => {
+    const rootEl = rootRef.current;
+    if (!rootEl) return;
+
+    // Set hidden states for reveal tags
+    rootEl.querySelectorAll("[data-reveal]").forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      htmlEl.style.opacity = "0";
+      htmlEl.style.transform = "translateY(28px)";
+    });
+
+    const countUp = (el: HTMLElement) => {
+      const target = parseFloat(el.getAttribute("data-count") || "0");
+      const suffix = el.getAttribute("data-suffix") || "";
+      const dur = 1400;
+      const start = performance.now();
+
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.innerHTML = Math.round(target * eased) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    // Intersection observer for fading elements in & running count-up numbers
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const el = e.target as HTMLElement;
+          if (el.hasAttribute("data-reveal")) {
+            el.style.opacity = "1";
+            el.style.transform = "none";
+          }
+          if (el.hasAttribute("data-count")) {
+            countUp(el);
+          }
+          io.unobserve(el);
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    rootEl.querySelectorAll("[data-reveal],[data-count]").forEach((el) => io.observe(el));
+
+    // Intersection observer for step vertical progress tracking
+    const stepIo = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const idx = parseInt(e.target.getAttribute("data-step") || "0", 10);
+          const d = WH_STEPS[idx] || WH_STEPS[0];
+          setActiveStep(idx);
+          setWhText(d.text);
+          setWhStatus(d.status);
+          setWhProg(d.prog);
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+    );
+
+    rootEl.querySelectorAll("[data-step]").forEach((s) => stepIo.observe(s));
+
+    return () => {
+      io.disconnect();
+      stepIo.disconnect();
+    };
+  }, []);
+
+  // Magnet button animation positioning
+  const handleMagnetMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * 0.3}px, ${(e.clientY - (r.top + r.height / 2)) * 0.45}px)`;
+    if (cursorRingRef.current) {
+      cursorRingRef.current.style.width = "64px";
+      cursorRingRef.current.style.height = "64px";
+      cursorRingRef.current.style.background = "rgba(224,123,57,.12)";
+    }
+  };
+
+  const handleMagnetLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.transform = "translate(0,0)";
+    if (cursorRingRef.current) {
+      cursorRingRef.current.style.width = "38px";
+      cursorRingRef.current.style.height = "38px";
+      cursorRingRef.current.style.background = "transparent";
+    }
+  };
+
+  // Tone switcher click event
+  const selectTone = (toneName: keyof typeof TONES) => {
+    if (toneName === tone) return;
+    if (toneElRef.current) toneElRef.current.style.opacity = "0";
+
+    setTimeout(() => {
+      setTone(toneName);
+      setToneText(TONES[toneName]);
+      if (toneElRef.current) toneElRef.current.style.opacity = "1";
+    }, 200);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div
+      ref={rootRef}
+      className={isLoaded ? "hero-loaded" : ""}
+      style={{
+        position: "relative",
+        background: "#FDF6F0",
+      }}
+    >
+      {/* PRELOADER OVERLAY */}
+      <div className={`preloader-overlay ${isLoaded ? "fade-out" : ""}`}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px" }}>
+          <div style={{ position: "relative", width: "80px", height: "80px" }}>
+            <div style={{
+              position: "absolute",
+              inset: "-8px",
+              borderRadius: "50%",
+              border: "2px dashed #E07B39",
+              animation: "spin 4s linear infinite"
+            }}></div>
+            <div style={{
+              position: "absolute",
+              inset: "-16px",
+              borderRadius: "50%",
+              border: "1px solid rgba(224,123,57,0.2)",
+              animation: "ping 1.5s cubic-bezier(0,0,0.2,1) infinite"
+            }}></div>
+            <img
+              src="/logo.png"
+              alt="Lisup Logo"
+              width="80"
+              height="80"
+              style={{ borderRadius: "20px", objectFit: "cover" }}
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "24px", color: "#26231F" }}>
+            Lis<span style={{ color: "#E07B39" }}>up</span>
+          </div>
+          <div className="font-jetbrains" style={{ fontSize: "12px", color: "#A29B91", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#E07B39", animation: "dotpulse 1s infinite" }}></span>
+            <span>connecting voice model...</span>
+          </div>
         </div>
-      </main>
+      </div>
+      {/* FILM GRAIN */}
+      <div
+        style={{
+          position: "fixed",
+          inset: "-50%",
+          width: "200%",
+          height: "200%",
+          pointerEvents: "none",
+          zIndex: 60,
+          opacity: 0.05,
+          mixBlendMode: "multiply",
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          animation: "grainshift 8s steps(10) infinite",
+        }}
+      ></div>
+
+      {/* CUSTOM CURSOR */}
+      <div
+        ref={cursorRingRef}
+        className="lz-hidemob"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "38px",
+          height: "38px",
+          border: "1.5px solid #E07B39",
+          borderRadius: "50%",
+          pointerEvents: "none",
+          zIndex: 9999,
+          transform: "translate(-50%,-50%)",
+          transition: "width .18s ease, height .18s ease, background .18s ease, opacity .18s ease",
+          willChange: "transform",
+        }}
+      ></div>
+      <div
+        ref={cursorDotRef}
+        className="lz-hidemob"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "6px",
+          height: "6px",
+          background: "#E07B39",
+          borderRadius: "50%",
+          pointerEvents: "none",
+          zIndex: 9999,
+          transform: "translate(-50%,-50%)",
+          willChange: "transform",
+        }}
+      ></div>
+
+      {/* SCROLL PROGRESS */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "3px",
+          zIndex: 9998,
+          background: "transparent",
+        }}
+      >
+        <div
+          ref={progBarRef}
+          style={{
+            height: "100%",
+            width: "0%",
+            background: "#E07B39",
+            transformOrigin: "left",
+          }}
+        ></div>
+      </div>
+
+      {/* ===================== NAV ===================== */}
+      <div
+        ref={navRef}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          transition: "background .3s, border-color .3s, box-shadow .3s",
+          background: "rgba(253,246,240,0)",
+          borderBottom: "1px solid transparent",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "0 48px",
+            height: "74px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div data-cursor style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img
+              src="/logo.png"
+              alt="Lisup Logo"
+              width="32"
+              height="32"
+              style={{ borderRadius: "8px", objectFit: "cover" }}
+            />
+            <span
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "22px",
+                color: "#26231F",
+                letterSpacing: "-.01em",
+              }}
+            >
+              Lis<span style={{ color: "#E07B39" }}>up</span>
+            </span>
+          </div>
+          <div
+            className="lz-hidemob"
+            style={{ display: "flex", alignItems: "center", gap: "34px" }}
+          >
+            <a
+              href="#how"
+              data-cursor
+              className="font-jetbrains"
+              style={{
+                fontSize: "12.5px",
+                color: "#6B6560",
+                fontWeight: 500,
+                textDecoration: "none",
+                letterSpacing: ".02em",
+              }}
+            >
+              how
+            </a>
+            <a
+              href="#features"
+              data-cursor
+              className="font-jetbrains"
+              style={{
+                fontSize: "12.5px",
+                color: "#6B6560",
+                fontWeight: 500,
+                textDecoration: "none",
+                letterSpacing: ".02em",
+              }}
+            >
+              features
+            </a>
+            <a
+              href="#tones"
+              data-cursor
+              className="font-jetbrains"
+              style={{
+                fontSize: "12.5px",
+                color: "#6B6560",
+                fontWeight: 500,
+                textDecoration: "none",
+                letterSpacing: ".02em",
+              }}
+            >
+              tones
+            </a>
+            <a
+              href="#why"
+              data-cursor
+              className="font-jetbrains"
+              style={{
+                fontSize: "12.5px",
+                color: "#6B6560",
+                fontWeight: 500,
+                textDecoration: "none",
+                letterSpacing: ".02em",
+              }}
+            >
+              why
+            </a>
+            <div
+              data-cursor
+              onMouseMove={handleMagnetMove}
+              onMouseLeave={handleMagnetLeave}
+              style={{
+                fontSize: "14px",
+                fontWeight: 700,
+                color: "#fff",
+                background: "#1A1A1A",
+                padding: "10px 20px",
+                borderRadius: "999px",
+                cursor: "none",
+                transition: "transform .12s ease-out, background .2s",
+              }}
+              className="hover-bg-orange"
+            >
+              Download free
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ===================== HERO ===================== */}
+      <section
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          minHeight: "calc(100vh - 74px)",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {/* big faint background word */}
+        <div
+          className="lz-hidemob font-bricolage hero-bg-text-wrap"
+          style={{
+            position: "absolute",
+            bottom: "-4%",
+            left: "-2%",
+            fontWeight: 800,
+            fontSize: "300px",
+            lineHeight: 0.8,
+            color: "#000",
+            letterSpacing: "-.04em",
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        >
+          voice
+        </div>
+
+        <canvas
+          ref={canvasHeroRef}
+          className="lz-hidemob hero-canvas-wrap"
+          style={{
+            position: "absolute",
+            top: 0,
+            right: "-6%",
+            width: "760px",
+            height: "100%",
+            display: "block",
+            zIndex: 1,
+          }}
+        ></canvas>
+
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "60px 48px",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            gap: "40px",
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              className="hero-badge"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "9px",
+                padding: "8px 15px",
+                borderRadius: "999px",
+                border: "1px solid #F2D6C2",
+                background: "rgba(254,240,230,.7)",
+                marginBottom: "28px",
+              }}
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  background: "#E07B39",
+                  animation: "dotpulse 1.6s ease-in-out infinite",
+                }}
+              ></span>
+              <span
+                className="font-jetbrains"
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 500,
+                  color: "#C0631F",
+                  letterSpacing: ".02em",
+                }}
+              >
+                Alt + Space &middot; speak anywhere
+              </span>
+            </div>
+
+            <h1
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(48px, 8vw, 96px)",
+                lineHeight: 0.9,
+                letterSpacing: "-.035em",
+                color: "#26231F",
+                margin: 0,
+              }}
+            >
+              <span className="hero-title-line">
+                <span>
+                  Stop{" "}
+                  <span
+                    style={{ position: "relative", display: "inline-block" }}
+                    className="strike-after"
+                  >
+                    typing.
+                  </span>
+                </span>
+              </span>
+              <span className="hero-title-line">
+                <span style={{ transitionDelay: "0.15s" }}>
+                  Start <span style={{ color: "#E07B39" }}>talking.</span>
+                </span>
+              </span>
+            </h1>
+
+            <p
+              className="hero-description"
+              style={{
+                maxWidth: "440px",
+                margin: "28px 0 0",
+                fontSize: "19px",
+                lineHeight: 1.55,
+                color: "#6B6560",
+              }}
+            >
+              Talk, stop, done. Lisup turns speech into finished text in 100+ languages &mdash; fillers gone, grammar fixed, in your tone. Everywhere on your machine.
+            </p>
+
+            <div
+              className="hero-buttons"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "14px",
+                marginTop: "36px",
+              }}
+            >
+              <div
+                data-cursor
+                onMouseMove={handleMagnetMove}
+                onMouseLeave={handleMagnetLeave}
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 700,
+                  color: "#fff",
+                  background: "#E07B39",
+                  padding: "16px 32px",
+                  borderRadius: "999px",
+                  cursor: "none",
+                  transition: "transform .12s ease-out, background .2s",
+                  boxShadow: "0 18px 36px -14px rgba(224,123,57,.7)",
+                }}
+                className="hover-bg-darkorange"
+              >
+                Download free
+              </div>
+              <div
+                data-cursor
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#26231F",
+                  padding: "16px 24px",
+                  borderRadius: "999px",
+                  border: "1px solid #E2DDD5",
+                  cursor: "none",
+                  transition: "background .2s",
+                }}
+                className="hover-bg-white"
+              >
+                &#9654; Watch it work
+              </div>
+            </div>
+
+            <div
+              className="font-jetbrains hero-platforms"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                marginTop: "32px",
+              }}
+            >
+              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
+                WINDOWS
+              </span>
+              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
+              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
+                MACOS
+              </span>
+              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
+              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
+                ANDROID
+              </span>
+            </div>
+          </div>
+
+          {/* floating widget - stacked on mobile, floating on desktop */}
+          <div
+            className="hero-floating-widget hero-widget-wrap"
+            style={{
+              flex: "none",
+              animation: "floaty 6s ease-in-out infinite",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                width: "372px",
+                maxWidth: "100%",
+                background: "#fff",
+                border: "1px solid #ECE8E2",
+                borderRadius: "22px",
+                boxShadow: "0 50px 100px -30px rgba(26,26,26,.4)",
+                padding: "18px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
+                  <img
+                    src="/logo.png"
+                    alt="Lisup Logo"
+                    width="26"
+                    height="26"
+                    style={{ borderRadius: "6px", objectFit: "cover" }}
+                  />
+                  <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#26231F" }}>
+                    Lis<span style={{ color: "#E07B39" }}>up</span>
+                  </span>
+                </div>
+                <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: "#F4F2EE", color: "#A29B91", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", cursor: "pointer" }}>
+                  &times;
+                </span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#F7F5F2", border: "1px solid #ECE8E2", borderRadius: "12px", padding: "11px 13px", marginBottom: "14px" }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C5BFB8" strokeWidth={2}>
+                  <rect x="8" y="2" width="8" height="4" rx="1" />
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                </svg>
+                <span style={{ flex: 1, fontSize: "13.5px", color: "#A29B91" }}>
+                  Copy text, then speak a command
+                </span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "18px" }}>
+                <div style={{ display: "inline-flex", gap: "4px", background: "#F2F0EC", borderRadius: "12px", padding: "4px" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "6px", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.08)", borderRadius: "9px", padding: "7px 15px", fontSize: "13.5px", fontWeight: 600, color: "#26231F" }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#6B6560">
+                      <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                    </svg>
+                    Transcribe
+                  </span>
+                  <span style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "9px", padding: "7px 15px", fontSize: "13.5px", fontWeight: 600, color: "#A29B91" }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5BFB8">
+                      <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                    </svg>
+                    Command
+                  </span>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+                <div style={{ position: "relative", width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "2px solid #E07B39", animation: "ping 1.8s cubic-bezier(0,0,.2,1) infinite" }}></span>
+                  <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#1A1A1A", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 26px -8px rgba(26,26,26,.5)" }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+                      <rect x="9" y="2" width="6" height="11" rx="3" />
+                      <path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" />
+                      <path d="M12 17v4M9 21h6" stroke="#fff" strokeWidth={2} strokeLinecap="round" />
+                    </svg>
+                  </div>
+                </div>
+                <span style={{ fontSize: "13.5px", color: "#A29B91", fontWeight: 500 }}>Press to speak</span>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "7px", marginTop: "16px" }}>
+                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/reply</span>
+                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/fix</span>
+                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/formal</span>
+                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/translate</span>
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "-22px",
+                  right: "-30px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  background: "#1A1A1A",
+                  borderRadius: "12px",
+                  padding: "9px 13px",
+                  boxShadow: "0 18px 34px -12px rgba(26,26,26,.5)",
+                  maxWidth: "300px",
+                  zIndex: 2,
+                }}
+                className="hero-sub-widget"
+              >
+                <span style={{ fontSize: "10px", fontWeight: 700, color: "#1A1A1A", background: "#E07B39", padding: "2px 6px", borderRadius: "5px", letterSpacing: ".03em" }}>
+                  DONE
+                </span>
+                <span className="font-jetbrains" style={{ fontSize: "12px", color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
+                  <span ref={heroTypedElRef}>Let's ship the redesign by Friday.</span>
+                  <span style={{ display: "inline-block", width: "2px", height: "13px", background: "#E07B39", marginLeft: "1px", verticalAlign: "-2px", animation: "blink 1s step-end infinite" }}></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* scroll cue */}
+        <div
+          className="lz-hidemob"
+          style={{
+            position: "absolute",
+            bottom: "26px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "7px",
+            zIndex: 3,
+          }}
+        >
+          <span className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", letterSpacing: ".12em" }}>
+            SCROLL
+          </span>
+          <svg width="14" height="20" viewBox="0 0 14 20" fill="none" style={{ animation: "cuebob 1.8s ease-in-out infinite" }}>
+            <path d="M7 1v14M2 11l5 5 5-5" stroke="#E07B39" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </section>
+
+      {/* ===================== FILLER FILTER BAND ===================== */}
+      <section style={{ background: "#FDF6F0", padding: "72px 0 40px" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div
+            data-reveal
+            style={{
+              transition:
+                "opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: "30px",
+              marginBottom: "30px",
+            }}
+          >
+            <h2
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(32px, 5vw, 48px)",
+                lineHeight: 0.95,
+                letterSpacing: "-.03em",
+                color: "#26231F",
+                margin: 0,
+              }}
+            >
+              Messy in.
+              <br />
+              Polished out.
+            </h2>
+            <span
+              className="font-jetbrains"
+              style={{
+                fontSize: "13px",
+                color: "#A29B91",
+                letterSpacing: ".04em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              RAW &rarr; CLEAN
+            </span>
+          </div>
+          <div
+            data-reveal
+            style={{
+              transition:
+                "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
+              position: "relative",
+              overflow: "hidden",
+              background: "#fff",
+              border: "1px solid #ECE8E2",
+              borderRadius: "24px",
+              padding: "36px 44px 40px",
+              boxShadow: "0 34px 70px -42px rgba(26,26,26,.3)",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: "150px",
+                background: "linear-gradient(90deg,transparent,rgba(224,123,57,.12),transparent)",
+                animation: "beam 3.4s ease-in-out infinite",
+                pointerEvents: "none",
+              }}
+            ></div>
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "10px",
+                marginBottom: "26px",
+              }}
+            >
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#A29B91", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#C9A48A" }}></span>
+                RAW DICTATION
+              </span>
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#C0631F", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E07B39", animation: "dotpulse 1.4s infinite" }}></span>
+                FILTERING
+              </span>
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#2C9A5E", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                CLEAN &#10003;
+              </span>
+            </div>
+            <div
+              ref={fillerStageRef}
+              className="font-bricolage"
+              style={{
+                fontWeight: 700,
+                fontSize: "clamp(24px, 4vw, 38px)",
+                lineHeight: 1.32,
+                letterSpacing: "-.02em",
+                color: "#26231F",
+                minHeight: "104px",
+              }}
+            ></div>
+            <div style={{ position: "relative", marginTop: "22px", display: "flex", alignItems: "center", gap: "10px", fontSize: "14.5px", color: "#6B6560" }}>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E07B39" strokeWidth="2" strokeLinejoin="round">
+                <path d="M22 3H2l8 9.5V19l4 2v-8.5z" />
+              </svg>
+              Fillers, false starts and &quot;ums&quot; stripped automatically &mdash; grammar fixed, tone kept.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== MARQUEE ===================== */}
+      <div
+        style={{
+          position: "relative",
+          background: "#E07B39",
+          padding: "26px 0",
+          overflow: "hidden",
+          transform: "rotate(-2.2deg) scale(1.04)",
+          margin: "30px 0",
+          zIndex: 5,
+        }}
+      >
+        <div style={{ display: "flex", gap: 0, width: "max-content", animation: "marquee 26s linear infinite" }}>
+          <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "34px", color: "#1A1A1A", letterSpacing: "-.02em", whiteSpace: "nowrap" }}>
+            SPEAK&nbsp;&middot;&nbsp;DON&apos;T&nbsp;TYPE&nbsp;&middot;&nbsp;3&times;&nbsp;FASTER&nbsp;&middot;&nbsp;100+&nbsp;LANGUAGES&nbsp;&middot;&nbsp;ON-DEVICE&nbsp;&middot;&nbsp;
+          </span>
+          <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "34px", color: "#1A1A1A", letterSpacing: "-.02em", whiteSpace: "nowrap" }}>
+            SPEAK&nbsp;&middot;&nbsp;DON&apos;T&nbsp;TYPE&nbsp;&middot;&nbsp;3&times;&nbsp;FASTER&nbsp;&middot;&nbsp;100+&nbsp;LANGUAGES&nbsp;&middot;&nbsp;ON-DEVICE&nbsp;&middot;&nbsp;
+          </span>
+        </div>
+      </div>
+
+      {/* ===================== HOW IT WORKS (sticky play) ===================== */}
+      <section id="how" style={{ background: "#FDF6F0", padding: "90px 0 60px" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div
+            data-reveal
+            style={{
+              transition:
+                "opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: "30px",
+              marginBottom: "56px",
+            }}
+          >
+            <h2
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(36px, 6vw, 60px)",
+                lineHeight: 0.95,
+                letterSpacing: "-.03em",
+                color: "#26231F",
+                margin: 0,
+                maxWidth: "680px",
+              }}
+            >
+              Watch it work
+              <br />
+              as you scroll.
+            </h2>
+            <span
+              className="font-jetbrains"
+              style={{
+                fontSize: "13px",
+                color: "#A29B91",
+                letterSpacing: ".04em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              (01) &mdash; HOW IT WORKS
+            </span>
+          </div>
+
+          <div className="how-it-works-flex" style={{ display: "flex", gap: "60px", alignItems: "flex-start" }}>
+            {/* sticky widget on desktop, hidden on mobile */}
+            <div
+              className="lz-hidemob"
+              style={{
+                flex: "none",
+                width: "380px",
+                position: "sticky",
+                top: "120px",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "380px",
+                  background: "#fff",
+                  border: "1px solid #ECE8E2",
+                  borderRadius: "24px",
+                  boxShadow: "0 40px 90px -34px rgba(26,26,26,.4)",
+                  padding: "22px",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
+                    <img
+                      src="/logo.png"
+                      alt="Lisup Logo"
+                      width="28"
+                      height="28"
+                      style={{ borderRadius: "6px", objectFit: "cover" }}
+                    />
+                    <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "17px", color: "#26231F" }}>
+                      Lis<span style={{ color: "#E07B39" }}>up</span>
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E07B39", animation: "dotpulse 1.4s infinite" }}></span>
+                    <span className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 600, color: "#C0631F", letterSpacing: ".02em" }}>
+                      {whStatus}
+                    </span>
+                  </div>
+                </div>
+                {/* mode toggle */}
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                  <div style={{ display: "inline-flex", gap: "4px", background: "#F2F0EC", borderRadius: "12px", padding: "4px" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: "6px", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.08)", borderRadius: "9px", padding: "8px 18px", fontSize: "13.5px", fontWeight: 600, color: "#26231F" }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="#6B6560">
+                        <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                      </svg>
+                      Transcribe
+                    </span>
+                    <span style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "9px", padding: "8px 18px", fontSize: "13.5px", fontWeight: 600, color: "#A29B91" }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5BFB8">
+                        <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                      </svg>
+                      Command
+                    </span>
+                  </div>
+                </div>
+                {/* mic + waveform */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginBottom: "18px" }}>
+                  <div style={{ position: "relative", width: "72px", height: "72px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "2px solid #E07B39", animation: "ping 1.8s cubic-bezier(0,0,.2,1) infinite" }}></span>
+                    <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "#1A1A1A", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 14px 30px -8px rgba(26,26,26,.5)" }}>
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff">
+                        <rect x="9" y="2" width="6" height="11" rx="3" />
+                        <path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                        <path d="M12 17v4M9 21h6" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  <canvas ref={canvasWaveRef} style={{ width: "240px", height: "34px", display: "block" }}></canvas>
+                </div>
+                {/* transcript */}
+                <div style={{ background: "#F7F5F2", border: "1px solid #ECE8E2", borderRadius: "14px", padding: "15px 16px", minHeight: "84px" }}>
+                  <div className="font-jetbrains" style={{ fontSize: "14px", lineHeight: 1.55, color: "#26231F", transition: "color .3s" }}>
+                    {whText}
+                    <span style={{ display: "inline-block", width: "2px", height: "15px", background: "#E07B39", marginLeft: "1px", verticalAlign: "-2px", animation: "blink 1s step-end infinite" }}></span>
+                  </div>
+                </div>
+                {/* progress */}
+                <div style={{ height: "4px", background: "#F2F0EC", borderRadius: "3px", marginTop: "16px", overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: whProg, background: "linear-gradient(90deg,#F5A878,#E07B39)", borderRadius: "3px", transition: "width .3s ease" }}></div>
+                </div>
+              </div>
+            </div>
+
+            {/* steps container */}
+            <div className="how-it-works-steps" style={{ flex: 1, minWidth: 0 }}>
+              <div
+                data-step="0"
+                style={{
+                  minHeight: "60vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  borderLeft: `2px solid ${activeStep === 0 ? "#E07B39" : "#EDE6DC"}`,
+                  paddingLeft: "34px",
+                  opacity: activeStep === 0 ? 1 : 0.4,
+                  transition: "opacity .3s, border-color .3s",
+                }}
+              >
+                <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "80px", lineHeight: 1, color: "#E07B39", marginBottom: "14px" }}>
+                  01
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "34px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Press Alt + Space
+                </h3>
+                <p style={{ fontSize: "18px", lineHeight: 1.6, color: "#6B6560", margin: 0, maxWidth: "440px" }}>
+                  The widget appears over whatever you&apos;re doing &mdash; without ever stealing focus from your active app.
+                </p>
+              </div>
+              <div
+                data-step="1"
+                style={{
+                  minHeight: "60vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  borderLeft: `2px solid ${activeStep === 1 ? "#E07B39" : "#EDE6DC"}`,
+                  paddingLeft: "34px",
+                  opacity: activeStep === 1 ? 1 : 0.4,
+                  transition: "opacity .3s, border-color .3s",
+                }}
+              >
+                <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "80px", lineHeight: 1, color: "#E07B39", marginBottom: "14px" }}>
+                  02
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "34px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Speak naturally
+                </h3>
+                <p style={{ fontSize: "18px", lineHeight: 1.6, color: "#6B6560", margin: 0, maxWidth: "440px" }}>
+                  Ramble. Correct yourself mid-sentence. Use &quot;um&quot; and &quot;like&quot;. Talk exactly like a human being &mdash; Lisup keeps up.
+                </p>
+              </div>
+              <div
+                data-step="2"
+                style={{
+                  minHeight: "60vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  borderLeft: `2px solid ${activeStep === 2 ? "#E07B39" : "#EDE6DC"}`,
+                  paddingLeft: "34px",
+                  opacity: activeStep === 2 ? 1 : 0.4,
+                  transition: "opacity .3s, border-color .3s",
+                }}
+              >
+                <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "80px", lineHeight: 1, color: "#E07B39", marginBottom: "14px" }}>
+                  03
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "34px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  It cleans up
+                </h3>
+                <p style={{ fontSize: "18px", lineHeight: 1.6, color: "#6B6560", margin: 0, maxWidth: "440px" }}>
+                  Fillers stripped, grammar fixed, self-corrections resolved to your final intent, and your tone applied &mdash; in under a second.
+                </p>
+              </div>
+              <div
+                data-step="3"
+                style={{
+                  minHeight: "60vh",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  borderLeft: `2px solid ${activeStep === 3 ? "#E07B39" : "#EDE6DC"}`,
+                  paddingLeft: "34px",
+                  opacity: activeStep === 3 ? 1 : 0.4,
+                  transition: "opacity .3s, border-color .3s",
+                }}
+              >
+                <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "80px", lineHeight: 1, color: "#E07B39", marginBottom: "14px" }}>
+                  04
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "34px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Inject anywhere
+                </h3>
+                <p style={{ fontSize: "18px", lineHeight: 1.6, color: "#6B6560", margin: 0, maxWidth: "440px" }}>
+                  One click drops the finished text straight into your active app &mdash; email, Slack, docs, code. You never left the keyboard.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== FEATURES (horizontal scroll) ===================== */}
+      <section ref={galSectionRef} id="features" style={{ position: "relative", height: "420vh", background: "#1A1A1A" }}>
+        <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", width: "100%", display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "38px" }}>
+            <h2 className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(32px, 5vw, 56px)", lineHeight: 0.95, letterSpacing: "-.03em", color: "#fff", margin: 0 }}>
+              A whole writing
+              <br />
+              studio in one hotkey.
+            </h2>
+            <span className="font-jetbrains" style={{ fontSize: "13px", color: "#6B6560", letterSpacing: ".04em", whiteSpace: "nowrap" }}>
+              (02) &mdash; SCROLL &rarr;
+            </span>
+          </div>
+          <div ref={galTrackRef} className="gallery-track-container" style={{ display: "flex", gap: "24px", padding: "0 48px", width: "max-content", willChange: "transform", flexShrink: 0, alignSelf: "flex-start" }}>
+            {/* card 1 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "linear-gradient(160deg,#2C2420,#1F1B18)", border: "1px solid #332C26", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#E07B39", letterSpacing: ".06em", marginBottom: "24px" }}>
+                  01 / TRANSCRIBE
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "3px", height: "60px", marginBottom: "28px" }}>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "40%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "70%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "100%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "55%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "85%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "35%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "65%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "90%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "50%" }}></span>
+                  <span style={{ flex: 1, background: "linear-gradient(180deg,#F5A878,#E07B39)", borderRadius: "3px", height: "78%" }}></span>
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Reads your mind
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#A29B91", margin: 0 }}>
+                  Groq-powered Whisper finishes transcribing faster than you stop talking. Filler gone, self-corrections resolved, grammar fixed.
+                </p>
+              </div>
+              <div className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+                ~400ms latency
+              </div>
+            </div>
+            {/* card 2 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "#E07B39", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#1A1A1A", letterSpacing: ".06em", marginBottom: "24px", opacity: 0.7 }}>
+                  02 / COMMAND
+                </div>
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="#1A1A1A" style={{ marginBottom: "24px" }}>
+                  <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+                </svg>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#1A1A1A", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  AI Command Mode
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#5C3417", margin: 0 }}>
+                  Copy any text, speak a command: &quot;reply professionally&quot;, &quot;translate to Urdu&quot;, &quot;make it shorter&quot;. It rewrites in place.
+                </p>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                <span className="font-jetbrains" style={{ fontSize: "11.5px", color: "#1A1A1A", background: "rgba(26,26,26,.12)", padding: "5px 10px", borderRadius: "8px" }}>
+                  /reply
+                </span>
+                <span className="font-jetbrains" style={{ fontSize: "11.5px", color: "#1A1A1A", background: "rgba(26,26,26,.12)", padding: "5px 10px", borderRadius: "8px" }}>
+                  /summarize
+                </span>
+                <span className="font-jetbrains" style={{ fontSize: "11.5px", color: "#1A1A1A", background: "rgba(26,26,26,.12)", padding: "5px 10px", borderRadius: "8px" }}>
+                  /email
+                </span>
+              </div>
+            </div>
+            {/* card 3 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "linear-gradient(160deg,#2C2420,#1F1B18)", border: "1px solid #332C26", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#E07B39", letterSpacing: ".06em", marginBottom: "24px" }}>
+                  03 / TONES
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "26px" }}>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#1A1A1A", background: "#E07B39", padding: "7px 14px", borderRadius: "999px" }}>Formal</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#C5BFB8", border: "1px solid #3A332C", padding: "7px 14px", borderRadius: "999px" }}>Casual</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#C5BFB8", border: "1px solid #3A332C", padding: "7px 14px", borderRadius: "999px" }}>Funny</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#C5BFB8", border: "1px solid #3A332C", padding: "7px 14px", borderRadius: "999px" }}>Polite</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#C5BFB8", border: "1px solid #3A332C", padding: "7px 14px", borderRadius: "999px" }}>Social</span>
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Five rephrasing tones
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#A29B91", margin: 0 }}>
+                  One thought, any register. Switch the voice of any text instantly &mdash; without rewriting a word yourself.
+                </p>
+              </div>
+              <div className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+                applied in place
+              </div>
+            </div>
+            {/* card 4 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "linear-gradient(160deg,#2C2420,#1F1B18)", border: "1px solid #332C26", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#E07B39", letterSpacing: ".06em", marginBottom: "24px" }}>
+                  04 / SNIPPETS
+                </div>
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E07B39" strokeWidth="2" strokeLinejoin="round" style={{ marginBottom: "24px" }}>
+                  <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" />
+                </svg>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Snippets &amp; dictionary
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#A29B91", margin: 0 }}>
+                  Say &quot;my email&quot; and it expands instantly &mdash; zero latency. Teach it names, brands and jargon it kept getting wrong.
+                </p>
+              </div>
+              <div className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+                no AI call needed
+              </div>
+            </div>
+            {/* card 5 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "linear-gradient(160deg,#2C2420,#1F1B18)", border: "1px solid #332C26", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#E07B39", letterSpacing: ".06em", marginBottom: "24px" }}>
+                  05 / LANGUAGES
+                </div>
+                <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "64px", color: "#E07B39", lineHeight: 1, marginBottom: "20px" }}>
+                  100+
+                </div>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Speak any language
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#A29B91", margin: 0 }}>
+                  Auto-detects what you speak or pin a language. Translate on command, and sign emails automatically with your name.
+                </p>
+              </div>
+              <div className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+                auto-detect &middot; translate
+              </div>
+            </div>
+            {/* card 6 */}
+            <div className="gallery-card" style={{ flex: "none", width: "440px", background: "#fff", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <div className="font-jetbrains" style={{ fontSize: "12px", color: "#C0631F", letterSpacing: ".06em", marginBottom: "24px" }}>
+                  06 / PRIVACY
+                </div>
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#E07B39" strokeWidth="2" strokeLinejoin="round" style={{ marginBottom: "24px" }}>
+                  <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "28px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+                  Private by design
+                </h3>
+                <p style={{ fontSize: "15.5px", lineHeight: "1.55", color: "#6B6560", margin: 0 }}>
+                  No account. No cloud sync. No telemetry. Your keys and your data stay on your device, full stop.
+                </p>
+              </div>
+              <div
+                data-cursor
+                onMouseMove={handleMagnetMove}
+                onMouseLeave={handleMagnetLeave}
+                style={{
+                  alignSelf: "flex-start",
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  color: "#fff",
+                  background: "#E07B39",
+                  padding: "13px 24px",
+                  borderRadius: "999px",
+                  cursor: "none",
+                  transition: "transform .12s ease-out",
+                }}
+                className="hover-bg-darkorange"
+              >
+                Download free
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== ORBIT / WORKS EVERYWHERE ===================== */}
+      <section style={{ background: "#FDF6F0", padding: "48px 0 96px", overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div data-reveal style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 40px" }}>
+            <span className="font-jetbrains" style={{ fontSize: "13px", color: "#E07B39", letterSpacing: ".06em" }}>
+              WORKS WHERE YOU WORK
+            </span>
+            <h2 className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(32px, 5vw, 54px)", lineHeight: 0.98, letterSpacing: "-.03em", color: "#26231F", margin: "16px 0 0" }}>
+              Speaks every app&apos;s language.
+            </h2>
+            <p style={{ fontSize: "18px", lineHeight: 1.55, color: "#6B6560", margin: "18px 0 0" }}>
+              Dictate and command in everything you already use. Lisup injects clean text right where your cursor is &mdash; no copy-paste, no app-switching.
+            </p>
+          </div>
+
+          {/* Desktop Orbit wrapper */}
+          <div data-reveal className="orbit-desktop-wrapper" style={{ position: "relative", height: "520px" }}>
+            <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "460px", height: "460px" }}>
+              {/* glow */}
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "340px", height: "340px", borderRadius: "50%", background: "radial-gradient(circle,rgba(224,123,57,.16),transparent 68%)", animation: "dotpulse 5s ease-in-out infinite" }}></div>
+              {/* orbit paths */}
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "360px", height: "360px", border: "1px dashed #E2D8CC", borderRadius: "50%" }}></div>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "220px", height: "220px", border: "1px dashed #E2D8CC", borderRadius: "50%" }}></div>
+              
+              {/* center logo */}
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                <img
+                  src="/logo.png"
+                  alt="Lisup Logo"
+                  width="78"
+                  height="78"
+                  style={{ borderRadius: "22px", boxShadow: "0 14px 28px rgba(224,123,57,.4)", objectFit: "cover" }}
+                />
+              </div>
+
+              {/* OUTER RING */}
+              <div style={{ position: "absolute", inset: 0, animation: "spin 44s linear infinite" }}>
+                <div style={{ position: "absolute", left: "379px", top: "199px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiGmail size={28} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "289px", top: "355px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiSlack size={28} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "109px", top: "355px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiNotion size={28} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "19px", top: "199px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiGoogle size={28} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "109px", top: "43px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiWhatsapp size={28} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "289px", top: "43px", width: "62px", height: "62px", borderRadius: "16px", background: "#fff", boxShadow: "0 14px 28px -14px rgba(26,26,26,.32)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spinrev 44s linear infinite" }}>
+                  <SiFigma size={26} color="#26231F" />
+                </div>
+              </div>
+
+              {/* INNER RING */}
+              <div style={{ position: "absolute", inset: 0, animation: "spinrev 31s linear infinite" }}>
+                <div style={{ position: "absolute", left: "294px", top: "254px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <VscVscode size={24} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "199px", top: "309px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <PiMicrosoftWordLogo size={26} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "104px", top: "254px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <SiGoogledocs size={24} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "104px", top: "144px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <PiMicrosoftOutlookLogo size={24} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "199px", top: "89px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <SiDiscord size={26} color="#26231F" />
+                </div>
+                <div style={{ position: "absolute", left: "294px", top: "144px", width: "58px", height: "58px", borderRadius: "15px", background: "#fff", boxShadow: "0 12px 24px -12px rgba(26,26,26,.3)", display: "flex", alignItems: "center", justifyContent: "center", animation: "spin 31s linear infinite" }}>
+                  <PiMicrosoftExcelLogo size={26} color="#26231F" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Orbit fallback grid */}
+          <div className="orbit-mobile-wrapper">
+            <div className="orbit-mobile-card">
+              <SiGmail size={24} color="#26231F" />
+              <span>Gmail</span>
+            </div>
+            <div className="orbit-mobile-card">
+              <SiSlack size={22} color="#26231F" />
+              <span>Slack</span>
+            </div>
+            <div className="orbit-mobile-card">
+              <SiNotion size={22} color="#26231F" />
+              <span style={{ marginTop: "4px" }}>Notion</span>
+            </div>
+            <div className="orbit-mobile-card">
+              <SiWhatsapp size={22} color="#26231F" />
+              <span>WhatsApp</span>
+            </div>
+            <div className="orbit-mobile-card">
+              <SiFigma size={22} color="#26231F" />
+              <span>Figma</span>
+            </div>
+            <div className="orbit-mobile-card">
+              <VscVscode size={22} color="#26231F" />
+              <span>VS Code</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== STATS ===================== */}
+      <section id="why" style={{ background: "#FDF6F0", padding: "120px 0" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div data-reveal style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "30px", marginBottom: "70px" }}>
+            <h2 className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(36px, 6vw, 60px)", lineHeight: 0.95, letterSpacing: "-.03em", color: "#26231F", margin: 0, maxWidth: "680px" }}>
+              Your hands can&apos;t keep up with your head.
+            </h2>
+            <span className="font-jetbrains" style={{ fontSize: "13px", color: "#A29B91", letterSpacing: ".04em", whiteSpace: "nowrap" }}>
+              (03) &mdash; WHY LISUP
+            </span>
+          </div>
+          <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0, borderTop: "1px solid #E2DDD5" }}>
+            <div data-reveal style={{ padding: "36px 28px 0 0" }} className="stats-card stats-border-right">
+              <div data-count="3" data-suffix="&times;" className="font-bricolage" style={{ fontWeight: 800, fontSize: "96px", lineHeight: 0.9, color: "#E07B39", letterSpacing: "-.04em" }}>
+                0
+              </div>
+              <div style={{ fontSize: "15px", color: "#6B6560", fontWeight: 500, marginTop: "14px", lineHeight: 1.45 }}>
+                Faster than typing, on every device you own
+              </div>
+            </div>
+            <div data-reveal style={{ padding: "36px 28px 0 28px" }} className="stats-card stats-border-right">
+              <div data-count="150" data-suffix="" className="font-bricolage" style={{ fontWeight: 800, fontSize: "96px", lineHeight: 0.9, color: "#26231F", letterSpacing: "-.04em" }}>
+                0
+              </div>
+              <div style={{ fontSize: "15px", color: "#6B6560", fontWeight: 500, marginTop: "14px", lineHeight: 1.45 }}>
+                Words a minute spoken vs ~40 typed
+              </div>
+            </div>
+            <div data-reveal style={{ padding: "36px 28px 0 28px" }} className="stats-card stats-border-right">
+              <div data-count="100" data-suffix="+" className="font-bricolage" style={{ fontWeight: 800, fontSize: "96px", lineHeight: 0.9, color: "#26231F", letterSpacing: "-.04em" }}>
+                0
+              </div>
+              <div style={{ fontSize: "15px", color: "#6B6560", fontWeight: 500, marginTop: "14px", lineHeight: 1.45 }}>
+                Languages, auto-detected or pinned
+              </div>
+            </div>
+            <div data-reveal style={{ padding: "36px 0 0 28px" }} className="stats-card">
+              <div data-count="100" data-suffix="%" className="font-bricolage" style={{ fontWeight: 800, fontSize: "96px", lineHeight: 0.9, color: "#26231F", letterSpacing: "-.04em" }}>
+                0
+              </div>
+              <div style={{ fontSize: "15px", color: "#6B6560", fontWeight: 500, marginTop: "14px", lineHeight: 1.45 }}>
+                On-device. Nothing synced or stored in a cloud
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== TONE SWITCHER ===================== */}
+      <section id="tones" style={{ background: "#1A1A1A", padding: "120px 0" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div data-reveal style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 44px" }}>
+            <span className="font-jetbrains" style={{ fontSize: "13px", color: "#E07B39", letterSpacing: ".06em" }}>
+              (04) &mdash; FIVE TONES, ONE VOICE
+            </span>
+            <h2 className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(36px, 5vw, 56px)", lineHeight: 0.98, letterSpacing: "-.03em", color: "#fff", margin: "18px 0 0" }}>
+              Same thought. Any register.
+            </h2>
+          </div>
+
+          <div data-reveal style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap", marginBottom: "28px" }}>
+              {Object.keys(TONES).map((t) => {
+                const isSelected = tone === t;
+                return (
+                  <button
+                    key={t}
+                    onClick={() => selectTone(t as keyof typeof TONES)}
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      padding: "12px 24px",
+                      borderRadius: "999px",
+                      cursor: "none",
+                      transition: "all 0.2s ease",
+                      border: isSelected ? "1px solid #E07B39" : "1px solid #3A332C",
+                      background: isSelected ? "#E07B39" : "transparent",
+                      color: isSelected ? "#1A1A1A" : "#C5BFB8",
+                    }}
+                    className={isSelected ? "" : "hover-border-orange"}
+                  >
+                    {t}
+                  </button>
+                );
+              })}
+            </div>
+            <div style={{ background: "linear-gradient(160deg,#2C2420,#211C18)", border: "1px solid #332C26", borderRadius: "24px", padding: "40px 44px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "18px" }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#6B6560">
+                  <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                </svg>
+                <span className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560", letterSpacing: ".04em" }}>
+                  YOU SAID
+                </span>
+              </div>
+              <p className="font-jetbrains" style={{ fontSize: "14px", color: "#6B6560", margin: "0 0 26px", paddingBottom: "26px", borderBottom: "1px dashed #3A332C" }}>
+                &quot;hey just checking if we&apos;re still on for the call tomorrow&quot;
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#E07B39" }}></span>
+                <span className="font-jetbrains" style={{ fontSize: "12px", color: "#E07B39", fontWeight: 600, letterSpacing: ".05em" }}>
+                  {tone.toUpperCase()}
+                </span>
+              </div>
+              <p ref={toneElRef} style={{ fontSize: "25px", lineHeight: 1.5, color: "#fff", margin: 0, fontWeight: 500, minHeight: "76px", transition: "opacity .25s" }}>
+                {toneText}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== CTA ===================== */}
+      <section style={{ background: "#E07B39", padding: "110px 0", position: "relative", overflow: "hidden" }}>
+        <div className="lz-hidemob" style={{ position: "absolute", top: "-160px", right: "-90px", width: "520px", height: "520px", borderRadius: "50%", background: "radial-gradient(circle,rgba(255,255,255,.2),transparent 70%)" }}></div>
+        <div data-reveal style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", textAlign: "center", position: "relative" }}>
+          <h2 className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(48px, 8vw, 80px)", lineHeight: 0.95, letterSpacing: "-.035em", color: "#fff", margin: 0 }}>
+            Stop typing.
+            <br />
+            Start talking.
+          </h2>
+          <p style={{ fontSize: "19px", lineHeight: 1.5, color: "rgba(255,255,255,.92)", margin: "24px auto 0", maxWidth: "480px" }}>
+            Free while in beta. Lives in your tray, launches on boot, ready the moment you press Alt + Space.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginTop: "38px" }}>
+            <div
+              data-cursor
+              onMouseMove={handleMagnetMove}
+              onMouseLeave={handleMagnetLeave}
+              style={{
+                fontSize: "16px",
+                fontWeight: 700,
+                color: "#E07B39",
+                background: "#fff",
+                padding: "17px 36px",
+                borderRadius: "999px",
+                cursor: "none",
+                transition: "transform .12s ease-out, background .2s",
+                boxShadow: "0 18px 38px -12px rgba(26,26,26,.4)",
+              }}
+              className="hover-bg-fdf6f0"
+            >
+              Download free
+            </div>
+            <span className="font-jetbrains" style={{ fontSize: "13px", color: "rgba(255,255,255,.9)", fontWeight: 500 }}>
+              WINDOWS &middot; MACOS &middot; ANDROID
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== FOOTER ===================== */}
+      <footer style={{ background: "#1A1A1A", padding: "70px 0 0", overflow: "hidden" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
+          <div style={{ maxWidth: "320px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
+              <img
+                src="/logo.png"
+                alt="Lisup Logo"
+                width="32"
+                height="32"
+                style={{ borderRadius: "8px", objectFit: "cover" }}
+              />
+              <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "22px", color: "#fff" }}>
+                Lis<span style={{ color: "#E07B39" }}>up</span>
+              </span>
+            </div>
+            <p style={{ fontSize: "14.5px", lineHeight: 1.55, color: "#A29B91", margin: 0 }}>
+              Your voice, perfected. Speak anywhere, get clean finished text in seconds.
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "72px", flexWrap: "wrap" }} className="footer-links-grid">
+            <div>
+              <div className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 600, color: "#6B6560", marginBottom: "18px", letterSpacing: ".06em" }}>
+                PRODUCT
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <a href="#features" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  Features
+                </a>
+                <a href="#how" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  How it works
+                </a>
+                <a href="#tones" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  Tones
+                </a>
+              </div>
+            </div>
+            <div>
+              <div className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 600, color: "#6B6560", marginBottom: "18px", letterSpacing: ".06em" }}>
+                COMPANY
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  About
+                </a>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  Privacy
+                </a>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                  Contact
+                </a>
+              </div>
+            </div>
+            <div>
+              <div className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 600, color: "#6B6560", marginBottom: "18px", letterSpacing: ".06em" }}>
+                PLATFORMS
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Windows</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: "1px solid #2C2824" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "22px 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
+            <span className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+              &copy; 2026 LISUP &mdash; ALL RIGHTS RESERVED
+            </span>
+            <span className="font-jetbrains" style={{ fontSize: "12px", color: "#6B6560" }}>
+              FOR PEOPLE WHO THINK FASTER THAN THEY TYPE
+            </span>
+          </div>
+        </div>
+        <div className="font-bricolage" style={{ fontWeight: 800, fontSize: "clamp(120px, 20vw, 290px)", lineHeight: 0.7, letterSpacing: "-.04em", color: "#fff", opacity: 0.05, textAlign: "center", whiteSpace: "nowrap", paddingBottom: "20px", userSelect: "none" }}>
+          Lisup
+        </div>
+      </footer>
     </div>
   );
 }
