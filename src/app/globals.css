@@ -445,7 +445,7 @@ body {
 
 .laptop-wrapper {
   perspective: 1200px;
-  width: 100%;
+  width: 92%;
   max-width: 960px;
   margin: 0 auto;
   position: relative;
@@ -465,6 +465,7 @@ body {
   transform-origin: bottom center;
   transition: transform 0.6s ease;
   z-index: 2;
+  container-type: inline-size;
 }
 
 .laptop-screen-content {
@@ -479,6 +480,19 @@ body {
   display: flex;
   flex-direction: column;
   user-select: none;
+}
+
+.laptop-screen-scale-wrapper {
+  width: 940px;
+  height: 588px;
+  position: relative;
+  /* Viewport fallback scaling for mobile browsers without container query support */
+  transform: scale(calc((92vw - 20px) / 940));
+  /* Preferred container query scaling */
+  transform: scale(calc((100cqw - 20px) / 940));
+  transform-origin: top left;
+  display: flex;
+  flex-direction: column;
 }
 
 .laptop-notch {
@@ -869,17 +883,17 @@ body {
   position: absolute;
   bottom: 12px;
   right: 12px;
-  width: 280px;
+  width: 220px;
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(236, 232, 226, 0.7);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 16px 36px rgba(0,0,0,0.18);
-  padding: 12px;
+  padding: 8px 10px;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
   will-change: transform, opacity;
 }
@@ -921,4 +935,426 @@ body {
   color: #fff !important;
   border-color: var(--accent) !important;
 }
+
+/* Simulated selections across app mockups */
+.slack-content .demo-selected-text {
+  background: rgba(17, 100, 163, 0.22) !important;
+}
+
+.notion-content .demo-selected-text {
+  background: rgba(35, 131, 226, 0.28) !important;
+}
+
+.vscode-content .demo-selected-text {
+  background: rgba(38, 79, 120, 0.6) !important;
+  color: #fff !important;
+}
+
+/* Copy tooltip popup animation */
+.demo-copy-tooltip {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: #1a1a1a;
+  color: #fff;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demo-copy-tooltip.show {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.demo-copy-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0;
+  border-style: solid;
+  border-color: #1a1a1a transparent;
+  display: block;
+  width: 0;
+}
+
+/* Clipboard Context panel inside Lisup widget */
+.widget-clipboard-context {
+  background: rgba(224, 123, 57, 0.05);
+  border: 1px dashed rgba(224, 123, 57, 0.25);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.widget-clipboard-label {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.widget-clipboard-text {
+  font-size: 10.5px;
+  color: #6b6560;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+}
+
+
+@media (max-width: 768px) {
+  .flex-col-mobile {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+}
+
+.hover-bg-fdf6f0-soft:hover {
+  background: rgba(253, 246, 240, 0.75) !important;
+}
+
+/* Responsive Layout Grid for Individuals Subpages */
+.role-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .role-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* Mock Application grid columns and sidebar hide rules */
+.mock-app-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+}
+
+@media (max-width: 768px) {
+  .mock-app-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .mock-app-sidebar {
+    display: none !important;
+  }
+}
+
+/* Floating Widget Overlay inside the mock screen */
+.mock-lisup-widget-overlay {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 330px;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+  .mock-lisup-widget-overlay {
+    width: calc(100% - 24px) !important;
+    right: 12px !important;
+    left: 12px !important;
+    bottom: 12px !important;
+  }
+}
+
+/* Mobile Drawer Navigation Panel */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+}
+
+.hamburger-line {
+  width: 22px;
+  height: 2px;
+  background-color: #26231F;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-line.open-1 {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-line.open-2 {
+  opacity: 0;
+}
+
+.hamburger-line.open-3 {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(253, 246, 240, 0.98);
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  padding: 90px 24px 40px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mobile-drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Responsive visibility display helpers */
+.mobile-only {
+  display: none !important;
+}
+
+.desktop-only {
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block !important;
+  }
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+/* Premium Mobile Annotation Card Simulator */
+.mobile-annotation-card {
+  width: 100%;
+  max-width: 580px;
+  /* Radial gradient with warm copper glowing orbs over deep dark background */
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(224, 123, 57, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(224, 123, 57, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #1b120c 0%, #0d0b09 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  padding: 24px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.mobile-raw-area {
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-hanken), sans-serif;
+  text-align: left;
+  margin-bottom: 24px;
+  margin-top: 10px;
+}
+
+/* Annotated word base styles */
+.mobile-annotated-word {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.mobile-annotated-word.removed-filler {
+  border-bottom: 1.5px solid #E07B39;
+  color: #ffffff;
+}
+
+.mobile-annotated-word.added-to-dictionary {
+  border: 1.5px solid #E07B39;
+  border-radius: 999px;
+  padding: 0 5px;
+  margin: 0 2px;
+  color: #ffffff;
+}
+
+.mobile-annotated-word.fixed-spelling {
+  border-bottom: 1.5px dashed #E07B39;
+  color: #ffffff;
+}
+
+/* Floating annotation bubble */
+.mobile-annotation-badge {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translate(-50%, 6px);
+  background: #E07B39;
+  color: #ffffff;
+  font-family: var(--font-hanken), sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(224, 123, 57, 0.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fade in class triggered when animState is not idle */
+.show-annotations .mobile-annotation-badge {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Polished Card Container */
+.mobile-polished-card {
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+
+.mobile-polished-text {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #ffffff;
+  min-height: 80px;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Toolbar at bottom of dark card */
+.mobile-card-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.mobile-toolbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-jetbrains), monospace;
+}
+
+.mobile-toolbar-icons span {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mobile-toolbar-icons span:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-toolbar-action {
+  width: 28px;
+  height: 28px;
+  background: #E07B39;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.mobile-toolbar-action:hover {
+  background: #f08b49;
+  transform: scale(1.05);
+}
+
+/* Hero section canvas styling */
+.hero-anim-canvas {
+  position: absolute;
+  top: 0;
+  right: -6%;
+  width: 760px;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .hero-anim-canvas {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 230px !important;
+    height: 230px !important;
+    margin: 0 auto 16px !important;
+    display: block !important;
+    z-index: 1;
+  }
+  .hero-section {
+    padding-top: 0px !important;
+  }
+  .hero-content-container {
+    padding-top: 10px !important;
+  }
+  .hero-content-container > div {
+    text-align: center !important;
+  }
+  .hero-buttons {
+    justify-content: center !important;
+  }
+  .hero-platforms {
+    justify-content: center !important;
+  }
+}
+
 

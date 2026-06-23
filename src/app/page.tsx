@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
+import Navbar from "./Navbar";
 import { 
   SiNotion, 
   SiSlack, 
@@ -90,7 +91,136 @@ const TYPER_LINES = [
   "Translate this note into Spanish.",
 ];
 
-// ===================== INTERACTIVE LAPTOP SIMULATION DATA =====================
+function MobileCommandSimulator() {
+  return (
+    <div className="mobile-annotation-card show-annotations">
+      {/* Raw transcript with dynamic inline annotation targets */}
+      <div className="mobile-raw-area font-hanken">
+        <div 
+          className="widget-clipboard-context" 
+          style={{ 
+            marginBottom: "16px", 
+            background: "rgba(255,255,255,0.03)", 
+            borderColor: "rgba(255,255,255,0.1)",
+            padding: "8px 12px",
+            borderRadius: "8px",
+            border: "1px dashed rgba(255,255,255,0.15)"
+          }}
+        >
+          <div className="widget-clipboard-label" style={{ color: "rgba(255,255,255,0.5)", fontSize: "9px" }}>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginRight: "4px", display: "inline-block", verticalAlign: "middle" }}>
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            TEXT TO REWRITE (CLIPBOARD)
+          </div>
+          <div className="widget-clipboard-text" style={{ color: "#ffffff", fontSize: "11px", whiteSpace: "normal", marginTop: "4px" }}>
+            &ldquo;hey, i can&apos;t make the call today. let&apos;s meet tomorrow.&rdquo;
+          </div>
+        </div>
+
+        <div style={{ fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.05em", marginBottom: "8px", textTransform: "uppercase" }}>
+          Dictated Command:
+        </div>
+
+        <div style={{ minHeight: "40px", lineHeight: "2.2" }}>
+          <span className="mobile-annotated-word added-to-dictionary" style={{ marginRight: "6px" }}>
+            make this professional and formal
+            <span className="mobile-annotation-badge">Voice Command</span>
+          </span>{" "}
+          <span className="mobile-annotated-word removed-filler" style={{ marginRight: "6px", color: "rgba(255,255,255,0.3)" }}>
+            please
+            <span className="mobile-annotation-badge">Removed filler</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Polished Card Container */}
+      <div className="mobile-polished-card">
+        <div className="mobile-polished-text font-hanken">
+          Unfortunately, I will not be able to attend today&apos;s meeting. Could we reschedule for tomorrow?
+        </div>
+
+        {/* Bottom Toolbar */}
+        <div className="mobile-card-toolbar">
+          <div className="mobile-toolbar-icons">
+            <span style={{ fontWeight: 800 }}>B</span>
+            <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
+            <span style={{ textDecoration: "line-through" }}>S</span>
+            <span>↻</span>
+            <span>::</span>
+            <span>:=</span>
+            <span>&lt;/&gt;</span>
+          </div>
+          <button className="mobile-toolbar-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileTranscribeSimulator() {
+  return (
+    <div className="mobile-annotation-card show-annotations">
+      {/* Raw transcript with dynamic inline annotation targets */}
+      <div className="mobile-raw-area font-hanken">
+        <div style={{ fontSize: "10px", fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.05em", marginBottom: "8px", textTransform: "uppercase" }}>
+          Speaking (Raw Input):
+        </div>
+
+        <div style={{ minHeight: "56px", lineHeight: "2.2" }}>
+          <span className="mobile-annotated-word removed-filler" style={{ marginRight: "6px", color: "rgba(255,255,255,0.3)" }}>
+            uh yeah
+            <span className="mobile-annotation-badge">Removed filler</span>
+          </span>{" "}
+          so I think we should probably check with Jenny from legal I think she said something about the NDA being like not ready yet or maybe she did send it I&apos;m not sure, and um we should cc{" "}
+          <span className="mobile-annotated-word added-to-dictionary" style={{ marginRight: "6px" }}>
+            Davee
+            <span className="mobile-annotation-badge">Added to Dictionary</span>
+          </span>{" "}
+          maybe... sure to update the Q2 um goals{" "}
+          <span className="mobile-annotated-word fixed-spelling" style={{ marginRight: "6px" }}>
+            slidez
+            <span className="mobile-annotation-badge">Fixed spelling</span>
+          </span>{" "}
+          before Friday&apos;s thing, I forget the link but it&apos;s probably in Slack somewhere..
+        </div>
+      </div>
+
+      {/* Polished Card Container */}
+      <div className="mobile-polished-card">
+        <div className="mobile-polished-text font-hanken">
+          Let&apos;s reach out to Jenny from Legal—she may have mentioned the NDA isn&apos;t finalized yet, or possibly already sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals slide is updated before Friday&apos;s review. The link should be in Slack.
+        </div>
+
+        {/* Bottom Toolbar */}
+        <div className="mobile-card-toolbar">
+          <div className="mobile-toolbar-icons">
+            <span style={{ fontWeight: 800 }}>B</span>
+            <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
+            <span style={{ textDecoration: "line-through" }}>S</span>
+            <span>↻</span>
+            <span>::</span>
+            <span>:=</span>
+            <span>&lt;/&gt;</span>
+          </div>
+          <button className="mobile-toolbar-action">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const DEMO_SENTENCES = [
   {
     id: 0,
@@ -375,426 +505,503 @@ function LaptopDemo() {
         </p>
       </div>
 
-      {/* TABS & CONTROLS ROW */}
-      <div
-        data-reveal
-        style={{
-          transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "30px",
-          marginBottom: "38px",
-        }}
-      >
-        {/* App Switcher Tabs */}
-        <div style={{ display: "flex", background: "#f2f0ec", padding: "4px", borderRadius: "12px", border: "1px solid #edebe7" }}>
-          <button
-            onClick={() => handleAppChange("slack")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              border: "none",
-              background: activeApp === "slack" ? "#fff" : "transparent",
-              color: activeApp === "slack" ? "#26231F" : "#A29B91",
-              fontSize: "13px",
-              fontWeight: 600,
-              padding: "8px 16px",
-              borderRadius: "9px",
-              cursor: "pointer",
-              boxShadow: activeApp === "slack" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-              transition: "all 0.2s",
-            }}
-          >
-            <SiSlack size={14} color={activeApp === "slack" ? "#E07B39" : "#A29B91"} />
-            Slack
-          </button>
-          <button
-            onClick={() => handleAppChange("notion")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              border: "none",
-              background: activeApp === "notion" ? "#fff" : "transparent",
-              color: activeApp === "notion" ? "#26231F" : "#A29B91",
-              fontSize: "13px",
-              fontWeight: 600,
-              padding: "8px 16px",
-              borderRadius: "9px",
-              cursor: "pointer",
-              boxShadow: activeApp === "notion" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-              transition: "all 0.2s",
-            }}
-          >
-            <SiNotion size={14} color={activeApp === "notion" ? "#1A1A1A" : "#A29B91"} />
-            Notion
-          </button>
-          <button
-            onClick={() => handleAppChange("vscode")}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              border: "none",
-              background: activeApp === "vscode" ? "#fff" : "transparent",
-              color: activeApp === "vscode" ? "#26231F" : "#A29B91",
-              fontSize: "13px",
-              fontWeight: 600,
-              padding: "8px 16px",
-              borderRadius: "9px",
-              cursor: "pointer",
-              boxShadow: activeApp === "vscode" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-              transition: "all 0.2s",
-            }}
-          >
-            <VscVscode size={14} color={activeApp === "vscode" ? "#007acc" : "#A29B91"} />
-            VS Code
-          </button>
-        </div>
-
-        {/* Script Selection */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
-          <span className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", fontWeight: 600, marginRight: "4px" }}>
-            SPEECH SCRIPT:
-          </span>
-          {DEMO_SENTENCES.map((s, idx) => (
+      {/* DESKTOP MODE (shown only on screens > 768px) */}
+      <div className="desktop-only">
+        {/* TABS & CONTROLS ROW */}
+        <div
+          data-reveal
+          style={{
+            transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "30px",
+            marginBottom: "38px",
+          }}
+        >
+          {/* App Switcher Tabs */}
+          <div style={{ display: "flex", background: "#f2f0ec", padding: "4px", borderRadius: "12px", border: "1px solid #edebe7" }}>
             <button
-              key={s.id}
-              onClick={() => handleSentenceChange(idx)}
-              className={`demo-control-tab ${activeSentenceIdx === idx ? "active" : ""}`}
+              onClick={() => handleAppChange("slack")}
               style={{
-                fontSize: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                border: "none",
+                background: activeApp === "slack" ? "#fff" : "transparent",
+                color: activeApp === "slack" ? "#26231F" : "#A29B91",
+                fontSize: "13px",
                 fontWeight: 600,
-                color: "#6B6560",
-                background: "#fff",
-                border: "1px solid #ECE8E2",
-                padding: "8px 14px",
-                borderRadius: "999px",
+                padding: "8px 16px",
+                borderRadius: "9px",
                 cursor: "pointer",
+                boxShadow: activeApp === "slack" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                transition: "all 0.2s",
               }}
             >
-              {s.label}
+              <SiSlack size={14} color={activeApp === "slack" ? "#E07B39" : "#A29B91"} />
+              Slack
             </button>
-          ))}
+            <button
+              onClick={() => handleAppChange("notion")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                border: "none",
+                background: activeApp === "notion" ? "#fff" : "transparent",
+                color: activeApp === "notion" ? "#26231F" : "#A29B91",
+                fontSize: "13px",
+                fontWeight: 600,
+                padding: "8px 16px",
+                borderRadius: "9px",
+                cursor: "pointer",
+                boxShadow: activeApp === "notion" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                transition: "all 0.2s",
+              }}
+            >
+              <SiNotion size={14} color={activeApp === "notion" ? "#1A1A1A" : "#A29B91"} />
+              Notion
+            </button>
+            <button
+              onClick={() => handleAppChange("vscode")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                border: "none",
+                background: activeApp === "vscode" ? "#fff" : "transparent",
+                color: activeApp === "vscode" ? "#26231F" : "#A29B91",
+                fontSize: "13px",
+                fontWeight: 600,
+                padding: "8px 16px",
+                borderRadius: "9px",
+                cursor: "pointer",
+                boxShadow: activeApp === "vscode" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                transition: "all 0.2s",
+              }}
+            >
+              <VscVscode size={14} color={activeApp === "vscode" ? "#007acc" : "#A29B91"} />
+              VS Code
+            </button>
+          </div>
+
+          {/* Script Selection */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+            <span className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", fontWeight: 600, marginRight: "4px" }}>
+              SPEECH SCRIPT:
+            </span>
+            {DEMO_SENTENCES.map((s, idx) => (
+              <button
+                key={s.id}
+                onClick={() => handleSentenceChange(idx)}
+                className={`demo-control-tab ${activeSentenceIdx === idx ? "active" : ""}`}
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: "#6B6560",
+                  background: "#fff",
+                  border: "1px solid #ECE8E2",
+                  padding: "8px 14px",
+                  borderRadius: "999px",
+                  cursor: "pointer",
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Play/Autoplay controls */}
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", borderLeft: "1px solid #ECE8E2", paddingLeft: "20px" }}>
+            <button
+              onClick={handleManualPlay}
+              disabled={isPlaying}
+              style={{
+                background: isPlaying ? "#EDE8E2" : "#1A1A1A",
+                color: isPlaying ? "#A29B91" : "#fff",
+                border: "none",
+                fontSize: "12.5px",
+                fontWeight: 700,
+                padding: "8px 16px",
+                borderRadius: "8px",
+                cursor: isPlaying ? "default" : "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "background 0.2s",
+              }}
+            >
+              {isPlaying ? "Simulating..." : "▶ Run Demo"}
+            </button>
+            <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12.5px", color: "#6B6560", cursor: "pointer", userSelect: "none" }}>
+              <input
+                type="checkbox"
+                checked={autoplay}
+                onChange={(e) => setAutoplay(e.target.checked)}
+                style={{ accentColor: "#E07B39", width: "14px", height: "14px" }}
+              />
+              Autoplay
+            </label>
+          </div>
         </div>
 
-        {/* Play/Autoplay controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px", borderLeft: "1px solid #ECE8E2", paddingLeft: "20px" }}>
-          <button
-            onClick={handleManualPlay}
-            disabled={isPlaying}
-            style={{
-              background: isPlaying ? "#EDE8E2" : "#1A1A1A",
-              color: isPlaying ? "#A29B91" : "#fff",
-              border: "none",
-              fontSize: "12.5px",
-              fontWeight: 700,
-              padding: "8px 16px",
-              borderRadius: "8px",
-              cursor: isPlaying ? "default" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              transition: "background 0.2s",
-            }}
-          >
-            {isPlaying ? "Simulating..." : "▶ Run Demo"}
-          </button>
-          <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12.5px", color: "#6B6560", cursor: "pointer", userSelect: "none" }}>
-            <input
-              type="checkbox"
-              checked={autoplay}
-              onChange={(e) => setAutoplay(e.target.checked)}
-              style={{ accentColor: "#E07B39", width: "14px", height: "14px" }}
-            />
-            Autoplay
-          </label>
-        </div>
-      </div>
+        {/* LAPTOP GRAPHIC FRAME */}
+        <div
+          data-reveal
+          style={{
+            transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .2s, transform .7s cubic-bezier(.2,.7,.2,1) .2s",
+          }}
+          className="laptop-wrapper"
+        >
+          <div className="laptop-lid">
+            <div className="laptop-notch"></div>
+            <div className="laptop-glare"></div>
 
-      {/* LAPTOP GRAPHIC FRAME */}
-      <div
-        data-reveal
-        style={{
-          transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .2s, transform .7s cubic-bezier(.2,.7,.2,1) .2s",
-        }}
-        className="laptop-wrapper"
-      >
-        <div className="laptop-lid">
-          <div className="laptop-notch"></div>
-          <div className="laptop-glare"></div>
-
-          {/* APPLICATION DISPLAY SCREEN */}
-          <div className="laptop-screen-content">
-            {/* WINDOW TOP HEADER */}
-            <div className="mock-window-header">
-              <div className="mock-window-dots">
-                <div className="mock-window-dot red"></div>
-                <div className="mock-window-dot yellow"></div>
-                <div className="mock-window-dot green"></div>
-              </div>
-              <div className="mock-window-tabs">
-                <div className={`mock-window-tab ${activeApp === "slack" ? "active" : ""}`}>
-                  <SiSlack size={10} color="#E07B39" />
-                  slack
+            {/* APPLICATION DISPLAY SCREEN */}
+            <div className="laptop-screen-content">
+              {/* WINDOW TOP HEADER */}
+              <div className="mock-window-header">
+                <div className="mock-window-dots">
+                  <div className="mock-window-dot red"></div>
+                  <div className="mock-window-dot yellow"></div>
+                  <div className="mock-window-dot green"></div>
                 </div>
-                <div className={`mock-window-tab ${activeApp === "notion" ? "active" : ""}`}>
-                  <SiNotion size={10} color="#fff" />
-                  notion
-                </div>
-                <div className={`mock-window-tab ${activeApp === "vscode" ? "active" : ""}`}>
-                  <VscVscode size={10} color="#007acc" />
-                  vscode
+                <div className="mock-window-tabs">
+                  <div className={`mock-window-tab ${activeApp === "slack" ? "active" : ""}`}>
+                    <SiSlack size={10} color="#E07B39" />
+                    slack
+                  </div>
+                  <div className={`mock-window-tab ${activeApp === "notion" ? "active" : ""}`}>
+                    <SiNotion size={10} color="#fff" />
+                    notion
+                  </div>
+                  <div className={`mock-window-tab ${activeApp === "vscode" ? "active" : ""}`}>
+                    <VscVscode size={10} color="#007acc" />
+                    vscode
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* SCREEN BODY BASED ON ACTIVE APP */}
-            <div className="mock-app-body">
-              {/* SLACK MOCK */}
-              {activeApp === "slack" && (
-                <div style={{ display: "flex", flex: 1, background: "#fff" }}>
-                  <div className="slack-sidebar font-hanken">
-                    <div style={{ fontWeight: 800, fontSize: "13px", color: "#fff", marginBottom: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
-                      <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#2C9A5E" }}></span>
-                      Lisup Workspace
-                    </div>
-                    <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>CHANNELS</div>
-                    <div className="slack-channels-list">
-                      <div className="slack-channel-item active"># design-team</div>
-                      <div className="slack-channel-item"># general</div>
-                      <div className="slack-channel-item"># announcements</div>
-                    </div>
-                    <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "10px" }}>DIRECT MESSAGES</div>
-                    <div className="slack-channels-list">
-                      <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
-                        Sarah (Designer)
+              {/* SCREEN BODY BASED ON ACTIVE APP */}
+              <div className="mock-app-body">
+                {/* SLACK MOCK */}
+                {activeApp === "slack" && (
+                  <div style={{ display: "flex", flex: 1, background: "#fff" }}>
+                    <div className="slack-sidebar font-hanken">
+                      <div style={{ fontWeight: 800, fontSize: "13px", color: "#fff", marginBottom: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                        Lisup Workspace
                       </div>
-                      <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
-                        Alex (Dev)
+                      <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>CHANNELS</div>
+                      <div className="slack-channels-list">
+                        <div className="slack-channel-item active"># design-team</div>
+                        <div className="slack-channel-item"># general</div>
+                        <div className="slack-channel-item"># announcements</div>
+                      </div>
+                      <div style={{ color: "#8b728c", fontSize: "10px", fontWeight: 700, marginTop: "10px" }}>DIRECT MESSAGES</div>
+                      <div className="slack-channels-list">
+                        <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                          Sarah (Designer)
+                        </div>
+                        <div className="slack-channel-item" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                          <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                          Alex (Dev)
+                        </div>
+                      </div>
+                    </div>
+                    <div className="slack-content font-hanken">
+                      <div className="slack-messages">
+                        <div className="slack-message-bubble">
+                          <div className="slack-avatar" style={{ background: "#4a154b", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>S</div>
+                          <div className="slack-msg-text-wrap">
+                            <span className="slack-sender">Sarah <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:24 AM</span></span>
+                            <span className="slack-msg-body">Hey team, are we ready to sign off on the design assets? We need to get the final build ready.</span>
+                          </div>
+                        </div>
+                        <div className="slack-message-bubble">
+                          <div className="slack-avatar" style={{ background: "#1164a3", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>A</div>
+                          <div className="slack-msg-text-wrap">
+                            <span className="slack-sender">Alex <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:25 AM</span></span>
+                            <span className="slack-msg-body">Yeah, we are just waiting to finalize the release date details. What&apos;s the plan?</span>
+                          </div>
+                        </div>
+
+                        {/* Animated injection message indicator */}
+                        {injectedText && (
+                          <div className="slack-message-bubble" style={{ opacity: animState === "done" ? 1 : 0.6, transition: "opacity 0.3s" }}>
+                            <div className="slack-avatar" style={{ background: "#e07b39", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>U</div>
+                            <div className="slack-msg-text-wrap">
+                              <span className="slack-sender">You <span style={{ fontWeight: 400, fontSize: "10px", color: "#e07b39", marginLeft: "4px" }}>Drafting...</span></span>
+                              <span className="slack-msg-body" style={{ color: animState === "done" ? "#1a1a1a" : "#6B6560" }}>
+                                {injectedText}
+                                {animState === "injecting" && <span className="demo-cursor"></span>}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="slack-input-container">
+                        <div className="slack-input-box">
+                          <span style={{ color: injectedText ? "#1a1a1a" : "#a29b91", display: "flex", alignItems: "center", width: "100%" }}>
+                            {!injectedText && animState !== "injecting" && "Message #design-team"}
+                            {animState === "injecting" && injectedText}
+                            {animState === "done" && injectedText}
+                            {animState === "injecting" && <span className="demo-cursor"></span>}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="slack-content font-hanken">
-                    <div className="slack-messages">
-                      <div className="slack-message-bubble">
-                        <div className="slack-avatar" style={{ background: "#4a154b", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>S</div>
-                        <div className="slack-msg-text-wrap">
-                          <span className="slack-sender">Sarah <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:24 AM</span></span>
-                          <span className="slack-msg-body">Hey team, are we ready to sign off on the design assets? We need to get the final build ready.</span>
-                        </div>
-                      </div>
-                      <div className="slack-message-bubble">
-                        <div className="slack-avatar" style={{ background: "#1164a3", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>A</div>
-                        <div className="slack-msg-text-wrap">
-                          <span className="slack-sender">Alex <span style={{ fontWeight: 400, fontSize: "10px", color: "#a29b91", marginLeft: "4px" }}>11:25 AM</span></span>
-                          <span className="slack-msg-body">Yeah, we are just waiting to finalize the release date details. What&apos;s the plan?</span>
-                        </div>
-                      </div>
+                )}
 
-                      {/* Animated injection message indicator */}
-                      {injectedText && (
-                        <div className="slack-message-bubble" style={{ opacity: animState === "done" ? 1 : 0.6, transition: "opacity 0.3s" }}>
-                          <div className="slack-avatar" style={{ background: "#e07b39", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "11px", fontWeight: 700 }}>U</div>
-                          <div className="slack-msg-text-wrap">
-                            <span className="slack-sender">You <span style={{ fontWeight: 400, fontSize: "10px", color: "#e07b39", marginLeft: "4px" }}>Drafting...</span></span>
-                            <span className="slack-msg-body" style={{ color: animState === "done" ? "#1a1a1a" : "#6B6560" }}>
-                              {injectedText}
-                              {animState === "injecting" && <span className="demo-cursor"></span>}
-                            </span>
-                          </div>
-                        </div>
-                      )}
+                {/* NOTION MOCK */}
+                {activeApp === "notion" && (
+                  <div style={{ display: "flex", flex: 1, background: "#fff" }}>
+                    <div className="notion-sidebar font-hanken">
+                      <div style={{ fontWeight: 800, fontSize: "12px", color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+                        🧑‍💻 Muzammil&apos;s Notion
+                      </div>
+                      <div style={{ color: "#a29b91", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>PRIVATE</div>
+                      <div className="notion-sidebar-item active">📄 Product Spec</div>
+                      <div className="notion-sidebar-item">📝 Meeting Notes</div>
+                      <div className="notion-sidebar-item">🚀 Release Planner</div>
                     </div>
-                    <div className="slack-input-container">
-                      <div className="slack-input-box">
-                        <span style={{ color: injectedText ? "#1a1a1a" : "#a29b91", display: "flex", alignItems: "center", width: "100%" }}>
-                          {!injectedText && animState !== "injecting" && "Message #design-team"}
-                          {animState === "injecting" && injectedText}
-                          {animState === "done" && injectedText}
+                    <div className="notion-content font-hanken">
+                      <div className="notion-title">📄 Product Spec</div>
+                      <div className="notion-text-block">
+                        We are developing the core landing page design details for the Lisup website. The site needs to showcase the voice-to-text widget.
+                      </div>
+                      <div className="notion-text-block" style={{ fontWeight: 600, color: "#1a1a1a" }}>
+                        Key Product Release Notes:
+                      </div>
+                      <div className="notion-editor-input">
+                        <span style={{ color: injectedText ? "#1a1a1a" : "#A29B91" }}>
+                          {injectedText || (animState === "injecting" ? "" : "Type '/' for commands...")}
                           {animState === "injecting" && <span className="demo-cursor"></span>}
                         </span>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* NOTION MOCK */}
-              {activeApp === "notion" && (
-                <div style={{ display: "flex", flex: 1, background: "#fff" }}>
-                  <div className="notion-sidebar font-hanken">
-                    <div style={{ fontWeight: 800, fontSize: "12px", color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                      🧑‍💻 Muzammil&apos;s Notion
+                {/* VS CODE MOCK */}
+                {activeApp === "vscode" && (
+                  <div style={{ display: "flex", flex: 1, background: "#1e1e1e" }}>
+                    <div className="vscode-sidebar">
+                      <div style={{ color: "#d4d4d4", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>EXPLORER</div>
+                      <div className="vscode-sidebar-item active">📄 page.tsx</div>
+                      <div className="vscode-sidebar-item">📄 layout.tsx</div>
+                      <div className="vscode-sidebar-item">📄 globals.css</div>
                     </div>
-                    <div style={{ color: "#a29b91", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>PRIVATE</div>
-                    <div className="notion-sidebar-item active">📄 Product Spec</div>
-                    <div className="notion-sidebar-item">📝 Meeting Notes</div>
-                    <div className="notion-sidebar-item">🚀 Release Planner</div>
-                  </div>
-                  <div className="notion-content font-hanken">
-                    <div className="notion-title">📄 Product Spec</div>
-                    <div className="notion-text-block">
-                      We are developing the core landing page design details for the Lisup website. The site needs to showcase the voice-to-text widget.
-                    </div>
-                    <div className="notion-text-block" style={{ fontWeight: 600, color: "#1a1a1a" }}>
-                      Key Product Release Notes:
-                    </div>
-                    <div className="notion-editor-input">
-                      <span style={{ color: injectedText ? "#1a1a1a" : "#A29B91" }}>
-                        {injectedText || (animState === "injecting" ? "" : "Type '/' for commands...")}
-                        {animState === "injecting" && <span className="demo-cursor"></span>}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* VS CODE MOCK */}
-              {activeApp === "vscode" && (
-                <div style={{ display: "flex", flex: 1, background: "#1e1e1e" }}>
-                  <div className="vscode-sidebar">
-                    <div style={{ color: "#d4d4d4", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>EXPLORER</div>
-                    <div className="vscode-sidebar-item active">📄 page.tsx</div>
-                    <div className="vscode-sidebar-item">📄 layout.tsx</div>
-                    <div className="vscode-sidebar-item">📄 globals.css</div>
-                  </div>
-                  <div className="vscode-content">
-                    <div className="vscode-line">
-                      <span className="vscode-line-num">1</span>
-                      <span className="vscode-code">
-                        <span className="vscode-keyword">import</span> React, &#123; useState &#125; <span className="vscode-keyword">from</span> <span className="vscode-string">&apos;react&apos;</span>;
-                      </span>
-                    </div>
-                    <div className="vscode-line">
-                      <span className="vscode-line-num">2</span>
-                      <span className="vscode-code">
-                        <span className="vscode-keyword">export default function</span> <span className="vscode-function">App</span>() &#123;
-                      </span>
-                    </div>
-                    <div className="vscode-line">
-                      <span className="vscode-line-num">3</span>
-                      <span className="vscode-code">
-                        <span className="vscode-comment" style={{ color: animState === "injecting" || animState === "done" ? "#ce9178" : "#6a9955" }}>
-                          &nbsp;&nbsp;<span style={{ color: "#6a9955" }}>// TODO:</span> {injectedText || ""}
-                          {animState === "injecting" && <span className="demo-cursor" style={{ background: "#ce9178" }}></span>}
+                    <div className="vscode-content">
+                      <div className="vscode-line">
+                        <span className="vscode-line-num">1</span>
+                        <span className="vscode-code">
+                          <span className="vscode-keyword">import</span> React, &#123; useState &#125; <span className="vscode-keyword">from</span> <span className="vscode-string">&apos;react&apos;</span>;
                         </span>
-                      </span>
-                    </div>
-                    <div className="vscode-line">
-                      <span className="vscode-line-num">4</span>
-                      <span className="vscode-code">
-                        &nbsp;&nbsp;<span className="vscode-keyword">return</span> &lt;<span className="vscode-keyword">div</span>&gt;Lisup Simulation&lt;/<span className="vscode-keyword">div</span>&gt;;
-                      </span>
-                    </div>
-                    <div className="vscode-line">
-                      <span className="vscode-line-num">5</span>
-                      <span className="vscode-code">&#125;</span>
+                      </div>
+                      <div className="vscode-line">
+                        <span className="vscode-line-num">2</span>
+                        <span className="vscode-code">
+                          <span className="vscode-keyword">export default function</span> <span className="vscode-function">App</span>() &#123;
+                        </span>
+                      </div>
+                      <div className="vscode-line">
+                        <span className="vscode-line-num">3</span>
+                        <span className="vscode-code">
+                          <span className="vscode-comment" style={{ color: animState === "injecting" || animState === "done" ? "#ce9178" : "#6a9955" }}>
+                            &nbsp;&nbsp;<span style={{ color: "#6a9955" }}>// TODO:</span> {injectedText || ""}
+                            {animState === "injecting" && <span className="demo-cursor" style={{ background: "#ce9178" }}></span>}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="vscode-line">
+                        <span className="vscode-line-num">4</span>
+                        <span className="vscode-code">
+                          &nbsp;&nbsp;<span className="vscode-keyword">return</span> &lt;<span className="vscode-keyword">div</span>&gt;Lisup Simulation&lt;/<span className="vscode-keyword">div</span>&gt;;
+                        </span>
+                      </div>
+                      <div className="vscode-line">
+                        <span className="vscode-line-num">5</span>
+                        <span className="vscode-code">&#125;</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-
-            {/* SCREEN FLOATING LISUP WIDGET OVERLAY */}
-            <div className={`mock-lisup-widget font-hanken ${animState === "idle" ? "hidden" : ""}`}>
-              {/* Widget Header */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)", paddingBottom: "6px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <img src="/logo.png" alt="Lisup" width="16" height="16" style={{ borderRadius: "4px" }} />
-                  <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "12.5px", color: "#26231F" }}>
-                    Lis<span style={{ color: "#E07B39" }}>up</span>
-                  </span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span
-                    style={{
-                      width: "6px",
-                      height: "6px",
-                      borderRadius: "50%",
-                      background: animState === "done" ? "#2C9A5E" : "#E07B39",
-                      animation: animState === "done" ? "none" : "dotpulse 1.2s infinite"
-                    }}
-                  ></span>
-                  <span className="font-jetbrains" style={{ fontSize: "9.5px", fontWeight: 700, color: animState === "done" ? "#2C9A5E" : "#C0631F", letterSpacing: ".04em" }}>
-                    {animState === "listening" && "LISTENING..."}
-                    {animState === "cleaning" && "CLEANING..."}
-                    {animState === "injecting" && "INJECTING..."}
-                    {animState === "done" && "INJECTED ✓"}
-                  </span>
-                </div>
+                )}
               </div>
 
-              {/* Transcription Area */}
-              <div style={{ background: "rgba(0,0,0,0.03)", borderRadius: "8px", padding: "8px 10px", minHeight: "56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <p className="font-jetbrains" style={{ fontSize: "11.5px", lineHeight: "1.45", color: "#26231F", margin: 0 }}>
-                  {/* Raw word blocks with strikethrough logic */}
-                  {visibleRawWords.length === 0 && <span style={{ color: "#a29b91" }}>Initializing speech capture...</span>}
-                  {visibleRawWords.map((w, idx) => {
-                    if (!w) return null;
-                    const isWordFiller = w.isFiller;
-                    const showStrike = showStrikes && isWordFiller;
-                    return (
-                      <span
-                        key={idx}
-                        className={isWordFiller ? "widget-highlight-word" : ""}
-                        style={{
-                          textDecoration: showStrike ? "line-through" : "none",
-                          color: showStrike ? "#E07B39" : (isWordFiller ? "#C9A48A" : "#26231F"),
-                          opacity: showStrike ? 0.6 : 1,
-                          transition: "all 0.25s ease",
-                          display: "inline-block",
-                          marginRight: "4px"
-                        }}
-                      >
-                        {w.text}
-                      </span>
-                    );
-                  })}
-                  {animState === "listening" && <span className="demo-cursor" style={{ height: "11px" }}></span>}
-                </p>
-              </div>
-
-              {/* Bottom Visualizer / Waveform */}
-              {animState === "listening" && (
-                <div style={{ display: "flex", alignItems: "center", gap: "3px", height: "26px", padding: "0 8px" }}>
-                  {waveHeights.map((h, i) => (
-                    <div
-                      key={i}
-                      className="widget-wave-bar"
+              {/* SCREEN FLOATING LISUP WIDGET OVERLAY */}
+              <div className={`mock-lisup-widget font-hanken ${animState === "idle" ? "hidden" : ""}`}>
+                {/* Widget Header */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)", paddingBottom: "6px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <img src="/logo.png" alt="Lisup" width="16" height="16" style={{ borderRadius: "4px" }} />
+                    <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "12.5px", color: "#26231F" }}>
+                      Lis<span style={{ color: "#E07B39" }}>up</span>
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                    <span
                       style={{
-                        height: `${h}px`,
-                        transition: "height 0.1s ease"
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: animState === "done" ? "#2C9A5E" : "#E07B39",
+                        animation: animState === "done" ? "none" : "dotpulse 1.2s infinite"
+                      }}
+                    ></span>
+                    <span className="font-jetbrains" style={{ fontSize: "9.5px", fontWeight: 700, color: animState === "done" ? "#2C9A5E" : "#C0631F", letterSpacing: ".04em" }}>
+                      {animState === "listening" && "LISTENING..."}
+                      {animState === "cleaning" && "CLEANING..."}
+                      {animState === "injecting" && "INJECTING..."}
+                      {animState === "done" && "INJECTED ✓"}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Transcription Area */}
+                <div style={{ background: "rgba(0,0,0,0.03)", borderRadius: "8px", padding: "8px 10px", minHeight: "56px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <p className="font-jetbrains" style={{ fontSize: "11.5px", lineHeight: "1.45", color: "#26231F", margin: 0 }}>
+                    {/* Raw word blocks with strikethrough logic */}
+                    {visibleRawWords.length === 0 && <span style={{ color: "#a29b91" }}>Initializing speech capture...</span>}
+                    {visibleRawWords.map((w, idx) => {
+                      if (!w) return null;
+                      const isWordFiller = w.isFiller;
+                      const showStrike = showStrikes && isWordFiller;
+                      return (
+                        <span
+                          key={idx}
+                          className={isWordFiller ? "widget-highlight-word" : ""}
+                          style={{
+                            textDecoration: showStrike ? "line-through" : "none",
+                            color: showStrike ? "#E07B39" : (isWordFiller ? "#C9A48A" : "#26231F"),
+                            opacity: showStrike ? 0.6 : 1,
+                            transition: "all 0.25s ease",
+                            display: "inline-block",
+                            marginRight: "4px"
+                          }}
+                        >
+                          {w.text}
+                        </span>
+                      );
+                    })}
+                    {animState === "listening" && <span className="demo-cursor" style={{ height: "11px" }}></span>}
+                  </p>
+                </div>
+
+                {/* Bottom Visualizer / Waveform */}
+                {animState === "listening" && (
+                  <div style={{ display: "flex", alignItems: "center", gap: "3px", height: "26px", padding: "0 8px" }}>
+                    {waveHeights.map((h, i) => (
+                      <div
+                        key={i}
+                        className="widget-wave-bar"
+                        style={{
+                          height: `${h}px`,
+                          transition: "height 0.1s ease"
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+                )}
+
+                {animState !== "listening" && (
+                  <div style={{ height: "3px", background: "rgba(0,0,0,0.05)", borderRadius: "2px", position: "relative", overflow: "hidden", marginTop: "2px" }}>
+                    <div
+                      style={{
+                        height: "100%",
+                        background: animState === "done" ? "#2C9A5E" : "var(--accent)",
+                        width: animState === "cleaning" ? "50%" : (animState === "injecting" ? "85%" : "100%"),
+                        transition: "width 0.8s ease"
                       }}
                     ></div>
-                  ))}
-                </div>
-              )}
-
-              {animState !== "listening" && (
-                <div style={{ height: "3px", background: "rgba(0,0,0,0.05)", borderRadius: "2px", position: "relative", overflow: "hidden", marginTop: "2px" }}>
-                  <div
-                    style={{
-                      height: "100%",
-                      background: animState === "done" ? "#2C9A5E" : "var(--accent)",
-                      width: animState === "cleaning" ? "50%" : (animState === "injecting" ? "85%" : "100%"),
-                      transition: "width 0.8s ease"
-                    }}
-                  ></div>
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+          {/* LAPTOP KEYBOARD BASE */}
+          <div className="laptop-base">
+            <div className="laptop-lip"></div>
+            <div className="laptop-trackpad"></div>
+          </div>
         </div>
-        {/* LAPTOP KEYBOARD BASE */}
-        <div className="laptop-base">
-          <div className="laptop-lip"></div>
-          <div className="laptop-trackpad"></div>
+      </div>
+
+      {/* MOBILE MODE (shown only on screens <= 768px) */}
+      <div className="mobile-only">
+        {/* SHOWCASE CARDS CONTAINER */}
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "48px", alignItems: "center" }}>
+          
+          {/* Command Mode Showcase */}
+          <div style={{ width: "100%", maxWidth: "580px" }}>
+            <div style={{ textAlign: "center", marginBottom: "20px" }}>
+              <h3 className="font-bricolage" style={{ fontWeight: 800, fontSize: "22px", color: "#26231F", margin: "0 0 6px 0" }}>
+                1. Voice Command Mode
+              </h3>
+              <p style={{ fontSize: "14px", color: "#6B6560", margin: 0 }}>
+                Rewrite highlighted text instantly in any tone or style using natural voice instructions.
+              </p>
+            </div>
+            <MobileCommandSimulator />
+          </div>
+
+          {/* Transcribe Mode Showcase */}
+          <div style={{ width: "100%", maxWidth: "580px" }}>
+            <div style={{ textAlign: "center", marginBottom: "20px" }}>
+              <h3 className="font-bricolage" style={{ fontWeight: 800, fontSize: "22px", color: "#26231F", margin: "0 0 6px 0" }}>
+                2. Speech Transcription Mode
+              </h3>
+              <p style={{ fontSize: "14px", color: "#6B6560", margin: 0 }}>
+                Dictate naturally while Lisup automatically filters fillers, fixes spelling, and polishes grammar.
+              </p>
+            </div>
+            <MobileTranscribeSimulator />
+          </div>
+        </div>
+      </div>
+
+      {/* PAIN & SOLUTION CALLOUT CARD (Placed after Demo) */}
+      <div
+        data-reveal
+        style={{
+          transition: "opacity .7s cubic-bezier(.2,.7,.2,1) .05s, transform .7s cubic-bezier(.2,.7,.2,1) .05s",
+          background: "#fff",
+          border: "1px solid #ECE8E2",
+          borderRadius: "18px",
+          padding: "24px 30px",
+          maxWidth: "800px",
+          margin: "64px auto 0",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.02)",
+          display: "flex",
+          alignItems: "center",
+          gap: "24px",
+          textAlign: "left"
+        }}
+        className="flex-col-mobile"
+      >
+        <div style={{ flex: 1 }}>
+          <h4 className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#26231F", marginBottom: "8px" }}>
+            The 6-Step Copy-Paste Friction:
+          </h4>
+          <ol className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "4px", listStyleType: "none", margin: 0, padding: 0 }}>
+            <li>1. Highlight unpolished draft text</li>
+            <li>2. Copy text → Switch tabs to ChatGPT/AI app</li>
+            <li>3. Paste draft → Dictate rewrite command → Copy output</li>
+            <li>4. Switch tabs back → Paste &amp; overwrite</li>
+          </ol>
+        </div>
+        <div style={{ width: "1px", height: "70px", background: "#ECE8E2" }} className="lz-hidemob"></div>
+        <div style={{ flex: 1.2 }}>
+          <h4 className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#E07B39", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span>⚡</span> Lisup In-Place Solution:
+          </h4>
+          <p className="font-hanken" style={{ fontSize: "13.5px", color: "#6B6560", lineHeight: 1.45, margin: 0 }}>
+            Zero context switching. Just highlight and copy the text once. Speak a command (e.g. &quot;make it formal&quot;) and Lisup rewrites the text in-place instantly inside Slack, Notion, or any app.
+          </p>
         </div>
       </div>
     </div>
@@ -806,10 +1013,9 @@ export default function Home() {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasHeroRef = useRef<HTMLCanvasElement>(null);
   const canvasWaveRef = useRef<HTMLCanvasElement>(null);
-  const cursorRingRef = useRef<HTMLDivElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
+
   const progBarRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLDivElement>(null);
+
   const galSectionRef = useRef<HTMLDivElement>(null);
   const galTrackRef = useRef<HTMLDivElement>(null);
   const heroTypedElRef = useRef<HTMLSpanElement>(null);
@@ -824,6 +1030,7 @@ export default function Home() {
   const [whStatus, setWhStatus] = useState("READY");
   const [whProg, setWhProg] = useState("12%");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [heroActiveTab, setHeroActiveTab] = useState<"transcribe" | "command">("transcribe");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -841,37 +1048,7 @@ export default function Home() {
   const rafRef = useRef<number | null>(null);
   const distRef = useRef<number>(0);
 
-  // Handle cursor hover states
-  useEffect(() => {
-    const rootEl = rootRef.current;
-    if (!rootEl) return;
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest && target.closest("[data-cursor]") && cursorRingRef.current) {
-        cursorRingRef.current.style.width = "58px";
-        cursorRingRef.current.style.height = "58px";
-        cursorRingRef.current.style.background = "rgba(224,123,57,.1)";
-      }
-    };
-
-    const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.closest && target.closest("[data-cursor]") && cursorRingRef.current) {
-        cursorRingRef.current.style.width = "38px";
-        cursorRingRef.current.style.height = "38px";
-        cursorRingRef.current.style.background = "transparent";
-      }
-    };
-
-    rootEl.addEventListener("mouseover", handleMouseOver);
-    rootEl.addEventListener("mouseout", handleMouseOut);
-
-    return () => {
-      rootEl.removeEventListener("mouseover", handleMouseOver);
-      rootEl.removeEventListener("mouseout", handleMouseOut);
-    };
-  }, []);
 
   // Typer effect for the floating widget
   useEffect(() => {
@@ -881,6 +1058,11 @@ export default function Home() {
 
     const step = (lines: string[], li: number, ci: number, dir: number) => {
       const full = lines[li];
+      if (li >= 2) {
+        setHeroActiveTab("command");
+      } else {
+        setHeroActiveTab("transcribe");
+      }
       if (dir > 0) {
         ci++;
         setTypedText(full.slice(0, ci));
@@ -1051,28 +1233,34 @@ export default function Home() {
     const drawFinger = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, mx: number, my: number) => {
       ctx.clearRect(0, 0, w, h);
       let cx = w / 2, cy = h / 2;
+      const scaleFactor = w / 760; // Scale rings based on canvas width
       if (isFinite(mx) && isFinite(my)) {
-        cx += Math.max(-40, Math.min(40, (mx - cx) * 0.06));
-        cy += Math.max(-40, Math.min(40, (my - cy) * 0.06));
+        cx += Math.max(-40 * scaleFactor, Math.min(40 * scaleFactor, (mx - cx) * 0.06));
+        cy += Math.max(-40 * scaleFactor, Math.min(40 * scaleFactor, (my - cy) * 0.06));
       }
-      const rings = 13, step = 0.12;
+      const rings = 13;
+      const segments = 120;
       for (let r = 0; r < rings; r++) {
-        const baseR = 26 + r * 17;
+        const baseR = (26 + r * 17) * scaleFactor;
+        const freq = 2 + r;
+        const amp = (3 + r * 0.4) * scaleFactor;
         ctx.beginPath();
-        for (let a = 0; a <= Math.PI * 2 + step; a += step) {
-          let rad = baseR + (4 + r * 0.8) * Math.sin(a * (2 + r * 0.4) + t * 1.3 + r * 0.5);
+        for (let s = 0; s <= segments; s++) {
+          const a = (s / segments) * Math.PI * 2;
+          let rad = baseR + amp * Math.sin(a * freq + t * 1.3 + r * 0.5);
           if (isFinite(mx)) {
             const pa = Math.atan2(my - cy, mx - cx);
             const da = Math.cos(a - pa);
-            rad += Math.max(0, da) * 10 * Math.max(0, da);
+            rad += Math.max(0, da) * 10 * Math.max(0, da) * scaleFactor;
           }
           const x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad;
-          if (a === 0) ctx.moveTo(x, y);
+          if (s === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
+        ctx.closePath();
         ctx.strokeStyle = "#E07B39";
         ctx.globalAlpha = Math.max(0.04, 0.4 - r * 0.028);
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.5 * Math.max(0.5, scaleFactor);
         ctx.stroke();
       }
       ctx.globalAlpha = 1;
@@ -1099,26 +1287,49 @@ export default function Home() {
     const tick = (timestamp: number) => {
       const t = timestamp / 1000;
 
-      // Custom cursor movement interpolation
-      ringRef.current.x += (pointerRef.current.x - ringRef.current.x) * 0.18;
-      ringRef.current.y += (pointerRef.current.y - ringRef.current.y) * 0.18;
 
-      if (cursorRingRef.current) {
-        cursorRingRef.current.style.transform = `translate(${ringRef.current.x}px,${ringRef.current.y}px) translate(-50%,-50%)`;
-      }
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = `translate(${pointerRef.current.x}px,${pointerRef.current.y}px) translate(-50%,-50%)`;
-      }
 
       // Draw canvas visuals
-      if (hctx && canvasHeroRef.current) {
-        const r = canvasHeroRef.current.getBoundingClientRect();
-        const mx = pointerRef.current.x - r.left, my = pointerRef.current.y - r.top;
-        drawFinger(hctx, hw, hh, t, mx, my);
+      const ch = canvasHeroRef.current;
+      if (ch) {
+        const expectedW = Math.floor(ch.clientWidth * dpr);
+        const expectedH = Math.floor(ch.clientHeight * dpr);
+        if (ch.width !== expectedW || ch.height !== expectedH || !hctx) {
+          ch.width = expectedW;
+          ch.height = expectedH;
+          hw = ch.clientWidth;
+          hh = ch.clientHeight;
+          hctx = ch.getContext("2d");
+          if (hctx) {
+            hctx.resetTransform();
+            hctx.scale(dpr, dpr);
+          }
+        }
+        if (hctx) {
+          const r = ch.getBoundingClientRect();
+          const mx = pointerRef.current.x - r.left, my = pointerRef.current.y - r.top;
+          drawFinger(hctx, hw, hh, t, mx, my);
+        }
       }
 
-      if (wctx) {
-        drawWave(wctx, ww, wh, t);
+      const cw = canvasWaveRef.current;
+      if (cw) {
+        const expectedW = Math.floor(cw.clientWidth * dpr);
+        const expectedH = Math.floor(cw.clientHeight * dpr);
+        if (cw.width !== expectedW || cw.height !== expectedH || !wctx) {
+          cw.width = expectedW;
+          cw.height = expectedH;
+          ww = cw.clientWidth;
+          wh = cw.clientHeight;
+          wctx = cw.getContext("2d");
+          if (wctx) {
+            wctx.resetTransform();
+            wctx.scale(dpr, dpr);
+          }
+        }
+        if (wctx) {
+          drawWave(wctx, ww, wh, t);
+        }
       }
 
       // Horizontal gallery animation (scroll linked)
@@ -1156,19 +1367,7 @@ export default function Home() {
         progBarRef.current.style.width = (h > 0 ? (sc / h) * 100 : 0) + "%";
       }
 
-      if (navRef.current) {
-        if (sc > 12) {
-          navRef.current.style.background = "rgba(253,246,240,.85)";
-          navRef.current.style.backdropFilter = "blur(12px)";
-          navRef.current.style.borderColor = "#E8E2DA";
-          navRef.current.style.boxShadow = "0 8px 30px rgba(0,0,0,0.03)";
-        } else {
-          navRef.current.style.background = "rgba(253,246,240,0)";
-          navRef.current.style.backdropFilter = "none";
-          navRef.current.style.borderColor = "transparent";
-          navRef.current.style.boxShadow = "none";
-        }
-      }
+
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -1256,19 +1455,21 @@ export default function Home() {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
     el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * 0.3}px, ${(e.clientY - (r.top + r.height / 2)) * 0.45}px)`;
-    if (cursorRingRef.current) {
-      cursorRingRef.current.style.width = "64px";
-      cursorRingRef.current.style.height = "64px";
-      cursorRingRef.current.style.background = "rgba(224,123,57,.12)";
+    const ring = document.getElementById("cursor-ring");
+    if (ring) {
+      ring.style.width = "64px";
+      ring.style.height = "64px";
+      ring.style.background = "rgba(224,123,57,.12)";
     }
   };
 
   const handleMagnetLeave = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = "translate(0,0)";
-    if (cursorRingRef.current) {
-      cursorRingRef.current.style.width = "38px";
-      cursorRingRef.current.style.height = "38px";
-      cursorRingRef.current.style.background = "transparent";
+    const ring = document.getElementById("cursor-ring");
+    if (ring) {
+      ring.style.width = "38px";
+      ring.style.height = "38px";
+      ring.style.background = "transparent";
     }
   };
 
@@ -1345,42 +1546,7 @@ export default function Home() {
         }}
       ></div>
 
-      {/* CUSTOM CURSOR */}
-      <div
-        ref={cursorRingRef}
-        className="lz-hidemob"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "38px",
-          height: "38px",
-          border: "1.5px solid #E07B39",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          zIndex: 9999,
-          transform: "translate(-50%,-50%)",
-          transition: "width .18s ease, height .18s ease, background .18s ease, opacity .18s ease",
-          willChange: "transform",
-        }}
-      ></div>
-      <div
-        ref={cursorDotRef}
-        className="lz-hidemob"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "6px",
-          height: "6px",
-          background: "#E07B39",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          zIndex: 9999,
-          transform: "translate(-50%,-50%)",
-          willChange: "transform",
-        }}
-      ></div>
+
 
       {/* SCROLL PROGRESS */}
       <div
@@ -1406,132 +1572,10 @@ export default function Home() {
       </div>
 
       {/* ===================== NAV ===================== */}
-      <div
-        ref={navRef}
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          transition: "background .3s, border-color .3s, box-shadow .3s",
-          background: "rgba(253,246,240,0)",
-          borderBottom: "1px solid transparent",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1280px",
-            margin: "0 auto",
-            padding: "0 48px",
-            height: "74px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div data-cursor style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <img
-              src="/logo.png"
-              alt="Lisup Logo"
-              width="32"
-              height="32"
-              style={{ borderRadius: "8px", objectFit: "cover" }}
-            />
-            <span
-              className="font-bricolage"
-              style={{
-                fontWeight: 800,
-                fontSize: "22px",
-                color: "#26231F",
-                letterSpacing: "-.01em",
-              }}
-            >
-              Lis<span style={{ color: "#E07B39" }}>up</span>
-            </span>
-          </div>
-          <div
-            className="lz-hidemob"
-            style={{ display: "flex", alignItems: "center", gap: "34px" }}
-          >
-            <a
-              href="#how"
-              data-cursor
-              className="font-jetbrains"
-              style={{
-                fontSize: "12.5px",
-                color: "#6B6560",
-                fontWeight: 500,
-                textDecoration: "none",
-                letterSpacing: ".02em",
-              }}
-            >
-              how
-            </a>
-            <a
-              href="#features"
-              data-cursor
-              className="font-jetbrains"
-              style={{
-                fontSize: "12.5px",
-                color: "#6B6560",
-                fontWeight: 500,
-                textDecoration: "none",
-                letterSpacing: ".02em",
-              }}
-            >
-              features
-            </a>
-            <a
-              href="#tones"
-              data-cursor
-              className="font-jetbrains"
-              style={{
-                fontSize: "12.5px",
-                color: "#6B6560",
-                fontWeight: 500,
-                textDecoration: "none",
-                letterSpacing: ".02em",
-              }}
-            >
-              tones
-            </a>
-            <a
-              href="#why"
-              data-cursor
-              className="font-jetbrains"
-              style={{
-                fontSize: "12.5px",
-                color: "#6B6560",
-                fontWeight: 500,
-                textDecoration: "none",
-                letterSpacing: ".02em",
-              }}
-            >
-              why
-            </a>
-            <div
-              data-cursor
-              onMouseMove={handleMagnetMove}
-              onMouseLeave={handleMagnetLeave}
-              style={{
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "#fff",
-                background: "#1A1A1A",
-                padding: "10px 20px",
-                borderRadius: "999px",
-                cursor: "none",
-                transition: "transform .12s ease-out, background .2s",
-              }}
-              className="hover-bg-orange"
-            >
-              Download free
-            </div>
-          </div>
-        </div>
-      </div>
+      <Navbar />
 
-      {/* ===================== HERO ===================== */}
-      <section
+          <section
+        className="hero-section"
         style={{
           position: "relative",
           overflow: "hidden",
@@ -1559,21 +1603,9 @@ export default function Home() {
           voice
         </div>
 
-        <canvas
-          ref={canvasHeroRef}
-          className="lz-hidemob hero-canvas-wrap"
-          style={{
-            position: "absolute",
-            top: 0,
-            right: "-6%",
-            width: "760px",
-            height: "100%",
-            display: "block",
-            zIndex: 1,
-          }}
-        ></canvas>
 
         <div
+          className="hero-content-container"
           style={{
             position: "relative",
             zIndex: 3,
@@ -1587,6 +1619,10 @@ export default function Home() {
           }}
         >
           <div style={{ flex: 1, minWidth: 0 }}>
+            <canvas
+              ref={canvasHeroRef}
+              className="hero-anim-canvas"
+            ></canvas>
             <div
               className="hero-badge"
               style={{
@@ -1621,7 +1657,7 @@ export default function Home() {
                 Alt + Space &middot; speak anywhere
               </span>
             </div>
-
+            
             <h1
               className="font-bricolage"
               style={{
@@ -1715,7 +1751,7 @@ export default function Home() {
                   cursor: "none",
                   transition: "background .2s",
                 }}
-                className="hover-bg-white"
+                className="hover-bg-white lz-hidemob"
               >
                 &#9654; Watch it work
               </button>
@@ -1744,114 +1780,15 @@ export default function Home() {
             </div>
           </div>
 
-          {/* floating widget - stacked on mobile, floating on desktop */}
+          {/* Right layout spacer to keep the layout preserved */}
           <div
-            className="hero-floating-widget hero-widget-wrap"
+            className="lz-hidemob"
             style={{
               flex: "none",
-              animation: "floaty 6s ease-in-out infinite",
+              width: "372px",
+              height: "372px",
             }}
-          >
-            <div
-              style={{
-                position: "relative",
-                width: "372px",
-                maxWidth: "100%",
-                background: "#fff",
-                border: "1px solid #ECE8E2",
-                borderRadius: "22px",
-                boxShadow: "0 50px 100px -30px rgba(26,26,26,.4)",
-                padding: "18px",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
-                  <img
-                    src="/logo.png"
-                    alt="Lisup Logo"
-                    width="26"
-                    height="26"
-                    style={{ borderRadius: "6px", objectFit: "cover" }}
-                  />
-                  <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#26231F" }}>
-                    Lis<span style={{ color: "#E07B39" }}>up</span>
-                  </span>
-                </div>
-                <span style={{ width: "26px", height: "26px", borderRadius: "50%", background: "#F4F2EE", color: "#A29B91", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", cursor: "pointer" }}>
-                  &times;
-                </span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "#F7F5F2", border: "1px solid #ECE8E2", borderRadius: "12px", padding: "11px 13px", marginBottom: "14px" }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C5BFB8" strokeWidth={2}>
-                  <rect x="8" y="2" width="8" height="4" rx="1" />
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                </svg>
-                <span style={{ flex: 1, fontSize: "13.5px", color: "#A29B91" }}>
-                  Copy text, then speak a command
-                </span>
-              </div>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: "18px" }}>
-                <div style={{ display: "inline-flex", gap: "4px", background: "#F2F0EC", borderRadius: "12px", padding: "4px" }}>
-                  <span style={{ display: "flex", alignItems: "center", gap: "6px", background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,.08)", borderRadius: "9px", padding: "7px 15px", fontSize: "13.5px", fontWeight: 600, color: "#26231F" }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#6B6560">
-                      <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
-                    </svg>
-                    Transcribe
-                  </span>
-                  <span style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "9px", padding: "7px 15px", fontSize: "13.5px", fontWeight: 600, color: "#A29B91" }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5BFB8">
-                      <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-                    </svg>
-                    Command
-                  </span>
-                </div>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                <div style={{ position: "relative", width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "2px solid #E07B39", animation: "ping 1.8s cubic-bezier(0,0,.2,1) infinite" }}></span>
-                  <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#1A1A1A", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 26px -8px rgba(26,26,26,.5)" }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
-                      <rect x="9" y="2" width="6" height="11" rx="3" />
-                      <path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" />
-                      <path d="M12 17v4M9 21h6" stroke="#fff" strokeWidth={2} strokeLinecap="round" />
-                    </svg>
-                  </div>
-                </div>
-                <span style={{ fontSize: "13.5px", color: "#A29B91", fontWeight: 500 }}>Press to speak</span>
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "7px", marginTop: "16px" }}>
-                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/reply</span>
-                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/fix</span>
-                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/formal</span>
-                <span style={{ fontSize: "12.5px", color: "#6B6560", background: "#fff", border: "1px solid #ECE8E2", padding: "5px 12px", borderRadius: "999px" }}>/translate</span>
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "-22px",
-                  right: "-30px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: "#1A1A1A",
-                  borderRadius: "12px",
-                  padding: "9px 13px",
-                  boxShadow: "0 18px 34px -12px rgba(26,26,26,.5)",
-                  maxWidth: "300px",
-                  zIndex: 2,
-                }}
-                className="hero-sub-widget"
-              >
-                <span style={{ fontSize: "10px", fontWeight: 700, color: "#1A1A1A", background: "#E07B39", padding: "2px 6px", borderRadius: "5px", letterSpacing: ".03em" }}>
-                  DONE
-                </span>
-                <span className="font-jetbrains" style={{ fontSize: "12px", color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>
-                  <span ref={heroTypedElRef}>Let's ship the redesign by Friday.</span>
-                  <span style={{ display: "inline-block", width: "2px", height: "13px", background: "#E07B39", marginLeft: "1px", verticalAlign: "-2px", animation: "blink 1s step-end infinite" }}></span>
-                </span>
-              </div>
-            </div>
-          </div>
+          ></div>
         </div>
 
         {/* scroll cue */}
@@ -1881,120 +1818,6 @@ export default function Home() {
       {/* ===================== LAPTOP DEMO SECTION ===================== */}
       <section id="demo-section" style={{ background: "#FDF6F0", padding: "100px 0 60px", borderBottom: "1px solid #ECE8E2", overflow: "hidden" }}>
         <LaptopDemo />
-      </section>
-
-      {/* ===================== FILLER FILTER BAND ===================== */}
-      <section style={{ background: "#FDF6F0", padding: "72px 0 40px" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
-          <div
-            data-reveal
-            style={{
-              transition:
-                "opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)",
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              gap: "30px",
-              marginBottom: "30px",
-            }}
-          >
-            <h2
-              className="font-bricolage"
-              style={{
-                fontWeight: 800,
-                fontSize: "clamp(32px, 5vw, 48px)",
-                lineHeight: 0.95,
-                letterSpacing: "-.03em",
-                color: "#26231F",
-                margin: 0,
-              }}
-            >
-              Messy in.
-              <br />
-              Polished out.
-            </h2>
-            <span
-              className="font-jetbrains"
-              style={{
-                fontSize: "13px",
-                color: "#A29B91",
-                letterSpacing: ".04em",
-                whiteSpace: "nowrap",
-              }}
-            >
-              RAW &rarr; CLEAN
-            </span>
-          </div>
-          <div
-            data-reveal
-            style={{
-              transition:
-                "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
-              position: "relative",
-              overflow: "hidden",
-              background: "#fff",
-              border: "1px solid #ECE8E2",
-              borderRadius: "24px",
-              padding: "36px 44px 40px",
-              boxShadow: "0 34px 70px -42px rgba(26,26,26,.3)",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                width: "150px",
-                background: "linear-gradient(90deg,transparent,rgba(224,123,57,.12),transparent)",
-                animation: "beam 3.4s ease-in-out infinite",
-                pointerEvents: "none",
-              }}
-            ></div>
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: "10px",
-                marginBottom: "26px",
-              }}
-            >
-              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#A29B91", letterSpacing: ".04em" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#C9A48A" }}></span>
-                RAW DICTATION
-              </span>
-              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#C0631F", letterSpacing: ".04em" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E07B39", animation: "dotpulse 1.4s infinite" }}></span>
-                FILTERING
-              </span>
-              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#2C9A5E", letterSpacing: ".04em" }}>
-                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#2C9A5E" }}></span>
-                CLEAN &#10003;
-              </span>
-            </div>
-            <div
-              ref={fillerStageRef}
-              className="font-bricolage"
-              style={{
-                fontWeight: 700,
-                fontSize: "clamp(24px, 4vw, 38px)",
-                lineHeight: 1.32,
-                letterSpacing: "-.02em",
-                color: "#26231F",
-                minHeight: "104px",
-              }}
-            ></div>
-            <div style={{ position: "relative", marginTop: "22px", display: "flex", alignItems: "center", gap: "10px", fontSize: "14.5px", color: "#6B6560" }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E07B39" strokeWidth="2" strokeLinejoin="round">
-                <path d="M22 3H2l8 9.5V19l4 2v-8.5z" />
-              </svg>
-              Fillers, false starts and &quot;ums&quot; stripped automatically &mdash; grammar fixed, tone kept.
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* ===================== MARQUEE ===================== */}
@@ -2456,7 +2279,11 @@ export default function Home() {
                   alt="Lisup Logo"
                   width="78"
                   height="78"
-                  style={{ borderRadius: "22px", boxShadow: "0 14px 28px rgba(224,123,57,.4)", objectFit: "cover" }}
+                  style={{
+                    borderRadius: "50%",
+                    filter: "drop-shadow(0 14px 28px rgba(224,123,57,0.4))",
+                    objectFit: "cover"
+                  }}
                 />
               </div>
 
@@ -2579,6 +2406,121 @@ export default function Home() {
               <div style={{ fontSize: "15px", color: "#6B6560", fontWeight: 500, marginTop: "14px", lineHeight: 1.45 }}>
                 On-device. Nothing synced or stored in a cloud
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== FILLER FILTER BAND ===================== */}
+      <section style={{ background: "#FDF6F0", padding: "72px 0 40px" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
+          <div
+            data-reveal
+            style={{
+              transition:
+                "opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: "30px",
+              marginBottom: "30px",
+            }}
+          >
+            <h2
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(32px, 5vw, 48px)",
+                lineHeight: 0.95,
+                letterSpacing: "-.03em",
+                color: "#26231F",
+                margin: 0,
+                maxWidth: "680px",
+              }}
+            >
+              Messy in.
+              <br />
+              Polished out.
+            </h2>
+            <span
+              className="font-jetbrains"
+              style={{
+                fontSize: "13px",
+                color: "#A29B91",
+                letterSpacing: ".04em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              RAW &rarr; CLEAN
+            </span>
+          </div>
+          <div
+            data-reveal
+            style={{
+              transition:
+                "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
+              position: "relative",
+              overflow: "hidden",
+              background: "#fff",
+              border: "1px solid #ECE8E2",
+              borderRadius: "24px",
+              padding: "36px 44px 40px",
+              boxShadow: "0 34px 70px -42px rgba(26,26,26,.3)",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: "150px",
+                background: "linear-gradient(90deg,transparent,rgba(224,123,57,.12),transparent)",
+                animation: "beam 3.4s ease-in-out infinite",
+                pointerEvents: "none",
+              }}
+            ></div>
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "10px",
+                marginBottom: "26px",
+              }}
+            >
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#A29B91", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#C9A48A" }}></span>
+                RAW DICTATION
+              </span>
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#C0631F", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E07B39", animation: "dotpulse 1.4s infinite" }}></span>
+                FILTERING
+              </span>
+              <span className="font-jetbrains" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "#2C9A5E", letterSpacing: ".04em" }}>
+                <span style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#2C9A5E" }}></span>
+                CLEAN &#10003;
+              </span>
+            </div>
+            <div
+              ref={fillerStageRef}
+              className="font-bricolage"
+              style={{
+                fontWeight: 700,
+                fontSize: "clamp(24px, 4vw, 38px)",
+                lineHeight: 1.32,
+                letterSpacing: "-.02em",
+                color: "#26231F",
+                minHeight: "104px",
+              }}
+            ></div>
+            <div style={{ position: "relative", marginTop: "22px", display: "flex", alignItems: "center", gap: "10px", fontSize: "14.5px", color: "#6B6560" }}>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#E07B39" strokeWidth="2" strokeLinejoin="round">
+                <path d="M22 3H2l8 9.5V19l4 2v-8.5z" />
+              </svg>
+              Fillers, false starts and &quot;ums&quot; stripped automatically &mdash; grammar fixed, tone kept.
             </div>
           </div>
         </div>
