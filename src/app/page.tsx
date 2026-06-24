@@ -1032,6 +1032,30 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [heroActiveTab, setHeroActiveTab] = useState<"transcribe" | "command">("transcribe");
 
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [submittedWaitlist, setSubmittedWaitlist] = useState(false);
+
+  const handleWaitlistSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (waitlistEmail.trim()) {
+      try {
+        const res = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: waitlistEmail }),
+        });
+        if (res.ok) {
+          setSubmittedWaitlist(true);
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+      }
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
@@ -1693,62 +1717,114 @@ export default function Home() {
               Talk, stop, done. Lisup turns speech into finished text in 100+ languages &mdash; fillers gone, grammar fixed, in your tone. Everywhere on your machine.
             </p>
 
-            <div
-              className="hero-buttons"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: "14px",
-                marginTop: "36px",
-              }}
-            >
+            {submittedWaitlist ? (
               <div
-                data-cursor
-                onMouseMove={handleMagnetMove}
-                onMouseLeave={handleMagnetLeave}
                 style={{
-                  fontSize: "16px",
-                  fontWeight: 700,
-                  color: "#fff",
-                  background: "#E07B39",
-                  padding: "16px 32px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  background: "rgba(44, 154, 94, 0.08)",
+                  border: "1px solid rgba(44, 154, 94, 0.2)",
+                  padding: "12px 24px",
                   borderRadius: "999px",
-                  cursor: "pointer",
-                  transition: "transform .12s ease-out, background .2s",
-                  boxShadow: "0 18px 36px -14px rgba(224,123,57,.7)",
-                }}
-                className="hover-bg-darkorange"
-              >
-                Download free
-              </div>
-              <button
-                data-cursor
-                onClick={() => {
-                  const el = document.getElementById("demo-section");
-                  if (el) {
-                    el.scrollIntoView({ behavior: "smooth" });
-                    setTimeout(() => {
-                      window.dispatchEvent(new CustomEvent("start-laptop-demo"));
-                    }, 600);
-                  }
-                }}
-                style={{
-                  fontSize: "16px",
+                  color: "#2C9A5E",
                   fontWeight: 600,
-                  color: "#26231F",
-                  background: "transparent",
-                  padding: "16px 24px",
-                  borderRadius: "999px",
-                  border: "1px solid #E2DDD5",
-                  cursor: "pointer",
-                  transition: "background .2s",
+                  fontSize: "15px",
+                  marginTop: "36px",
+                  alignSelf: "flex-start",
                 }}
-                className="hover-bg-white lz-hidemob"
               >
-                &#9654; Watch it work
-              </button>
-            </div>
+                <span>🚀 You&apos;re on the waitlist! We&apos;ll be in touch.</span>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "stretch",
+                  flexWrap: "wrap",
+                  gap: "14px",
+                  marginTop: "36px",
+                  maxWidth: "580px",
+                  width: "100%",
+                }}
+              >
+                <form
+                  onSubmit={handleWaitlistSubmit}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    background: "#FAF4EE",
+                    border: "1.5px solid #F0D5C1",
+                    padding: "6px 6px 6px 18px",
+                    borderRadius: "999px",
+                    flex: "1 1 320px",
+                    boxShadow: "0 12px 24px rgba(224, 123, 57, 0.06)",
+                    gap: "8px",
+                  }}
+                >
+                  <input
+                    type="email"
+                    required
+                    placeholder="Enter your work email..."
+                    value={waitlistEmail}
+                    onChange={(e) => setWaitlistEmail(e.target.value)}
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      outline: "none",
+                      fontSize: "15px",
+                      color: "#26231F",
+                      flex: 1,
+                      fontFamily: "var(--font-hanken)",
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    style={{
+                      fontSize: "14.5px",
+                      fontWeight: 700,
+                      color: "#fff",
+                      background: "#E07B39",
+                      border: "none",
+                      padding: "12px 24px",
+                      borderRadius: "999px",
+                      cursor: "pointer",
+                      transition: "background 0.2s, transform 0.1s",
+                      boxShadow: "0 8px 16px -6px rgba(224,123,57,.6)",
+                    }}
+                    className="hover-bg-darkorange"
+                  >
+                    Join Waitlist
+                  </button>
+                </form>
+                <button
+                  data-cursor
+                  onClick={() => {
+                    const el = document.getElementById("demo-section");
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth" });
+                      setTimeout(() => {
+                        window.dispatchEvent(new CustomEvent("start-laptop-demo"));
+                      }, 600);
+                    }
+                  }}
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    color: "#26231F",
+                    background: "transparent",
+                    padding: "14px 24px",
+                    borderRadius: "999px",
+                    border: "1px solid #E2DDD5",
+                    cursor: "pointer",
+                    transition: "background 0.2s",
+                  }}
+                  className="hover-bg-white lz-hidemob"
+                >
+                  &#9654; Watch it work
+                </button>
+              </div>
+            )}
 
             <div
               className="font-jetbrains hero-platforms"
@@ -2221,6 +2297,7 @@ export default function Home() {
                 data-cursor
                 onMouseMove={handleMagnetMove}
                 onMouseLeave={handleMagnetLeave}
+                onClick={() => window.dispatchEvent(new CustomEvent("open-waitlist-modal"))}
                 style={{
                   alignSelf: "flex-start",
                   fontSize: "15px",
@@ -2234,7 +2311,7 @@ export default function Home() {
                 }}
                 className="hover-bg-darkorange"
               >
-                Download free
+                Join waitlist
               </div>
             </div>
           </div>
@@ -2601,6 +2678,7 @@ export default function Home() {
               data-cursor
               onMouseMove={handleMagnetMove}
               onMouseLeave={handleMagnetLeave}
+              onClick={() => window.dispatchEvent(new CustomEvent("open-waitlist-modal"))}
               style={{
                 fontSize: "16px",
                 fontWeight: 700,
@@ -2614,7 +2692,7 @@ export default function Home() {
               }}
               className="hover-bg-fdf6f0"
             >
-              Download free
+              Join waitlist
             </div>
             <span className="font-jetbrains" style={{ fontSize: "13px", color: "rgba(255,255,255,.9)", fontWeight: 500 }}>
               WINDOWS &middot; MACOS &middot; ANDROID
