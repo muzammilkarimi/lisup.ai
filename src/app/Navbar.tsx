@@ -540,6 +540,7 @@ export default function Navbar() {
           alignItems: "center",
           justifyContent: "center",
           padding: "20px",
+          pointerEvents: "auto",
         }}
         onClick={() => setIsWaitlistOpen(false)}
       >
