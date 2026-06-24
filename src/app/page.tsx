@@ -1047,6 +1047,7 @@ export default function Home() {
   const fillerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rafRef = useRef<number | null>(null);
   const distRef = useRef<number>(0);
+  const currentXRef = useRef<number>(0);
 
 
 
@@ -1340,9 +1341,13 @@ export default function Home() {
         const rect = sec.getBoundingClientRect();
         let p = dist > 0 ? (-rect.top / dist) : 0;
         p = Math.max(0, Math.min(1, p));
-        track.style.transform = `translateX(${-p * Math.max(0, dist)}px)`;
+        const targetX = -p * Math.max(0, dist);
+        // Linear interpolation (lerp) with a smoothing factor of 0.08
+        currentXRef.current += (targetX - currentXRef.current) * 0.08;
+        track.style.transform = `translateX(${currentXRef.current}px)`;
       } else if (track) {
         track.style.transform = "";
+        currentXRef.current = 0;
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -1455,22 +1460,10 @@ export default function Home() {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
     el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * 0.3}px, ${(e.clientY - (r.top + r.height / 2)) * 0.45}px)`;
-    const ring = document.getElementById("cursor-ring");
-    if (ring) {
-      ring.style.width = "64px";
-      ring.style.height = "64px";
-      ring.style.background = "rgba(224,123,57,.12)";
-    }
   };
 
   const handleMagnetLeave = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = "translate(0,0)";
-    const ring = document.getElementById("cursor-ring");
-    if (ring) {
-      ring.style.width = "38px";
-      ring.style.height = "38px";
-      ring.style.background = "transparent";
-    }
   };
 
   // Tone switcher click event
@@ -1721,7 +1714,7 @@ export default function Home() {
                   background: "#E07B39",
                   padding: "16px 32px",
                   borderRadius: "999px",
-                  cursor: "none",
+                  cursor: "pointer",
                   transition: "transform .12s ease-out, background .2s",
                   boxShadow: "0 18px 36px -14px rgba(224,123,57,.7)",
                 }}
@@ -1748,7 +1741,7 @@ export default function Home() {
                   padding: "16px 24px",
                   borderRadius: "999px",
                   border: "1px solid #E2DDD5",
-                  cursor: "none",
+                  cursor: "pointer",
                   transition: "background .2s",
                 }}
                 className="hover-bg-white lz-hidemob"
@@ -2236,7 +2229,7 @@ export default function Home() {
                   background: "#E07B39",
                   padding: "13px 24px",
                   borderRadius: "999px",
-                  cursor: "none",
+                  cursor: "pointer",
                   transition: "transform .12s ease-out",
                 }}
                 className="hover-bg-darkorange"
@@ -2456,6 +2449,7 @@ export default function Home() {
           </div>
           <div
             data-reveal
+            className="filler-card"
             style={{
               transition:
                 "opacity .7s cubic-bezier(.2,.7,.2,1) .1s, transform .7s cubic-bezier(.2,.7,.2,1) .1s",
@@ -2551,20 +2545,20 @@ export default function Home() {
                       fontWeight: 600,
                       padding: "12px 24px",
                       borderRadius: "999px",
-                      cursor: "none",
+                      cursor: "pointer",
                       transition: "all 0.2s ease",
                       border: isSelected ? "1px solid #E07B39" : "1px solid #3A332C",
                       background: isSelected ? "#E07B39" : "transparent",
                       color: isSelected ? "#1A1A1A" : "#C5BFB8",
                     }}
-                    className={isSelected ? "" : "hover-border-orange"}
+                    className={isSelected ? "tone-btn" : "tone-btn hover-border-orange"}
                   >
                     {t}
                   </button>
                 );
               })}
             </div>
-            <div style={{ background: "linear-gradient(160deg,#2C2420,#211C18)", border: "1px solid #332C26", borderRadius: "24px", padding: "40px 44px" }}>
+            <div className="tone-card" style={{ background: "linear-gradient(160deg,#2C2420,#211C18)", border: "1px solid #332C26", borderRadius: "24px", padding: "40px 44px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "18px" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="#6B6560">
                   <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
@@ -2614,7 +2608,7 @@ export default function Home() {
                 background: "#fff",
                 padding: "17px 36px",
                 borderRadius: "999px",
-                cursor: "none",
+                cursor: "pointer",
                 transition: "transform .12s ease-out, background .2s",
                 boxShadow: "0 18px 38px -12px rgba(26,26,26,.4)",
               }}
@@ -2655,13 +2649,13 @@ export default function Home() {
                 PRODUCT
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <a href="#features" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#features" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Features
                 </a>
-                <a href="#how" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#how" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   How it works
                 </a>
-                <a href="#tones" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#tones" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Tones
                 </a>
               </div>
@@ -2671,13 +2665,13 @@ export default function Home() {
                 COMPANY
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   About
                 </a>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Privacy
                 </a>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none", cursor: "none" }}>
+                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Contact
                 </a>
               </div>

@@ -74,22 +74,10 @@ export default function Navbar() {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
     el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * 0.3}px, ${(e.clientY - (r.top + r.height / 2)) * 0.45}px)`;
-    const ring = document.getElementById("cursor-ring");
-    if (ring) {
-      ring.style.width = "64px";
-      ring.style.height = "64px";
-      ring.style.background = "rgba(224,123,57,.12)";
-    }
   };
 
   const handleMagnetLeave = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = "translate(0,0)";
-    const ring = document.getElementById("cursor-ring");
-    if (ring) {
-      ring.style.width = "38px";
-      ring.style.height = "38px";
-      ring.style.background = "transparent";
-    }
   };
 
   return (
@@ -185,7 +173,7 @@ export default function Navbar() {
                 fontSize: "14px",
                 color: "#26231F",
                 fontWeight: 600,
-                cursor: "none",
+                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
@@ -311,7 +299,7 @@ export default function Navbar() {
                 fontSize: "14px",
                 color: "#26231F",
                 fontWeight: 600,
-                cursor: "none",
+                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
@@ -389,7 +377,7 @@ export default function Navbar() {
               background: "#1A1A1A",
               padding: "9px 18px",
               borderRadius: "999px",
-              cursor: "none",
+              cursor: "pointer",
               transition: "transform .12s ease-out, background .2s",
             }}
             className="hover-bg-orange"
@@ -417,26 +405,6 @@ export default function Navbar() {
 
     {/* MOBILE DRAWER */}
     <div className={`mobile-drawer ${isMobileDrawerOpen ? "open" : ""}`} style={{ pointerEvents: isMobileDrawerOpen ? "auto" : "none" }}>
-      {/* Close button in top-right */}
-      <button 
-        onClick={() => setIsMobileDrawerOpen(false)}
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "24px",
-          background: "transparent",
-          border: "none",
-          fontSize: "32px",
-          fontWeight: 300,
-          color: "#26231F",
-          cursor: "pointer",
-          padding: "8px",
-          lineHeight: 0.5
-        }}
-        aria-label="Close Menu"
-      >
-        &times;
-      </button>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
         

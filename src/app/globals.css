@@ -179,7 +179,7 @@ body {
     text-align: center;
   }
 
-  p {
+  .hero-content-container p, .cta-section p, footer p {
     text-align: center;
     margin: 20px auto 0 !important;
   }
@@ -1354,6 +1354,46 @@ body {
   }
   .hero-platforms {
     justify-content: center !important;
+  }
+}
+
+/* Mobile Layout and Responsive Enhancements */
+@media (max-width: 900px) {
+  /* Inner Wrapper Padding override for standard containers */
+  section > div, footer > div {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Filler and Tone card inner padding scaling */
+  .filler-card {
+    padding: 24px 20px !important;
+  }
+  .tone-card {
+    padding: 24px 20px !important;
+  }
+
+  /* Responsive navbar row padding adjustment */
+  #site-navbar > div {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Code wrapping in simulator viewports */
+  .mock-app-grid pre, pre.font-jetbrains {
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+  }
+
+  /* Responsive Mock App workspace inner padding */
+  .mock-app-grid > div {
+    padding: 16px !important;
+  }
+
+  /* Tone buttons size adjustment on smaller viewports */
+  .tone-btn {
+    padding: 8px 16px !important;
+    font-size: 13.5px !important;
   }
 }
 

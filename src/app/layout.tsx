@@ -25,8 +25,6 @@ export const metadata: Metadata = {
   description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages — fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
 };
 
-import CustomCursor from "./CustomCursor";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +36,6 @@ export default function RootLayout({
       className={`${bricolageGrotesque.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        <CustomCursor />
         {children}
       </body>
     </html>
