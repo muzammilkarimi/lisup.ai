@@ -410,13 +410,13 @@ export default function CreatorsPage() {
                 COMPANY
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <Link href="#" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <Link href="/about" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   About
                 </Link>
-                <Link href="#" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <Link href="/privacy" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Privacy
                 </Link>
-                <Link href="#" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <Link href="/contact" style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Contact
                 </Link>
               </div>

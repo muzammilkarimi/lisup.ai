@@ -10,7 +10,8 @@ import {
   FiBookOpen, 
   FiBriefcase, 
   FiEye, 
-  FiTrendingUp 
+  FiTrendingUp,
+  FiX 
 } from "react-icons/fi";
 
 const INDIVIDUAL_ROLES = [
@@ -134,7 +135,11 @@ export default function Navbar() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          pointerEvents: "auto",
+          position: "relative",
+          zIndex: 50,
+          pointerEvents: isMobileDrawerOpen ? "none" : "auto",
+          opacity: isMobileDrawerOpen ? 0 : 1,
+          transform: isMobileDrawerOpen ? "translateY(-10px)" : "translateY(0)",
           width: "min(92%, 1160px)",
           borderRadius: "999px",
           background: "rgba(253, 246, 240, 0.85)",
@@ -142,7 +147,7 @@ export default function Navbar() {
           borderColor: `rgba(224, 123, 57, ${isHovered ? 0.45 : 0.25})`,
           boxShadow: `0 12px 40px rgba(224, 123, 57, ${isHovered ? 0.12 : 0.08}), 0 1px 3px rgba(224, 123, 57, 0.04)`,
           backdropFilter: "blur(16px)",
-          transition: "border-color .3s, box-shadow .3s",
+          transition: "opacity .3s, transform .3s, border-color .3s, box-shadow .3s",
           display: "flex",
           flexDirection: "column",
         }}
@@ -386,7 +391,7 @@ export default function Navbar() {
 
           {/* PRICING */}
           <Link
-            href="/#why"
+            href="/pricing"
             data-cursor
             className="font-bricolage"
             style={{
@@ -439,9 +444,65 @@ export default function Navbar() {
     </div>
 
     {/* MOBILE DRAWER */}
-    <div className={`mobile-drawer ${isMobileDrawerOpen ? "open" : ""}`} style={{ pointerEvents: isMobileDrawerOpen ? "auto" : "none" }}>
+    <div 
+      className={`mobile-drawer ${isMobileDrawerOpen ? "open" : ""}`} 
+      style={{ 
+        pointerEvents: isMobileDrawerOpen ? "auto" : "none",
+        paddingTop: "24px"
+      }}
+    >
 
       <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+
+        {/* Drawer Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #ECE8E2", paddingBottom: "16px" }}>
+          <Link 
+            href="/" 
+            onClick={() => setIsMobileDrawerOpen(false)}
+            style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
+          >
+            <img
+              src="/logo.png"
+              alt="Lisup Logo"
+              width="32"
+              height="32"
+              style={{ borderRadius: "8px", objectFit: "cover" }}
+            />
+            <span
+              className="font-bricolage"
+              style={{
+                fontWeight: 800,
+                fontSize: "20px",
+                color: "#26231F",
+                letterSpacing: "-.01em",
+              }}
+            >
+              Lis<span style={{ color: "#E07B39" }}>up</span>
+            </span>
+          </Link>
+
+          <button
+            onClick={() => setIsMobileDrawerOpen(false)}
+            aria-label="Close Navigation Menu"
+            style={{
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "8px",
+              color: "#26231F",
+              borderRadius: "50%",
+              width: "36px",
+              height: "36px",
+              transition: "background 0.2s",
+            }}
+            className="hover-bg-fdf6f0-soft"
+          >
+            <FiX size={24} />
+          </button>
+        </div>
         
         {/* Main Links */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", borderBottom: "1px solid #ECE8E2", paddingBottom: "24px" }}>
@@ -454,7 +515,7 @@ export default function Navbar() {
             Business
           </Link>
           <Link
-            href="/#why"
+            href="/pricing"
             onClick={() => setIsMobileDrawerOpen(false)}
             className="font-bricolage"
             style={{ fontSize: "20px", fontWeight: 700, color: "#26231F", textDecoration: "none" }}

@@ -1202,6 +1202,24 @@ export default function Home() {
     let hctx: CanvasRenderingContext2D | null = null;
     let wctx: CanvasRenderingContext2D | null = null;
 
+    // Absolute layout metrics cached on resize/mount to avoid layout thrashing in RAF loop
+    let sectionOffsetTop = 0;
+    let canvasHeroOffsetTop = 0;
+    let canvasHeroOffsetLeft = 0;
+    let canvasWaveOffsetTop = 0;
+
+    const getOffsetTop = (el: HTMLElement | null) => {
+      let top = 0;
+      let left = 0;
+      let curr = el;
+      while (curr) {
+        top += curr.offsetTop;
+        left += curr.offsetLeft;
+        curr = curr.offsetParent as HTMLElement;
+      }
+      return { top, left };
+    };
+
     const adjustGalleryHeight = () => {
       const sec = galSectionRef.current;
       const track = galTrackRef.current;
@@ -1219,10 +1237,19 @@ export default function Home() {
       }
     };
 
-    const initCanvas = () => {
+    const cacheMetrics = () => {
       adjustGalleryHeight();
+      
+      const sec = galSectionRef.current;
+      if (sec) {
+        sectionOffsetTop = getOffsetTop(sec).top;
+      }
+      
       const ch = canvasHeroRef.current;
       if (ch) {
+        const offset = getOffsetTop(ch);
+        canvasHeroOffsetTop = offset.top;
+        canvasHeroOffsetLeft = offset.left;
         hw = ch.clientWidth;
         hh = ch.clientHeight;
         ch.width = hw * dpr;
@@ -1236,6 +1263,8 @@ export default function Home() {
 
       const cw = canvasWaveRef.current;
       if (cw) {
+        const offset = getOffsetTop(cw);
+        canvasWaveOffsetTop = offset.top;
         ww = cw.clientWidth;
         wh = cw.clientHeight;
         cw.width = ww * dpr;
@@ -1248,11 +1277,11 @@ export default function Home() {
       }
     };
 
-    initCanvas();
-    setTimeout(adjustGalleryHeight, 150);
-    setTimeout(adjustGalleryHeight, 500);
-    setTimeout(adjustGalleryHeight, 1500);
-    window.addEventListener("resize", initCanvas);
+    cacheMetrics();
+    setTimeout(cacheMetrics, 150);
+    setTimeout(cacheMetrics, 500);
+    setTimeout(cacheMetrics, 1500);
+    window.addEventListener("resize", cacheMetrics);
 
     // Render Canvas drawings
     const drawFinger = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, mx: number, my: number) => {
@@ -1311,67 +1340,22 @@ export default function Home() {
 
     const tick = (timestamp: number) => {
       const t = timestamp / 1000;
+      
+      const scrollY = typeof window !== "undefined" ? window.scrollY : 0;
+      const vpHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+      
+      const isHeroVisible = scrollY < (canvasHeroOffsetTop + hh) && (scrollY + vpHeight) > canvasHeroOffsetTop;
+      const isWaveVisible = scrollY < (canvasWaveOffsetTop + wh) && (scrollY + vpHeight) > canvasWaveOffsetTop;
 
-
-
-      // Draw canvas visuals
-      const ch = canvasHeroRef.current;
-      if (ch) {
-        const expectedW = Math.floor(ch.clientWidth * dpr);
-        const expectedH = Math.floor(ch.clientHeight * dpr);
-        if (ch.width !== expectedW || ch.height !== expectedH || !hctx) {
-          ch.width = expectedW;
-          ch.height = expectedH;
-          hw = ch.clientWidth;
-          hh = ch.clientHeight;
-          hctx = ch.getContext("2d");
-          if (hctx) {
-            hctx.resetTransform();
-            hctx.scale(dpr, dpr);
-          }
-        }
-        if (hctx) {
-          const r = ch.getBoundingClientRect();
-          const mx = pointerRef.current.x - r.left, my = pointerRef.current.y - r.top;
-          drawFinger(hctx, hw, hh, t, mx, my);
-        }
+      // Draw canvas visuals only if they are visible in the viewport
+      if (hctx && isHeroVisible) {
+        const mx = pointerRef.current.x - (canvasHeroOffsetLeft - (typeof window !== "undefined" ? window.scrollX : 0));
+        const my = pointerRef.current.y - (canvasHeroOffsetTop - scrollY);
+        drawFinger(hctx, hw, hh, t, mx, my);
       }
 
-      const cw = canvasWaveRef.current;
-      if (cw) {
-        const expectedW = Math.floor(cw.clientWidth * dpr);
-        const expectedH = Math.floor(cw.clientHeight * dpr);
-        if (cw.width !== expectedW || cw.height !== expectedH || !wctx) {
-          cw.width = expectedW;
-          cw.height = expectedH;
-          ww = cw.clientWidth;
-          wh = cw.clientHeight;
-          wctx = cw.getContext("2d");
-          if (wctx) {
-            wctx.resetTransform();
-            wctx.scale(dpr, dpr);
-          }
-        }
-        if (wctx) {
-          drawWave(wctx, ww, wh, t);
-        }
-      }
-
-      // Horizontal gallery animation (scroll linked)
-      const sec = galSectionRef.current;
-      const track = galTrackRef.current;
-      if (sec && track && window.innerWidth > 900) {
-        const dist = distRef.current;
-        const rect = sec.getBoundingClientRect();
-        let p = dist > 0 ? (-rect.top / dist) : 0;
-        p = Math.max(0, Math.min(1, p));
-        const targetX = -p * Math.max(0, dist);
-        // Linear interpolation (lerp) with a smoothing factor of 0.08
-        currentXRef.current += (targetX - currentXRef.current) * 0.08;
-        track.style.transform = `translateX(${currentXRef.current}px)`;
-      } else if (track) {
-        track.style.transform = "";
-        currentXRef.current = 0;
+      if (wctx && isWaveVisible) {
+        drawWave(wctx, ww, wh, t);
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -1381,22 +1365,42 @@ export default function Home() {
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", initCanvas);
+      window.removeEventListener("resize", cacheMetrics);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   // Handle Page Scroll progress bar & Nav sticky state
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const sc = window.scrollY || document.documentElement.scrollTop;
-      const h = document.documentElement.scrollHeight - window.innerHeight;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sc = window.scrollY || document.documentElement.scrollTop;
+          const h = document.documentElement.scrollHeight - window.innerHeight;
 
-      if (progBarRef.current) {
-        progBarRef.current.style.width = (h > 0 ? (sc / h) * 100 : 0) + "%";
+          if (progBarRef.current) {
+            progBarRef.current.style.width = (h > 0 ? (sc / h) * 100 : 0) + "%";
+          }
+
+          // Horizontal gallery translation (1:1 direct scroll linking mapped on screen refresh)
+          const sec = galSectionRef.current;
+          const track = galTrackRef.current;
+          if (sec && track && window.innerWidth > 900) {
+            const dist = distRef.current;
+            const rect = sec.getBoundingClientRect();
+            let p = dist > 0 ? (-rect.top / dist) : 0;
+            p = Math.max(0, Math.min(1, p));
+            const targetX = -p * Math.max(0, dist);
+            track.style.transform = `translateX(${targetX}px)`;
+          } else if (track) {
+            track.style.transform = "";
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
-
-
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -2154,7 +2158,19 @@ export default function Home() {
               (02) &mdash; SCROLL &rarr;
             </span>
           </div>
-          <div ref={galTrackRef} className="gallery-track-container" style={{ display: "flex", gap: "24px", padding: "0 48px", width: "max-content", willChange: "transform", flexShrink: 0, alignSelf: "flex-start" }}>
+          <div 
+            ref={galTrackRef} 
+            className="gallery-track-container" 
+            style={{ 
+              display: "flex", 
+              gap: "24px", 
+              padding: "0 48px", 
+              width: "max-content", 
+              willChange: "transform", 
+              flexShrink: 0, 
+              alignSelf: "flex-start"
+            }}
+          >
             {/* card 1 */}
             <div className="gallery-card" style={{ flex: "none", width: "440px", background: "linear-gradient(160deg,#2C2420,#1F1B18)", border: "1px solid #332C26", borderRadius: "24px", padding: "38px", height: "440px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
@@ -2743,13 +2759,13 @@ export default function Home() {
                 COMPANY
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <a href="/about" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   About
                 </a>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <a href="/privacy" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Privacy
                 </a>
-                <a href="#" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                <a href="/contact" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                   Contact
                 </a>
               </div>
