@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../../Navbar";
 import { 
   FiCode, 
@@ -9,8 +10,6 @@ import {
   FiPlay, 
   FiRefreshCw, 
   FiTerminal, 
-  FiFileText, 
-  FiCpu, 
   FiClock,
   FiZap
 } from "react-icons/fi";
@@ -119,7 +118,7 @@ def get_weather():
     setVisibleRawText("");
     setTerminalLogs([]);
     clearAllTimeouts();
-  }, [activeTab]);
+  }, [activeTab, currentData.initial]);
 
   const clearAllTimeouts = () => {
     timeoutsRef.current.forEach(t => clearTimeout(t));
@@ -138,7 +137,7 @@ def get_weather():
       setAnimState("listening");
       setTerminalLogs(prev => [...prev, "[LISUP] Speech listener active (16kHz)..."]);
 
-      let chars = currentData.rawSpeech.split("");
+      const chars = currentData.rawSpeech.split("");
       let currentText = "";
       chars.forEach((char, idx) => {
         const tId = setTimeout(() => {
@@ -213,7 +212,7 @@ def get_weather():
             <FiArrowLeft /> Back to home
           </Link>
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#38BDF8", letterSpacing: ".25em", textTransform: "uppercase" }}>
-            // A DAY IN THE LIFE STORY
+            {"// A DAY IN THE LIFE STORY"}
           </div>
           <h1
             className="font-bricolage"
@@ -262,7 +261,7 @@ def get_weather():
                 return (
                   <div
                     key={key}
-                    onClick={() => !isPlaying && setActiveTab(key as any)}
+                    onClick={() => !isPlaying && setActiveTab(key as typeof activeTab)}
                     style={{
                       background: isActive ? "rgba(56, 189, 248, 0.04)" : "transparent",
                       border: "1px solid",
@@ -434,7 +433,7 @@ def get_weather():
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

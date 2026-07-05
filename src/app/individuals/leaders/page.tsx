@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../../Navbar";
 import { 
   FiClock, 
@@ -66,7 +67,7 @@ export default function LeadersPage() {
     setAnimState("idle");
     setVisibleRawText("");
     clearAllTimeouts();
-  }, [activeTab]);
+  }, [activeTab, currentData.initialText]);
 
   const clearAllTimeouts = () => {
     timeoutsRef.current.forEach(t => clearTimeout(t));
@@ -86,7 +87,7 @@ export default function LeadersPage() {
 
     const t1 = setTimeout(() => {
       setAnimState("listening");
-      let chars = currentData.rawSpeech.split("");
+      const chars = currentData.rawSpeech.split("");
       let currentText = "";
       chars.forEach((char, idx) => {
         const tId = setTimeout(() => {
@@ -153,7 +154,7 @@ export default function LeadersPage() {
             <FiArrowLeft /> Back to home
           </Link>
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#E07B39", letterSpacing: ".25em", textTransform: "uppercase" }}>
-            // DAY IN THE LIFE OF A MANAGER
+            {"// DAY IN THE LIFE OF A MANAGER"}
           </div>
           <h1
             className="font-bricolage"
@@ -202,7 +203,7 @@ export default function LeadersPage() {
                 return (
                   <div
                     key={key}
-                    onClick={() => !isPlaying && setActiveTab(key as any)}
+                    onClick={() => !isPlaying && setActiveTab(key as typeof activeTab)}
                     style={{
                       background: isActive ? "rgba(224, 123, 57, 0.03)" : "#FAF8F5",
                       border: "1px solid",
@@ -376,7 +377,7 @@ export default function LeadersPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

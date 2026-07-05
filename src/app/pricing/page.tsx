@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../Navbar";
-import { FiCheck, FiInfo, FiChevronDown, FiZap } from "react-icons/fi";
+import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
+import { FiCheck, FiChevronDown } from "react-icons/fi";
 
 const FAQS = [
   {
@@ -31,12 +33,6 @@ const FAQS = [
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const toggleBilling = () => setIsAnnual(!isAnnual);
-
-  const triggerWaitlist = () => {
-    window.dispatchEvent(new CustomEvent("open-waitlist-modal"));
-  };
 
   const proPrice = isAnnual ? 4 : 5;
 
@@ -79,7 +75,7 @@ export default function PricingPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#E07B39", letterSpacing: ".25em", textTransform: "uppercase", marginBottom: "16px" }}>
-            // PRICING PLANS
+            {"// PRICING PLANS"}
           </div>
           
           <h1
@@ -188,9 +184,12 @@ export default function PricingPage() {
                 <span className="font-hanken" style={{ fontSize: "14px", color: "#A29B91" }}>/ forever</span>
               </div>
 
-              <button
-                onClick={triggerWaitlist}
+              <a
+                href={WINDOWS_DOWNLOAD_URL}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
                   padding: "13px",
                   borderRadius: "999px",
@@ -201,12 +200,13 @@ export default function PricingPage() {
                   fontSize: "14.5px",
                   cursor: "pointer",
                   marginBottom: "36px",
-                  transition: "background 0.2s, color 0.2s"
+                  transition: "background 0.2s, color 0.2s",
+                  textDecoration: "none"
                 }}
                 className="hover-bg-orange"
               >
-                Get Started
-              </button>
+                {WINDOWS_DOWNLOAD_LABEL}
+              </a>
 
               <div style={{ borderTop: "1px solid #ECE8E2", paddingTop: "28px" }}>
                 <p className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 700, color: "#A29B91", marginBottom: "16px", letterSpacing: "0.05em" }}>
@@ -270,9 +270,12 @@ export default function PricingPage() {
                 <span className="font-hanken" style={{ fontSize: "14px", color: "#A29B91" }}>/ month</span>
               </div>
 
-              <button
-                onClick={triggerWaitlist}
+              <a
+                href={WINDOWS_DOWNLOAD_URL}
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
                   padding: "14px",
                   borderRadius: "999px",
@@ -284,12 +287,13 @@ export default function PricingPage() {
                   cursor: "pointer",
                   marginBottom: "36px",
                   boxShadow: "0 10px 20px rgba(0,0,0,0.08)",
-                  transition: "background 0.2s"
+                  transition: "background 0.2s",
+                  textDecoration: "none"
                 }}
                 className="hover-bg-orange"
               >
-                Get Pro Access
-              </button>
+                {WINDOWS_DOWNLOAD_LABEL}
+              </a>
 
               <div style={{ borderTop: "1px solid #ECE8E2", paddingTop: "28px" }}>
                 <p className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 700, color: "#A29B91", marginBottom: "16px", letterSpacing: "0.05em" }}>
@@ -339,9 +343,12 @@ export default function PricingPage() {
                 <span className="font-bricolage" style={{ fontSize: "44px", fontWeight: 800, color: "#26231F" }}>Custom</span>
               </div>
 
-              <button
-                onClick={triggerWaitlist}
+              <a
+                href="/contact"
                 style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
                   padding: "13px",
                   borderRadius: "999px",
@@ -352,12 +359,13 @@ export default function PricingPage() {
                   fontSize: "14.5px",
                   cursor: "pointer",
                   marginBottom: "36px",
-                  transition: "background 0.2s, color 0.2s"
+                  transition: "background 0.2s, color 0.2s",
+                  textDecoration: "none"
                 }}
                 className="hover-bg-orange"
               >
                 Contact Sales
-              </button>
+              </a>
 
               <div style={{ borderTop: "1px solid #ECE8E2", paddingTop: "28px" }}>
                 <p className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 700, color: "#A29B91", marginBottom: "16px", letterSpacing: "0.05em" }}>
@@ -465,11 +473,14 @@ export default function PricingPage() {
             Ready to Speak Faster?
           </h2>
           <p className="font-hanken" style={{ fontSize: "16px", color: "#6B6560", maxWidth: "480px", margin: "0 auto 28px" }}>
-            Join the waitlist today and get early access to our desktop app releases and special pricing tiers.
+            Download the Windows app today and start turning voice into finished text on your desktop.
           </p>
-          <button
-            onClick={triggerWaitlist}
+          <a
+            href={WINDOWS_DOWNLOAD_URL}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               padding: "14px 36px",
               background: "#E07B39",
               color: "#fff",
@@ -478,12 +489,13 @@ export default function PricingPage() {
               fontWeight: 700,
               fontSize: "15px",
               cursor: "pointer",
-              boxShadow: "0 10px 24px rgba(224,123,57,0.2)"
+              boxShadow: "0 10px 24px rgba(224,123,57,0.2)",
+              textDecoration: "none"
             }}
             className="hover-bg-darkorange"
           >
-            Join waitlist
-          </button>
+            {WINDOWS_DOWNLOAD_LABEL}
+          </a>
         </div>
       </section>
 
@@ -492,7 +504,7 @@ export default function PricingPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

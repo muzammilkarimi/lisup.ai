@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../../Navbar";
 import { 
   FiClock, 
@@ -67,7 +68,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
     setAnimState("idle");
     setVisibleRawText("");
     clearAllTimeouts();
-  }, [activeTab]);
+  }, [activeTab, currentData.initialText]);
 
   const clearAllTimeouts = () => {
     timeoutsRef.current.forEach(t => clearTimeout(t));
@@ -87,7 +88,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
 
     const t1 = setTimeout(() => {
       setAnimState("listening");
-      let chars = currentData.rawSpeech.split("");
+      const chars = currentData.rawSpeech.split("");
       let currentText = "";
       chars.forEach((char, idx) => {
         const tId = setTimeout(() => {
@@ -154,7 +155,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
             <FiArrowLeft /> Back to home
           </Link>
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#6366F1", letterSpacing: ".25em", textTransform: "uppercase" }}>
-            // DAY IN THE LIFE OF A STUDENT
+            {"// DAY IN THE LIFE OF A STUDENT"}
           </div>
           <h1
             className="font-bricolage"
@@ -203,7 +204,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
                 return (
                   <div
                     key={key}
-                    onClick={() => !isPlaying && setActiveTab(key as any)}
+                    onClick={() => !isPlaying && setActiveTab(key as typeof activeTab)}
                     style={{
                       background: isActive ? "rgba(99, 102, 241, 0.03)" : "#FAFBFD",
                       border: "1px solid",
@@ -375,7 +376,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import Navbar from "./Navbar";
+import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "./download";
 import { 
   SiNotion, 
   SiSlack, 
@@ -316,7 +318,7 @@ function LaptopDemo() {
   }, [animState]);
 
   // Main animation engine
-  const startDemo = useCallback((sentenceIdx: number, appType: "slack" | "notion" | "vscode") => {
+  const startDemo = useCallback((sentenceIdx: number) => {
     clearAllTimeouts();
     setInjectedText("");
     setVisibleRawWords([]);
@@ -402,7 +404,7 @@ function LaptopDemo() {
       setActiveSentenceIdx(nextIdx);
       const nextSentence = DEMO_SENTENCES[nextIdx];
       setActiveApp(nextSentence.app);
-      startDemo(nextIdx, nextSentence.app);
+      startDemo(nextIdx);
     }, 2800);
 
     return () => clearTimeout(tId);
@@ -414,7 +416,7 @@ function LaptopDemo() {
       setAutoplay(false);
       const sentence = DEMO_SENTENCES[activeSentenceIdx];
       setActiveApp(sentence.app);
-      startDemo(activeSentenceIdx, sentence.app);
+      startDemo(activeSentenceIdx);
     };
     window.addEventListener("start-laptop-demo", handleExternalTrigger);
     return () => {
@@ -433,7 +435,7 @@ function LaptopDemo() {
     const sIdx = DEMO_SENTENCES.findIndex((s) => s.app === app);
     const useIdx = sIdx !== -1 ? sIdx : 0;
     setActiveSentenceIdx(useIdx);
-    startDemo(useIdx, app);
+    startDemo(useIdx);
   };
 
   const handleSentenceChange = (idx: number) => {
@@ -441,12 +443,12 @@ function LaptopDemo() {
     setActiveSentenceIdx(idx);
     const sentence = DEMO_SENTENCES[idx];
     setActiveApp(sentence.app);
-    startDemo(idx, sentence.app);
+    startDemo(idx);
   };
 
   const handleManualPlay = () => {
     setAutoplay(false);
-    startDemo(activeSentenceIdx, activeApp);
+    startDemo(activeSentenceIdx);
   };
 
   return (
@@ -813,7 +815,7 @@ function LaptopDemo() {
                         <span className="vscode-line-num">3</span>
                         <span className="vscode-code">
                           <span className="vscode-comment" style={{ color: animState === "injecting" || animState === "done" ? "#ce9178" : "#6a9955" }}>
-                            &nbsp;&nbsp;<span style={{ color: "#6a9955" }}>// TODO:</span> {injectedText || ""}
+                            &nbsp;&nbsp;<span style={{ color: "#6a9955" }}>{"// TODO:"}</span> {injectedText || ""}
                             {animState === "injecting" && <span className="demo-cursor" style={{ background: "#ce9178" }}></span>}
                           </span>
                         </span>
@@ -838,7 +840,7 @@ function LaptopDemo() {
                 {/* Widget Header */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,0,0,0.06)", paddingBottom: "6px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <img src="/logo.png" alt="Lisup" width="16" height="16" style={{ borderRadius: "4px" }} />
+                    <Image src="/logo.png" alt="Lisup" width="16" height="16" style={{ borderRadius: "4px" }} />
                     <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "12.5px", color: "#26231F" }}>
                       Lis<span style={{ color: "#E07B39" }}>up</span>
                     </span>
@@ -1030,31 +1032,7 @@ export default function Home() {
   const [whStatus, setWhStatus] = useState("READY");
   const [whProg, setWhProg] = useState("12%");
   const [isLoaded, setIsLoaded] = useState(false);
-  const [heroActiveTab, setHeroActiveTab] = useState<"transcribe" | "command">("transcribe");
-
-  const [waitlistEmail, setWaitlistEmail] = useState("");
-  const [submittedWaitlist, setSubmittedWaitlist] = useState(false);
-
-  const handleWaitlistSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (waitlistEmail.trim()) {
-      try {
-        const res = await fetch("/api/waitlist", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: waitlistEmail }),
-        });
-        if (res.ok) {
-          setSubmittedWaitlist(true);
-        } else {
-          alert("Something went wrong. Please try again.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Something went wrong. Please try again.");
-      }
-    }
-  };
+  const [, setHeroActiveTab] = useState<"transcribe" | "command">("transcribe");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1065,13 +1043,11 @@ export default function Home() {
 
   // Animation values stored in refs to avoid triggering render cycles
   const pointerRef = useRef({ x: -100, y: -100 });
-  const ringRef = useRef({ x: -100, y: -100 });
   const fillerIdxRef = useRef(0);
   const typerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fillerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rafRef = useRef<number | null>(null);
   const distRef = useRef<number>(0);
-  const currentXRef = useRef<number>(0);
 
 
 
@@ -1203,7 +1179,6 @@ export default function Home() {
     let wctx: CanvasRenderingContext2D | null = null;
 
     // Absolute layout metrics cached on resize/mount to avoid layout thrashing in RAF loop
-    let sectionOffsetTop = 0;
     let canvasHeroOffsetTop = 0;
     let canvasHeroOffsetLeft = 0;
     let canvasWaveOffsetTop = 0;
@@ -1239,11 +1214,6 @@ export default function Home() {
 
     const cacheMetrics = () => {
       adjustGalleryHeight();
-      
-      const sec = galSectionRef.current;
-      if (sec) {
-        sectionOffsetTop = getOffsetTop(sec).top;
-      }
       
       const ch = canvasHeroRef.current;
       if (ch) {
@@ -1533,11 +1503,13 @@ export default function Home() {
               border: "1px solid rgba(224,123,57,0.2)",
               animation: "ping 1.5s cubic-bezier(0,0,0.2,1) infinite"
             }}></div>
-            <img
+            <Image
               src="/logo.png"
               alt="Lisup Logo"
               width="80"
               height="80"
+              priority
+              loading="eager"
               style={{ borderRadius: "20px", objectFit: "cover" }}
             />
           </div>
@@ -1721,115 +1693,66 @@ export default function Home() {
               Talk, stop, done. Lisup turns speech into finished text in 100+ languages &mdash; fillers gone, grammar fixed, in your tone. Everywhere on your machine.
             </p>
 
-            {submittedWaitlist ? (
-              <div
+            <div
+              style={{
+                display: "flex",
+                alignItems: "stretch",
+                flexWrap: "wrap",
+                gap: "14px",
+                marginTop: "36px",
+                maxWidth: "580px",
+                width: "100%",
+              }}
+            >
+              <a
+                href={WINDOWS_DOWNLOAD_URL}
+                data-cursor
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "10px",
-                  background: "rgba(44, 154, 94, 0.08)",
-                  border: "1px solid rgba(44, 154, 94, 0.2)",
-                  padding: "12px 24px",
-                  borderRadius: "999px",
-                  color: "#2C9A5E",
-                  fontWeight: 600,
+                  justifyContent: "center",
                   fontSize: "15px",
-                  marginTop: "36px",
-                  alignSelf: "flex-start",
+                  fontWeight: 700,
+                  color: "#fff",
+                  background: "#E07B39",
+                  padding: "14px 28px",
+                  borderRadius: "999px",
+                  cursor: "pointer",
+                  transition: "background 0.2s, transform 0.1s",
+                  boxShadow: "0 8px 16px -6px rgba(224,123,57,.6)",
+                  textDecoration: "none",
                 }}
+                className="hover-bg-darkorange"
               >
-                <span>🚀 You&apos;re on the waitlist! We&apos;ll be in touch.</span>
-              </div>
-            ) : (
-              <div
+                {WINDOWS_DOWNLOAD_LABEL}
+              </a>
+              <button
+                data-cursor
+                onClick={() => {
+                  const el = document.getElementById("demo-section");
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth" });
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent("start-laptop-demo"));
+                    }, 600);
+                  }
+                }}
                 style={{
-                  display: "flex",
-                  alignItems: "stretch",
-                  flexWrap: "wrap",
-                  gap: "14px",
-                  marginTop: "36px",
-                  maxWidth: "580px",
-                  width: "100%",
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  color: "#26231F",
+                  background: "transparent",
+                  padding: "14px 24px",
+                  borderRadius: "999px",
+                  border: "1px solid #E2DDD5",
+                  cursor: "pointer",
+                  transition: "background 0.2s",
                 }}
+                className="hover-bg-white lz-hidemob"
               >
-                <form
-                  onSubmit={handleWaitlistSubmit}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    background: "#FAF4EE",
-                    border: "1.5px solid #F0D5C1",
-                    padding: "6px 6px 6px 18px",
-                    borderRadius: "999px",
-                    flex: "1 1 320px",
-                    boxShadow: "0 12px 24px rgba(224, 123, 57, 0.06)",
-                    gap: "8px",
-                  }}
-                >
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your work email..."
-                    value={waitlistEmail}
-                    onChange={(e) => setWaitlistEmail(e.target.value)}
-                    style={{
-                      border: "none",
-                      background: "transparent",
-                      outline: "none",
-                      fontSize: "15px",
-                      color: "#26231F",
-                      flex: 1,
-                      fontFamily: "var(--font-hanken)",
-                    }}
-                  />
-                  <button
-                    type="submit"
-                    style={{
-                      fontSize: "14.5px",
-                      fontWeight: 700,
-                      color: "#fff",
-                      background: "#E07B39",
-                      border: "none",
-                      padding: "12px 24px",
-                      borderRadius: "999px",
-                      cursor: "pointer",
-                      transition: "background 0.2s, transform 0.1s",
-                      boxShadow: "0 8px 16px -6px rgba(224,123,57,.6)",
-                    }}
-                    className="hover-bg-darkorange"
-                  >
-                    Join Waitlist
-                  </button>
-                </form>
-                <button
-                  data-cursor
-                  onClick={() => {
-                    const el = document.getElementById("demo-section");
-                    if (el) {
-                      el.scrollIntoView({ behavior: "smooth" });
-                      setTimeout(() => {
-                        window.dispatchEvent(new CustomEvent("start-laptop-demo"));
-                      }, 600);
-                    }
-                  }}
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: 600,
-                    color: "#26231F",
-                    background: "transparent",
-                    padding: "14px 24px",
-                    borderRadius: "999px",
-                    border: "1px solid #E2DDD5",
-                    cursor: "pointer",
-                    transition: "background 0.2s",
-                  }}
-                  className="hover-bg-white lz-hidemob"
-                >
-                  &#9654; Watch it work
-                </button>
-              </div>
-            )}
-
+                &#9654; Watch it work
+              </button>
+            </div>
             <div
               className="font-jetbrains hero-platforms"
               style={{
@@ -1841,14 +1764,6 @@ export default function Home() {
             >
               <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
                 WINDOWS
-              </span>
-              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
-              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
-                MACOS
-              </span>
-              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
-              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
-                ANDROID
               </span>
             </div>
           </div>
@@ -1983,7 +1898,7 @@ export default function Home() {
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "9px" }}>
-                    <img
+                    <Image
                       src="/logo.png"
                       alt="Lisup Logo"
                       width="28"
@@ -2309,11 +2224,11 @@ export default function Home() {
                   No account. No cloud sync. No telemetry. Your keys and your data stay on your device, full stop.
                 </p>
               </div>
-              <div
+              <a
+                href={WINDOWS_DOWNLOAD_URL}
                 data-cursor
                 onMouseMove={handleMagnetMove}
                 onMouseLeave={handleMagnetLeave}
-                onClick={() => window.dispatchEvent(new CustomEvent("open-waitlist-modal"))}
                 style={{
                   alignSelf: "flex-start",
                   fontSize: "15px",
@@ -2324,11 +2239,12 @@ export default function Home() {
                   borderRadius: "999px",
                   cursor: "pointer",
                   transition: "transform .12s ease-out",
+                  textDecoration: "none",
                 }}
                 className="hover-bg-darkorange"
               >
-                Join waitlist
-              </div>
+                {WINDOWS_DOWNLOAD_LABEL}
+              </a>
             </div>
           </div>
         </div>
@@ -2360,7 +2276,7 @@ export default function Home() {
               
               {/* center logo */}
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 6, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                <img
+                <Image
                   src="/logo.png"
                   alt="Lisup Logo"
                   width="78"
@@ -2690,11 +2606,11 @@ export default function Home() {
             Free while in beta. Lives in your tray, launches on boot, ready the moment you press Alt + Space.
           </p>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginTop: "38px" }}>
-            <div
+            <a
+              href={WINDOWS_DOWNLOAD_URL}
               data-cursor
               onMouseMove={handleMagnetMove}
               onMouseLeave={handleMagnetLeave}
-              onClick={() => window.dispatchEvent(new CustomEvent("open-waitlist-modal"))}
               style={{
                 fontSize: "16px",
                 fontWeight: 700,
@@ -2705,13 +2621,14 @@ export default function Home() {
                 cursor: "pointer",
                 transition: "transform .12s ease-out, background .2s",
                 boxShadow: "0 18px 38px -12px rgba(26,26,26,.4)",
+                textDecoration: "none",
               }}
               className="hover-bg-fdf6f0"
             >
-              Join waitlist
-            </div>
+              {WINDOWS_DOWNLOAD_LABEL}
+            </a>
             <span className="font-jetbrains" style={{ fontSize: "13px", color: "rgba(255,255,255,.9)", fontWeight: 500 }}>
-              WINDOWS &middot; MACOS &middot; ANDROID
+              WINDOWS
             </span>
           </div>
         </div>
@@ -2722,7 +2639,7 @@ export default function Home() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

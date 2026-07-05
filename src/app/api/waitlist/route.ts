@@ -3,10 +3,14 @@ import fs from "fs";
 import path from "path";
 import { neon } from "@neondatabase/serverless";
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(request: Request) {
   try {
-    const { email } = await request.json();
-    if (!email || typeof email !== "string" || !email.includes("@")) {
+    const body = await request.json().catch(() => null);
+    const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+
+    if (!EMAIL_PATTERN.test(email)) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
 
@@ -32,6 +36,13 @@ export async function POST(request: Request) {
       
       console.log(`[Waitlist DB] Successfully saved: ${email}`);
     } else {
+      if (process.env.NODE_ENV === "production") {
+        return NextResponse.json(
+          { error: "Waitlist storage is not configured" },
+          { status: 503 }
+        );
+      }
+
       // Local fallback: Save to waitlist.csv at the root of the project
       const filePath = path.join(process.cwd(), "waitlist.csv");
       

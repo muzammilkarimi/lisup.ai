@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../Navbar";
-import { FiMail, FiMessageSquare, FiSend, FiCheckCircle } from "react-icons/fi";
+import { FiSend, FiCheckCircle } from "react-icons/fi";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -66,7 +67,7 @@ export default function ContactPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
           
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#E07B39", letterSpacing: ".25em", textTransform: "uppercase", marginBottom: "16px" }}>
-            // REACH OUT
+            {"// REACH OUT"}
           </div>
           
           <h1
@@ -298,7 +299,7 @@ export default function ContactPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

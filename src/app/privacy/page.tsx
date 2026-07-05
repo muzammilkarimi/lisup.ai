@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../Navbar";
 
 export default function PrivacyPage() {
@@ -28,7 +29,7 @@ export default function PrivacyPage() {
       <section style={{ padding: "100px 0 40px", position: "relative", zIndex: 2 }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", padding: "0 24px" }}>
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#E07B39", letterSpacing: ".25em", textTransform: "uppercase", marginBottom: "16px" }}>
-            // LEGAL POLICY
+            {"// LEGAL POLICY"}
           </div>
           <h1
             className="font-bricolage"
@@ -89,7 +90,7 @@ export default function PrivacyPage() {
                 * **Voice Recordings:** When you use the shortcut (Alt + Space) to record audio, that file is processed securely via secure APIs. Once transcription and AI-based styling are completed, the audio is permanently deleted from our servers.
               </p>
               <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.6, color: "#6B6560", marginBottom: "14px" }}>
-                * **Waitlist Signups:** If you join the Lisup waitlist, we store your email address securely in our database (backed by Neon PostgreSQL). This is used solely to notify you of launch announcements, early beta access, and major app releases.
+                * **Contact Messages:** If you contact Lisup, we store the details you submit so we can respond to your request and provide support.
               </p>
               <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.6, color: "#6B6560", margin: 0 }}>
                 * **Local App Analytics:** We may collect anonymous diagnostic and usage telemetry (e.g. error reports or feature click frequency) to improve the desktop app performance. None of this data contains personal information or text you transcribe.
@@ -119,7 +120,7 @@ export default function PrivacyPage() {
                 5. Contact & Support
               </h2>
               <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.6, color: "#6B6560", margin: 0 }}>
-                If you have any questions or concerns regarding our privacy policies, data practices, or wish to request deletion of your waitlist email, please reach out to us via our <Link href="/contact" style={{ color: "#E07B39", textDecoration: "none", fontWeight: 600 }}>Contact Page</Link>.
+                If you have any questions or concerns regarding our privacy policies, data practices, or wish to request deletion of submitted contact information, please reach out to us via our <Link href="/contact" style={{ color: "#E07B39", textDecoration: "none", fontWeight: 600 }}>Contact Page</Link>.
               </p>
             </div>
 
@@ -132,7 +133,7 @@ export default function PrivacyPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

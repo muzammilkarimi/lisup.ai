@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "../Navbar";
+import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
 import { FiUsers, FiCpu, FiCompass, FiShield } from "react-icons/fi";
 
 const PILLARS = [
@@ -28,10 +30,6 @@ const PILLARS = [
 ];
 
 export default function AboutPage() {
-  const triggerWaitlist = () => {
-    window.dispatchEvent(new CustomEvent("open-waitlist-modal"));
-  };
-
   return (
     <div style={{ background: "#FDF6F0", minHeight: "100vh", color: "#26231F", position: "relative", overflowX: "hidden" }}>
       
@@ -56,7 +54,7 @@ export default function AboutPage() {
       <section style={{ padding: "100px 0 60px", position: "relative", zIndex: 2 }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <div className="font-jetbrains" style={{ fontSize: "12.5px", color: "#E07B39", letterSpacing: ".25em", textTransform: "uppercase", marginBottom: "16px" }}>
-            // OUR MISSION
+            {"// OUR MISSION"}
           </div>
           <h1
             className="font-bricolage"
@@ -168,9 +166,12 @@ export default function AboutPage() {
           <p className="font-hanken" style={{ fontSize: "16px", color: "#6B6560", maxWidth: "480px", margin: "0 auto 28px" }}>
             Be among the first to experience Lisup and experience early adopter benefits.
           </p>
-          <button
-            onClick={triggerWaitlist}
+          <a
+            href={WINDOWS_DOWNLOAD_URL}
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               padding: "14px 36px",
               background: "#E07B39",
               color: "#fff",
@@ -179,12 +180,13 @@ export default function AboutPage() {
               fontWeight: 700,
               fontSize: "15px",
               cursor: "pointer",
-              boxShadow: "0 10px 24px rgba(224,123,57,0.2)"
+              boxShadow: "0 10px 24px rgba(224,123,57,0.2)",
+              textDecoration: "none"
             }}
             className="hover-bg-darkorange"
           >
-            Join waitlist
-          </button>
+            {WINDOWS_DOWNLOAD_LABEL}
+          </a>
         </div>
       </section>
 
@@ -193,7 +195,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "40px", paddingBottom: "56px" }}>
           <div style={{ maxWidth: "320px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "18px" }}>
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lisup Logo"
                 width="32"

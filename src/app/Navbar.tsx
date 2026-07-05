@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "./download";
 import { 
   FiUsers, 
   FiCode, 
@@ -71,41 +73,6 @@ export default function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
-  const [modalEmail, setModalEmail] = useState("");
-  const [modalSubmitted, setModalSubmitted] = useState(false);
-
-  useEffect(() => {
-    const handleOpen = () => {
-      setModalSubmitted(false);
-      setModalEmail("");
-      setIsWaitlistOpen(true);
-    };
-    window.addEventListener("open-waitlist-modal", handleOpen);
-    return () => window.removeEventListener("open-waitlist-modal", handleOpen);
-  }, []);
-
-  const handleModalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (modalEmail.trim()) {
-      try {
-        const res = await fetch("/api/waitlist", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: modalEmail }),
-        });
-        if (res.ok) {
-          setModalSubmitted(true);
-        } else {
-          alert("Something went wrong. Please try again.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Something went wrong. Please try again.");
-      }
-    }
-  };
-
   const handleMagnetMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
@@ -170,11 +137,13 @@ export default function Navbar() {
           data-cursor 
           style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
         >
-          <img
+          <Image
             src="/logo.png"
             alt="Lisup Logo"
             width="32"
             height="32"
+            priority
+            loading="eager"
             style={{ borderRadius: "8px", objectFit: "cover" }}
           />
           <span
@@ -405,11 +374,11 @@ export default function Navbar() {
             Pricing
           </Link>
 
-          <div
+          <a
+            href={WINDOWS_DOWNLOAD_URL}
             data-cursor
             onMouseMove={handleMagnetMove}
             onMouseLeave={handleMagnetLeave}
-            onClick={() => setIsWaitlistOpen(true)}
             style={{
               fontSize: "13.5px",
               fontWeight: 700,
@@ -419,11 +388,12 @@ export default function Navbar() {
               borderRadius: "999px",
               cursor: "pointer",
               transition: "transform .12s ease-out, background .2s",
+              textDecoration: "none",
             }}
             className="hover-bg-orange"
           >
-            Join waitlist
-          </div>
+            {WINDOWS_DOWNLOAD_LABEL}
+          </a>
         </div>
 
         {/* HAMBURGER MENU BUTTON FOR MOBILE */}
@@ -461,7 +431,7 @@ export default function Navbar() {
             onClick={() => setIsMobileDrawerOpen(false)}
             style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
           >
-            <img
+            <Image
               src="/logo.png"
               alt="Lisup Logo"
               width="32"
@@ -566,10 +536,10 @@ export default function Navbar() {
 
         {/* Download free */}
         <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div
+          <a
+            href={WINDOWS_DOWNLOAD_URL}
             onClick={() => {
               setIsMobileDrawerOpen(false);
-              setIsWaitlistOpen(true);
             }}
             style={{
               fontSize: "15px",
@@ -579,142 +549,17 @@ export default function Navbar() {
               padding: "14px 28px",
               borderRadius: "999px",
               textAlign: "center",
-              cursor: "pointer"
+              cursor: "pointer",
+              textDecoration: "none"
             }}
           >
-            Join waitlist
-          </div>
+            {WINDOWS_DOWNLOAD_LABEL}
+          </a>
         </div>
       </div>
     </div>
 
-    {/* WAITLIST MODAL OVERLAY */}
-    {isWaitlistOpen && (
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(26, 23, 20, 0.4)",
-          backdropFilter: "blur(12px)",
-          zIndex: 100000,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "20px",
-          pointerEvents: "auto",
-        }}
-        onClick={() => setIsWaitlistOpen(false)}
-      >
-        <div
-          style={{
-            background: "#FDF6F0",
-            border: "1.5px solid #F2D6C2",
-            borderRadius: "28px",
-            width: "100%",
-            maxWidth: "460px",
-            padding: "36px 32px",
-            boxShadow: "0 24px 60px -15px rgba(224, 123, 57, 0.15)",
-            position: "relative",
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Close Button */}
-          <button
-            onClick={() => setIsWaitlistOpen(false)}
-            style={{
-              position: "absolute",
-              top: "20px",
-              right: "20px",
-              background: "transparent",
-              border: "none",
-              fontSize: "20px",
-              color: "#A29B91",
-              cursor: "pointer",
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "50%",
-            }}
-          >
-            &times;
-          </button>
 
-          {/* Modal Content */}
-          {modalSubmitted ? (
-            <div style={{ textAlign: "center", padding: "12px 0" }}>
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>🚀</div>
-              <h3 className="font-bricolage" style={{ fontSize: "24px", fontWeight: 800, color: "#26231F", margin: "0 0 8px" }}>
-                You&apos;re on the list!
-              </h3>
-              <p className="font-hanken" style={{ fontSize: "14.5px", color: "#6B6560", lineHeight: 1.5, margin: 0 }}>
-                Thank you for joining our waitlist. We&apos;re launching soon and will reach out with early access.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <div style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "48px",
-                height: "48px",
-                borderRadius: "14px",
-                background: "rgba(224, 123, 57, 0.08)",
-                color: "#E07B39",
-                marginBottom: "20px",
-              }}>
-                <FiUsers size={22} />
-              </div>
-              <h3 className="font-bricolage" style={{ fontSize: "24px", fontWeight: 800, color: "#26231F", margin: "0 0 10px" }}>
-                Join the Lisup Waitlist
-              </h3>
-              <p className="font-hanken" style={{ fontSize: "14.5px", color: "#6B6560", lineHeight: 1.5, margin: "0 0 24px" }}>
-                Lisup turns speech into clean, structured text anywhere on your screen. Drop your email below to get early access when we launch.
-              </p>
-              <form onSubmit={handleModalSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <input
-                  type="email"
-                  required
-                  placeholder="Enter your email address"
-                  value={modalEmail}
-                  onChange={(e) => setModalEmail(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "14px 18px",
-                    borderRadius: "12px",
-                    border: "1.5px solid #F0D5C1",
-                    background: "#fff",
-                    outline: "none",
-                    fontSize: "14.5px",
-                    color: "#26231F",
-                    fontFamily: "var(--font-hanken)",
-                  }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    width: "100%",
-                    padding: "14px",
-                    borderRadius: "999px",
-                    border: "none",
-                    background: "#E07B39",
-                    color: "#fff",
-                    fontWeight: 700,
-                    fontSize: "15px",
-                    cursor: "pointer",
-                    boxShadow: "0 10px 20px -8px rgba(224,123,57,0.5)",
-                  }}
-                >
-                  Join waitlist
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
-      </div>
-    )}
 
   </div>
 );
