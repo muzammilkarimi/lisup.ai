@@ -13,7 +13,11 @@ import {
   FiBriefcase, 
   FiEye, 
   FiTrendingUp,
-  FiX 
+  FiX,
+  FiDownload,
+  FiPlayCircle,
+  FiLayers,
+  FiSliders
 } from "react-icons/fi";
 
 const INDIVIDUAL_ROLES = [
@@ -67,6 +71,28 @@ const INDIVIDUAL_ROLES = [
   }
 ];
 
+
+const RESOURCE_LINKS = [
+  {
+    title: "How it works",
+    subtitle: "See the voice-to-text flow",
+    href: "/#how",
+    icon: <FiPlayCircle size={15} />
+  },
+  {
+    title: "Features",
+    subtitle: "Explore product capabilities",
+    href: "/#features",
+    icon: <FiLayers size={15} />
+  },
+  {
+    title: "Tone options",
+    subtitle: "Switch writing style instantly",
+    href: "/#tones",
+    icon: <FiSliders size={15} />
+  }
+];
+
 export default function Navbar() {
   const [isIndivOpen, setIsIndivOpen] = useState(false);
   const [isResOpen, setIsResOpen] = useState(false);
@@ -81,6 +107,13 @@ export default function Navbar() {
 
   const handleMagnetLeave = (e: React.MouseEvent<HTMLElement>) => {
     e.currentTarget.style.transform = "translate(0,0)";
+  };
+
+  const handleLogoClick = () => {
+    setIsMobileDrawerOpen(false);
+    if (window.location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -134,6 +167,7 @@ export default function Navbar() {
         {/* LOGO */}
         <Link 
           href="/" 
+          onClick={handleLogoClick}
           data-cursor 
           style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
         >
@@ -227,7 +261,7 @@ export default function Navbar() {
               }}
             >
               <div className="font-jetbrains" style={{ fontSize: "9.5px", fontWeight: 700, color: "#A29B91", letterSpacing: "0.08em", paddingLeft: "10px", marginBottom: "6px" }}>
-                FLOW FOR
+                INDIVIDUALS
               </div>
               
               <div style={{ display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: "2px" }}>
@@ -337,24 +371,64 @@ export default function Navbar() {
                 top: "58px",
                 left: "50%",
                 transform: `translateX(-50%) translateY(${isResOpen ? "0px" : "8px"})`,
-                width: "160px",
+                width: "330px",
                 background: "#fff",
-                borderRadius: "16px",
+                borderRadius: "20px",
                 border: "1px solid #ECE8E2",
-                boxShadow: "0 24px 48px rgba(26,26,26,0.06)",
-                padding: "10px 8px",
+                boxShadow: "0 24px 48px rgba(26,26,26,0.08)",
+                padding: "18px 16px",
                 zIndex: 100,
                 opacity: isResOpen ? 1 : 0,
                 pointerEvents: isResOpen ? "auto" : "none",
                 transition: "opacity 0.2s ease, transform 0.2s ease",
-                display: "flex",
-                flexDirection: "column",
-                gap: "2px"
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: "4px"
               }}
             >
-              <Link href="/#how" style={{ padding: "8px 12px", borderRadius: "8px", textDecoration: "none", fontSize: "12.5px", fontWeight: 600, color: "#26231F" }} className="hover-bg-fdf6f0-soft font-bricolage">How it works</Link>
-              <Link href="/#features" style={{ padding: "8px 12px", borderRadius: "8px", textDecoration: "none", fontSize: "12.5px", fontWeight: 600, color: "#26231F" }} className="hover-bg-fdf6f0-soft font-bricolage">Features</Link>
-              <Link href="/#tones" style={{ padding: "8px 12px", borderRadius: "8px", textDecoration: "none", fontSize: "12.5px", fontWeight: 600, color: "#26231F" }} className="hover-bg-fdf6f0-soft font-bricolage">Tone options</Link>
+              <div className="font-jetbrains" style={{ fontSize: "9.5px", fontWeight: 700, color: "#A29B91", letterSpacing: "0.08em", paddingLeft: "10px", marginBottom: "6px" }}>
+                RESOURCES
+              </div>
+
+              {RESOURCE_LINKS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: "9px 10px",
+                    borderRadius: "12px",
+                    textDecoration: "none",
+                    color: "inherit",
+                    transition: "background 0.2s"
+                  }}
+                  className="hover-bg-fdf6f0-soft"
+                >
+                  <div style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "8px",
+                    background: "rgba(224, 123, 57, 0.07)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#E07B39",
+                    flexShrink: 0
+                  }}>
+                    {item.icon}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+                    <div className="font-bricolage" style={{ fontSize: "13.5px", fontWeight: 700, color: "#26231F", lineHeight: 1.15 }}>
+                      {item.title}
+                    </div>
+                    <div className="font-hanken" style={{ fontSize: "11px", color: "#6B6560", lineHeight: 1.15 }}>
+                      {item.subtitle}
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -387,11 +461,16 @@ export default function Navbar() {
               padding: "9px 18px",
               borderRadius: "999px",
               cursor: "pointer",
-              transition: "transform .12s ease-out, background .2s",
+              transition: "transform .12s ease-out, background .2s, box-shadow .2s",
               textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              boxShadow: "0 10px 22px -14px rgba(26,26,26,.7)",
             }}
             className="hover-bg-orange"
           >
+            <FiDownload size={15} />
             {WINDOWS_DOWNLOAD_LABEL}
           </a>
         </div>
@@ -428,7 +507,7 @@ export default function Navbar() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #ECE8E2", paddingBottom: "16px" }}>
           <Link 
             href="/" 
-            onClick={() => setIsMobileDrawerOpen(false)}
+            onClick={handleLogoClick}
             style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
           >
             <Image
@@ -497,7 +576,7 @@ export default function Navbar() {
         {/* Individuals list */}
         <div>
           <div className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 700, color: "#A29B91", letterSpacing: "0.08em", marginBottom: "14px" }}>
-            FLOW FOR INDIVIDUALS
+            INDIVIDUALS
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px", maxHeight: "300px", overflowY: "auto", paddingRight: "6px" }}>
             {INDIVIDUAL_ROLES.map((role) => (

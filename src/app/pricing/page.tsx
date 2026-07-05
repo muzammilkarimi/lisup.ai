@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../Navbar";
 import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
-import { FiCheck, FiChevronDown } from "react-icons/fi";
+import { FiCheck, FiChevronDown, FiLock } from "react-icons/fi";
 
 const FAQS = [
   {
@@ -205,7 +205,7 @@ export default function PricingPage() {
                 }}
                 className="hover-bg-orange"
               >
-                {WINDOWS_DOWNLOAD_LABEL}
+                Start free trial
               </a>
 
               <div style={{ borderTop: "1px solid #ECE8E2", paddingTop: "28px" }}>
@@ -270,30 +270,30 @@ export default function PricingPage() {
                 <span className="font-hanken" style={{ fontSize: "14px", color: "#A29B91" }}>/ month</span>
               </div>
 
-              <a
-                href={WINDOWS_DOWNLOAD_URL}
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   width: "100%",
                   padding: "14px",
                   borderRadius: "999px",
                   border: "none",
-                  background: "#1A1A1A",
-                  color: "#fff",
+                  background: "#E8E1DA",
+                  color: "#8E8880",
                   fontWeight: 700,
                   fontSize: "14.5px",
-                  cursor: "pointer",
+                  cursor: "not-allowed",
                   marginBottom: "36px",
-                  boxShadow: "0 10px 20px rgba(0,0,0,0.08)",
-                  transition: "background 0.2s",
-                  textDecoration: "none"
+                  boxShadow: "none",
                 }}
-                className="hover-bg-orange"
               >
-                {WINDOWS_DOWNLOAD_LABEL}
-              </a>
+                <FiLock size={15} /> Pro coming soon
+              </button>
 
               <div style={{ borderTop: "1px solid #ECE8E2", paddingTop: "28px" }}>
                 <p className="font-jetbrains" style={{ fontSize: "11px", fontWeight: 700, color: "#A29B91", marginBottom: "16px", letterSpacing: "0.05em" }}>
@@ -559,8 +559,8 @@ export default function PricingPage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Windows</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS soon</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android soon</span>
               </div>
             </div>
           </div>

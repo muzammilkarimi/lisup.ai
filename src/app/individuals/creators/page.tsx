@@ -428,8 +428,8 @@ export default function CreatorsPage() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Windows</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS soon</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android soon</span>
               </div>
             </div>
           </div>

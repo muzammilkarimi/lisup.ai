@@ -1048,6 +1048,8 @@ export default function Home() {
   const fillerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rafRef = useRef<number | null>(null);
   const distRef = useRef<number>(0);
+  const isScrollingRef = useRef(false);
+  const scrollIdleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 
 
@@ -1170,10 +1172,19 @@ export default function Home() {
       pointerRef.current = { x: e.clientX, y: e.clientY };
     };
 
+    const markScrolling = () => {
+      isScrollingRef.current = true;
+      if (scrollIdleTimeoutRef.current) clearTimeout(scrollIdleTimeoutRef.current);
+      scrollIdleTimeoutRef.current = setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 120);
+    };
+
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("scroll", markScrolling, { passive: true });
 
     // Initialize canvas sizes
-    const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
+    const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 1.5) : 1;
     let hw = 0, hh = 0, ww = 0, wh = 0;
     let hctx: CanvasRenderingContext2D | null = null;
     let wctx: CanvasRenderingContext2D | null = null;
@@ -1292,7 +1303,7 @@ export default function Home() {
 
     const drawWave = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) => {
       ctx.clearRect(0, 0, w, h);
-      const n = 30, bw = w / n, cy = h / 2;
+      const n = 22, bw = w / n, cy = h / 2;
       for (let i = 0; i < n; i++) {
         let v = Math.sin(i * 0.5 + t * 5) + 0.6 * Math.sin(i * 0.2 - t * 3);
         v = Math.abs(v) / 1.6;
@@ -1308,7 +1319,15 @@ export default function Home() {
       ctx.globalAlpha = 1;
     };
 
+    let lastCanvasPaint = 0;
+
     const tick = (timestamp: number) => {
+      if (timestamp - lastCanvasPaint < 33) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+      lastCanvasPaint = timestamp;
+
       const t = timestamp / 1000;
       
       const scrollY = typeof window !== "undefined" ? window.scrollY : 0;
@@ -1317,8 +1336,8 @@ export default function Home() {
       const isHeroVisible = scrollY < (canvasHeroOffsetTop + hh) && (scrollY + vpHeight) > canvasHeroOffsetTop;
       const isWaveVisible = scrollY < (canvasWaveOffsetTop + wh) && (scrollY + vpHeight) > canvasWaveOffsetTop;
 
-      // Draw canvas visuals only if they are visible in the viewport
-      if (hctx && isHeroVisible) {
+      // Keep the full-detail hero ring, but do not repaint it during active scroll.
+      if (hctx && isHeroVisible && !isScrollingRef.current) {
         const mx = pointerRef.current.x - (canvasHeroOffsetLeft - (typeof window !== "undefined" ? window.scrollX : 0));
         const my = pointerRef.current.y - (canvasHeroOffsetTop - scrollY);
         drawFinger(hctx, hw, hh, t, mx, my);
@@ -1522,25 +1541,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* FILM GRAIN */}
-      <div
-        style={{
-          position: "fixed",
-          inset: "-50%",
-          width: "200%",
-          height: "200%",
-          pointerEvents: "none",
-          zIndex: 60,
-          opacity: 0.05,
-          mixBlendMode: "multiply",
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-          animation: "grainshift 8s steps(10) infinite",
-        }}
-      ></div>
-
-
-
       {/* SCROLL PROGRESS */}
       <div
         style={{
@@ -1694,6 +1694,7 @@ export default function Home() {
             </p>
 
             <div
+              className="hero-cta-row"
               style={{
                 display: "flex",
                 alignItems: "stretch",
@@ -1765,6 +1766,14 @@ export default function Home() {
               <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em" }}>
                 WINDOWS
               </span>
+              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
+              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em", opacity: 0.72 }}>
+                MACOS SOON
+              </span>
+              <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#D8CFC4" }}></span>
+              <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em", opacity: 0.72 }}>
+                ANDROID SOON
+              </span>
             </div>
           </div>
 
@@ -1810,6 +1819,7 @@ export default function Home() {
 
       {/* ===================== MARQUEE ===================== */}
       <div
+        className="marquee-ribbon"
         style={{
           position: "relative",
           background: "#E07B39",
@@ -1820,7 +1830,7 @@ export default function Home() {
           zIndex: 5,
         }}
       >
-        <div style={{ display: "flex", gap: 0, width: "max-content", animation: "marquee 26s linear infinite" }}>
+        <div className="marquee-ribbon-track" style={{ display: "flex", gap: 0, width: "max-content", animation: "marquee 26s linear infinite" }}>
           <span className="font-bricolage" style={{ fontWeight: 800, fontSize: "34px", color: "#1A1A1A", letterSpacing: "-.02em", whiteSpace: "nowrap" }}>
             SPEAK&nbsp;&middot;&nbsp;DON&apos;T&nbsp;TYPE&nbsp;&middot;&nbsp;3&times;&nbsp;FASTER&nbsp;&middot;&nbsp;100+&nbsp;LANGUAGES&nbsp;&middot;&nbsp;ON-DEVICE&nbsp;&middot;&nbsp;
           </span>
@@ -2628,7 +2638,7 @@ export default function Home() {
               {WINDOWS_DOWNLOAD_LABEL}
             </a>
             <span className="font-jetbrains" style={{ fontSize: "13px", color: "rgba(255,255,255,.9)", fontWeight: 500 }}>
-              WINDOWS
+              WINDOWS &middot; MACOS SOON &middot; ANDROID SOON
             </span>
           </div>
         </div>
@@ -2693,8 +2703,8 @@ export default function Home() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Windows</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS</span>
-                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>macOS soon</span>
+                <span style={{ fontSize: "14px", color: "#C5BFB8" }}>Android soon</span>
               </div>
             </div>
           </div>
