@@ -295,10 +295,10 @@ function LaptopDemo() {
   const [showStrikes, setShowStrikes] = useState(false);
   const [injectedText, setInjectedText] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  const [autoplay, setAutoplay] = useState(true);
   const [waveHeights, setWaveHeights] = useState<number[]>(Array(15).fill(8));
 
   const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  const hasAutoplayStartedRef = useRef(false);
 
   const clearAllTimeouts = useCallback(() => {
     timeoutsRef.current.forEach((t) => clearTimeout(t));
@@ -395,25 +395,27 @@ function LaptopDemo() {
 
   }, [clearAllTimeouts]);
 
-  // Autoplay handler
+  // Continuous autoplay handler
   useEffect(() => {
-    if (!autoplay || isPlaying) return;
+    if (isPlaying) return;
 
     const tId = setTimeout(() => {
-      const nextIdx = (activeSentenceIdx + 1) % DEMO_SENTENCES.length;
+      const nextIdx = hasAutoplayStartedRef.current
+        ? (activeSentenceIdx + 1) % DEMO_SENTENCES.length
+        : activeSentenceIdx;
+      hasAutoplayStartedRef.current = true;
       setActiveSentenceIdx(nextIdx);
       const nextSentence = DEMO_SENTENCES[nextIdx];
       setActiveApp(nextSentence.app);
       startDemo(nextIdx);
-    }, 2800);
+    }, hasAutoplayStartedRef.current ? 1800 : 500);
 
     return () => clearTimeout(tId);
-  }, [autoplay, isPlaying, activeSentenceIdx, startDemo]);
+  }, [isPlaying, activeSentenceIdx, startDemo]);
 
   // External trigger for "Watch it work" click
   useEffect(() => {
     const handleExternalTrigger = () => {
-      setAutoplay(false);
       const sentence = DEMO_SENTENCES[activeSentenceIdx];
       setActiveApp(sentence.app);
       startDemo(activeSentenceIdx);
@@ -430,7 +432,6 @@ function LaptopDemo() {
   }, [clearAllTimeouts]);
 
   const handleAppChange = (app: "slack" | "notion" | "vscode") => {
-    setAutoplay(false);
     setActiveApp(app);
     const sIdx = DEMO_SENTENCES.findIndex((s) => s.app === app);
     const useIdx = sIdx !== -1 ? sIdx : 0;
@@ -439,17 +440,12 @@ function LaptopDemo() {
   };
 
   const handleSentenceChange = (idx: number) => {
-    setAutoplay(false);
     setActiveSentenceIdx(idx);
     const sentence = DEMO_SENTENCES[idx];
     setActiveApp(sentence.app);
     startDemo(idx);
   };
 
-  const handleManualPlay = () => {
-    setAutoplay(false);
-    startDemo(activeSentenceIdx);
-  };
 
   return (
     <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px" }}>
@@ -613,39 +609,6 @@ function LaptopDemo() {
                 {s.label}
               </button>
             ))}
-          </div>
-
-          {/* Play/Autoplay controls */}
-          <div style={{ display: "flex", alignItems: "center", gap: "14px", borderLeft: "1px solid #ECE8E2", paddingLeft: "20px" }}>
-            <button
-              onClick={handleManualPlay}
-              disabled={isPlaying}
-              style={{
-                background: isPlaying ? "#EDE8E2" : "#1A1A1A",
-                color: isPlaying ? "#A29B91" : "#fff",
-                border: "none",
-                fontSize: "12.5px",
-                fontWeight: 700,
-                padding: "8px 16px",
-                borderRadius: "8px",
-                cursor: isPlaying ? "default" : "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                transition: "background 0.2s",
-              }}
-            >
-              {isPlaying ? "Simulating..." : "▶ Run Demo"}
-            </button>
-            <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12.5px", color: "#6B6560", cursor: "pointer", userSelect: "none" }}>
-              <input
-                type="checkbox"
-                checked={autoplay}
-                onChange={(e) => setAutoplay(e.target.checked)}
-                style={{ accentColor: "#E07B39", width: "14px", height: "14px" }}
-              />
-              Autoplay
-            </label>
           </div>
         </div>
 

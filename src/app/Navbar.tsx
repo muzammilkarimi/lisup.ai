@@ -75,7 +75,7 @@ const INDIVIDUAL_ROLES = [
 const RESOURCE_LINKS = [
   {
     title: "How it works",
-    subtitle: "See the voice-to-text flow",
+    subtitle: "See Lisup in action",
     href: "/#how",
     icon: <FiPlayCircle size={15} />
   },
@@ -198,6 +198,23 @@ export default function Navbar() {
           className="lz-hidemob"
           style={{ display: "flex", alignItems: "center", gap: "34px" }}
         >
+
+
+          {/* ABOUT */}
+          <Link
+            href="/about"
+            data-cursor
+            className="font-bricolage"
+            style={{
+              fontSize: "14px",
+              color: "#26231F",
+              fontWeight: 600,
+              textDecoration: "none",
+              letterSpacing: ".01em",
+            }}
+          >
+            About
+          </Link>
           {/* INDIVIDUALS DROPDOWN */}
           <div
             onMouseEnter={() => setIsIndivOpen(true)}
@@ -307,23 +324,6 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-
-          {/* BUSINESS */}
-          <Link
-            href="/#why"
-            data-cursor
-            className="font-bricolage"
-            style={{
-              fontSize: "14px",
-              color: "#26231F",
-              fontWeight: 600,
-              textDecoration: "none",
-              letterSpacing: ".01em",
-            }}
-          >
-            Business
-          </Link>
-
           {/* RESOURCES DROPDOWN */}
           <div
             onMouseEnter={() => setIsResOpen(true)}
@@ -556,12 +556,12 @@ export default function Navbar() {
         {/* Main Links */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px", borderBottom: "1px solid #ECE8E2", paddingBottom: "24px" }}>
           <Link
-            href="/#why"
+            href="/about"
             onClick={() => setIsMobileDrawerOpen(false)}
             className="font-bricolage"
             style={{ fontSize: "20px", fontWeight: 700, color: "#26231F", textDecoration: "none" }}
           >
-            Business
+            About
           </Link>
           <Link
             href="/pricing"

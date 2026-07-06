@@ -259,7 +259,7 @@ export default function PricingPage() {
               </div>
               
               <h3 className="font-bricolage" style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 8px", color: "#26231F" }}>
-                Pro Flow
+                Lisup Pro
               </h3>
               <p className="font-hanken" style={{ fontSize: "14px", color: "#6B6560", margin: "0 0 28px", minHeight: "42px" }}>
                 For professionals, developers, and writers who rely on high-volume voice-to-text.

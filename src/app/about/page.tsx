@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Navbar from "../Navbar";
 import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
-import { FiUsers, FiCpu, FiCompass, FiShield } from "react-icons/fi";
+import { FiUsers, FiCpu, FiCompass, FiShield, FiMic, FiArrowRight, FiGithub, FiInstagram, FiLinkedin } from "react-icons/fi";
 
 const PILLARS = [
   {
@@ -27,6 +27,12 @@ const PILLARS = [
     title: "Privacy Conscious",
     description: "Your voice data belongs to you. Audio is processed securely and discarded immediately, never saved or used for model training."
   }
+];
+
+const FOUNDER_NOTES = [
+  "Built from a real everyday problem: ideas move fast, typing slows them down.",
+  "Focused on a Windows-first desktop experience that feels instant and practical.",
+  "Designed for students, founders, developers, creators, and anyone who writes all day."
 ];
 
 export default function AboutPage() {
@@ -83,6 +89,115 @@ export default function AboutPage() {
           >
             We believe that writing should be as fast as speaking, but as structured and polished as typing. Lisup turns raw speech into finished copy, instantly.
           </p>
+        </div>
+      </section>
+
+      {/* Founder */}
+      <section style={{ padding: "0 0 92px", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 24px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "28px",
+              alignItems: "stretch"
+            }}
+          >
+            <div style={{ background: "#26231F", borderRadius: "24px", padding: "40px", color: "#fff", minHeight: "100%" }}>
+              <div className="font-jetbrains" style={{ fontSize: "12px", color: "#E8B18A", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: "16px" }}>
+                Founder
+              </div>
+              <h2 className="font-bricolage" style={{ fontSize: "clamp(30px, 4vw, 44px)", lineHeight: 1, fontWeight: 800, margin: "0 0 20px", letterSpacing: "-.03em" }}>
+                Meet the founder.
+              </h2>
+              <p className="font-hanken" style={{ fontSize: "16.5px", lineHeight: 1.65, color: "#D9D1CA", margin: "0 0 26px" }}>
+                As an IIT Patna alumnus, I am building Lisup from a simple frustration: speaking is natural, but turning spoken ideas into clean writing still takes too much work. Lisup exists so people can think out loud and get useful, polished text wherever they already work.
+              </p>
+              <a
+                href={WINDOWS_DOWNLOAD_URL}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  color: "#fff",
+                  fontWeight: 800,
+                  fontSize: "14px",
+                  textDecoration: "none"
+                }}
+              >
+                Try Lisup on Windows <FiArrowRight size={16} />
+              </a>
+            </div>
+
+            <div style={{ background: "#fff", border: "1.5px solid #ECE8E2", borderRadius: "24px", padding: "34px", boxShadow: "0 4px 24px rgba(0,0,0,0.015)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "148px 1fr", gap: "24px", alignItems: "center", marginBottom: "28px" }} className="founder-profile-row">
+                <div style={{ width: "148px", height: "148px", borderRadius: "50%", padding: "5px", background: "linear-gradient(135deg, #E07B39, #F3C7A8)", boxShadow: "0 18px 34px rgba(224,123,57,0.18)" }}>
+                  <Image
+                    src="/founder-muzammil-a-karimi.jpeg"
+                    alt="Muzammil A Karimi"
+                    width={148}
+                    height={148}
+                    sizes="148px"
+                    style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", display: "block", border: "4px solid #fff" }}
+                  />
+                </div>
+                <div>
+                  <div className="font-jetbrains" style={{ fontSize: "10.5px", color: "#E07B39", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: "10px", fontWeight: 700 }}>
+                    Founder of Lisup
+                  </div>
+                  <h3 className="font-bricolage" style={{ fontSize: "clamp(28px, 4vw, 38px)", lineHeight: 1, fontWeight: 800, color: "#26231F", margin: "0 0 10px", letterSpacing: "-.02em" }}>
+                    Muzammil A Karimi
+                  </h3>
+                  <p className="font-hanken" style={{ fontSize: "15px", color: "#6B6560", margin: "0 0 16px", lineHeight: 1.45 }}>
+                    IIT Patna alumnus building a faster way to turn spoken ideas into finished writing.
+                  </p>
+                  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }} className="founder-social-links">
+                    <a
+                      href="https://github.com/muzammilkarimi"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Muzammil A Karimi on GitHub"
+                      style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "9px 12px", borderRadius: "999px", border: "1px solid #ECE8E2", color: "#26231F", textDecoration: "none", fontSize: "13px", fontWeight: 700, background: "#FDF6F0" }}
+                    >
+                      <FiGithub size={15} /> GitHub
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/makarimi01/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Muzammil A Karimi on LinkedIn"
+                      style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "9px 12px", borderRadius: "999px", border: "1px solid #ECE8E2", color: "#26231F", textDecoration: "none", fontSize: "13px", fontWeight: 700, background: "#fff" }}
+                    >
+                      <FiLinkedin size={15} /> LinkedIn
+                    </a>
+                    <a
+                      href="https://www.instagram.com/muzammilkarimiiiii/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Muzammil A Karimi on Instagram"
+                      style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "9px 12px", borderRadius: "999px", border: "1px solid #ECE8E2", color: "#26231F", textDecoration: "none", fontSize: "13px", fontWeight: 700, background: "#fff" }}
+                    >
+                      <FiInstagram size={15} /> Instagram
+                    </a>
+
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                {FOUNDER_NOTES.map((note) => (
+                  <div key={note} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                    <span style={{ width: "30px", height: "30px", borderRadius: "10px", background: "rgba(224, 123, 57, 0.08)", color: "#E07B39", display: "inline-flex", alignItems: "center", justifyContent: "center", flex: "0 0 30px" }}>
+                      <FiMic size={15} />
+                    </span>
+                    <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.5, color: "#6B6560", margin: 0 }}>
+                      {note}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -161,7 +276,7 @@ export default function AboutPage() {
       <section style={{ padding: "80px 0", background: "rgba(224, 123, 57, 0.04)", position: "relative", zIndex: 2 }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <h2 className="font-bricolage" style={{ fontSize: "36px", fontWeight: 800, margin: "0 0 16px" }}>
-            Join the Flow Revolution
+            Start Writing With Lisup
           </h2>
           <p className="font-hanken" style={{ fontSize: "16px", color: "#6B6560", maxWidth: "480px", margin: "0 auto 28px" }}>
             Be among the first to experience Lisup and experience early adopter benefits.

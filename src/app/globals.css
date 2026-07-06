@@ -1591,3 +1591,17 @@ body {
     margin-bottom: 52px !important;
   }
 }
+
+@media (max-width: 640px) {
+  .founder-profile-row {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .founder-social-links {
+    justify-content: center;
+  }
+}

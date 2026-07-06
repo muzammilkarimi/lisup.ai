@@ -45,7 +45,7 @@ export default function CreatorsPage() {
       appName: "Notion — 📝 Intro Scripts",
       initialText: "imagine sitting in front of a screen typing is slow why not speak and edit directly inside notion",
       rawSpeech: "make this a hook for a YouTube script, sound excited",
-      rewritten: "What if you could think at the speed of light, and watch your thoughts write themselves directly inside Notion—no keyboards, no typos, just pure flow?",
+      rewritten: "What if you could think at the speed of light, and watch your thoughts write themselves directly inside Notion—no keyboards, no typos, just polished ideas?",
       optimizingText: "⚡ INJECTING DYNAMIC CREATIVE HOOK..."
     },
     newsletter: {
