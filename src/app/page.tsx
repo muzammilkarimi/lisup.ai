@@ -2626,6 +2626,31 @@ export default function Home() {
             <p style={{ fontSize: "14.5px", lineHeight: 1.55, color: "#A29B91", margin: 0 }}>
               Your voice, perfected. Speak anywhere, get clean finished text in seconds.
             </p>
+            <a
+              href="https://www.listbulb.com/tools/lisupai"
+              target="_blank"
+              rel="noopener"
+              aria-label="Lisup featured on ListBulb"
+              style={{
+                display: "inline-flex",
+                marginTop: "22px",
+                opacity: 0.9,
+                transition: "opacity .2s ease, transform .2s ease",
+              }}
+              className="listbulb-footer-badge"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.listbulb.com/featured-on-listbulb-light.svg"
+                alt="Featured on ListBulb"
+                height="72"
+                style={{
+                  width: "auto",
+                  maxWidth: "100%",
+                  display: "block",
+                }}
+              />
+            </a>
           </div>
           <div style={{ display: "flex", gap: "72px", flexWrap: "wrap" }} className="footer-links-grid">
             <div>
