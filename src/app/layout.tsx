@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Bricolage_Grotesque, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -22,13 +22,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lisup.ai"),
+  metadataBase: new URL("https://www.lisupai.online"),
   title: "Lisup - Stop typing. Start talking.",
   description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
   openGraph: {
     title: "Lisup - Stop typing. Start talking.",
     description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
-    url: "https://lisup.ai",
+    url: "https://www.lisupai.online",
     siteName: "Lisup",
     images: [
       {

@@ -133,7 +133,7 @@ export default function Image() {
             <span style={{ color: "#E07B39" }}>-</span>
             <span>Works anywhere</span>
           </div>
-          <div style={{ color: "#E07B39" }}>lisup.ai</div>
+          <div style={{ color: "#E07B39" }}>lisupai.online</div>
         </div>
       </div>
     ),
