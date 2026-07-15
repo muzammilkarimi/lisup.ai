@@ -77,6 +77,7 @@ body {
 }
 
 @keyframes strike {
+  from { transform: scaleX(0) }
   to { transform: scaleX(1) }
 }
 
@@ -158,8 +159,10 @@ body {
   color: var(--accent) !important;
 }
 
-/* Pseudo-element animation for word strike-through */
+/* Hero word strike-through animation */
 .strike-after {
+  position: relative;
+  display: inline-block;
   white-space: nowrap;
 }
 
@@ -168,14 +171,31 @@ body {
   position: absolute;
   left: -2%;
   top: 54%;
+  z-index: 1;
   width: 104%;
   height: 9px;
   background: var(--accent);
   border-radius: 5px;
+  pointer-events: none;
   transform: scaleX(0);
   transform-origin: left;
 }
 
+.hero-strike-mark {
+  position: absolute;
+  left: -3%;
+  top: 52%;
+  z-index: 2;
+  display: block;
+  width: 106%;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 999px;
+  pointer-events: none;
+  transform: rotate(-1.5deg) scaleX(1);
+  transform-origin: left center;
+  opacity: 0.95;
+}
 /* Custom Responsive Styles */
 @media (max-width: 900px) {
   .lz-hidemob {
@@ -451,10 +471,11 @@ body {
 }
 
 .hero-loaded .strike-after::after {
-  animation: strike 0.8s cubic-bezier(0.7, 0, 0.3, 1) 1.2s forwards;
+  animation: strike 0.8s cubic-bezier(0.7, 0, 0.3, 1) 1.2s both;
 }
 
 /* ===================== LAPTOP DEMO MOCKUP ===================== */
+
 
 .laptop-wrapper {
   perspective: 1200px;

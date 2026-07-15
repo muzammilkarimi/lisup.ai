@@ -63,7 +63,7 @@ const SENTENCES = [
 const TONES = {
   Formal: "I wanted to confirm whether our call scheduled for tomorrow is still going ahead.",
   Casual: "Hey! Are we still good for the call tomorrow?",
-  Funny: "Knock knock â€” is tomorrow's call still alive, or did it quietly ghost us?",
+  Funny: "Knock knock - is tomorrow's call still alive, or did it quietly ghost us?",
   Polite: "Just a gentle note to check whether tomorrow's call still works for you.",
   Social: "Still on for tomorrow's call? Drop me a quick yes and we're set.",
 };
@@ -71,17 +71,17 @@ const TONES = {
 const WH_STEPS = [
   { status: "READY", text: "", prog: "12%" },
   {
-    status: "LISTENINGâ€¦",
-    text: "um so i think we should ship theâ€¦ the redesign by friday",
+    status: "LISTENING...",
+    text: "um so i think we should ship the... the redesign by friday",
     prog: "45%",
   },
   {
-    status: "CLEANING UPâ€¦",
+    status: "CLEANING UP...",
     text: "Let's ship the redesign by Friday.",
     prog: "78%",
   },
   {
-    status: "INJECTED âœ“",
+    status: "INJECTED OK",
     text: "Let's ship the redesign by Friday.",
     prog: "100%",
   },
@@ -150,7 +150,7 @@ function MobileCommandSimulator() {
             <span style={{ fontWeight: 800 }}>B</span>
             <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
             <span style={{ textDecoration: "line-through" }}>S</span>
-            <span>â†»</span>
+            <span>Undo</span>
             <span>::</span>
             <span>:=</span>
             <span>&lt;/&gt;</span>
@@ -198,7 +198,7 @@ function MobileTranscribeSimulator() {
       {/* Polished Card Container */}
       <div className="mobile-polished-card">
         <div className="mobile-polished-text font-hanken">
-          Let&apos;s reach out to Jenny from Legalâ€”she may have mentioned the NDA isn&apos;t finalized yet, or possibly already sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals slide is updated before Friday&apos;s review. The link should be in Slack.
+          Let&apos;s reach out to Jenny from Legal - she may have mentioned the NDA isn&apos;t finalized yet, or possibly already sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals slide is updated before Friday&apos;s review. The link should be in Slack.
         </div>
 
         {/* Bottom Toolbar */}
@@ -207,7 +207,7 @@ function MobileTranscribeSimulator() {
             <span style={{ fontWeight: 800 }}>B</span>
             <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
             <span style={{ textDecoration: "line-through" }}>S</span>
-            <span>â†»</span>
+            <span>Undo</span>
             <span>::</span>
             <span>:=</span>
             <span>&lt;/&gt;</span>
@@ -728,15 +728,15 @@ function LaptopDemo() {
                   <div style={{ display: "flex", flex: 1, background: "#fff" }}>
                     <div className="notion-sidebar font-hanken">
                       <div style={{ fontWeight: 800, fontSize: "12px", color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                        ðŸ§‘â€ðŸ’» Muzammil&apos;s Notion
+                        Muzammil&apos;s Notion
                       </div>
                       <div style={{ color: "#a29b91", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>PRIVATE</div>
-                      <div className="notion-sidebar-item active">ðŸ“„ Product Spec</div>
-                      <div className="notion-sidebar-item">ðŸ“ Meeting Notes</div>
-                      <div className="notion-sidebar-item">ðŸš€ Release Planner</div>
+                      <div className="notion-sidebar-item active">Product Spec</div>
+                      <div className="notion-sidebar-item">Meeting Notes</div>
+                      <div className="notion-sidebar-item">Release Planner</div>
                     </div>
                     <div className="notion-content font-hanken">
-                      <div className="notion-title">ðŸ“„ Product Spec</div>
+                      <div className="notion-title">Product Spec</div>
                       <div className="notion-text-block">
                         We are developing the core landing page design details for the Lisup website. The site needs to showcase the voice-to-text widget.
                       </div>
@@ -758,9 +758,9 @@ function LaptopDemo() {
                   <div style={{ display: "flex", flex: 1, background: "#1e1e1e" }}>
                     <div className="vscode-sidebar">
                       <div style={{ color: "#d4d4d4", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>EXPLORER</div>
-                      <div className="vscode-sidebar-item active">ðŸ“„ page.tsx</div>
-                      <div className="vscode-sidebar-item">ðŸ“„ layout.tsx</div>
-                      <div className="vscode-sidebar-item">ðŸ“„ globals.css</div>
+                      <div className="vscode-sidebar-item active">page.tsx</div>
+                      <div className="vscode-sidebar-item">layout.tsx</div>
+                      <div className="vscode-sidebar-item">globals.css</div>
                     </div>
                     <div className="vscode-content">
                       <div className="vscode-line">
@@ -823,7 +823,7 @@ function LaptopDemo() {
                       {animState === "listening" && "LISTENING..."}
                       {animState === "cleaning" && "CLEANING..."}
                       {animState === "injecting" && "INJECTING..."}
-                      {animState === "done" && "INJECTED âœ“"}
+                      {animState === "done" && "INJECTED OK"}
                     </span>
                   </div>
                 </div>
@@ -955,15 +955,15 @@ function LaptopDemo() {
           </h4>
           <ol className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "4px", listStyleType: "none", margin: 0, padding: 0 }}>
             <li>1. Highlight unpolished draft text</li>
-            <li>2. Copy text â†’ Switch tabs to ChatGPT/AI app</li>
-            <li>3. Paste draft â†’ Dictate rewrite command â†’ Copy output</li>
-            <li>4. Switch tabs back â†’ Paste &amp; overwrite</li>
+            <li>2. Copy text -&gt; Switch tabs to ChatGPT/AI app</li>
+            <li>3. Paste draft -&gt; Dictate rewrite command -&gt; Copy output</li>
+            <li>4. Switch tabs back -&gt; Paste &amp; overwrite</li>
           </ol>
         </div>
         <div style={{ width: "1px", height: "70px", background: "#ECE8E2" }} className="lz-hidemob"></div>
         <div style={{ flex: 1.2 }}>
           <h4 className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#E07B39", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span>âš¡</span> Lisup In-Place Solution:
+            <span>Fast</span> Lisup In-Place Solution:
           </h4>
           <p className="font-hanken" style={{ fontSize: "13.5px", color: "#6B6560", lineHeight: 1.45, margin: 0 }}>
             Zero context switching. Just highlight and copy the text once. Speak a command (e.g. &quot;make it formal&quot;) and Lisup rewrites the text in-place instantly inside Slack, Notion, or any app.
@@ -1630,10 +1630,11 @@ export default function Home() {
                 <span>
                   Stop{" "}
                   <span
-                    style={{ position: "relative", display: "inline-block" }}
+                    style={{ position: "relative", display: "inline-block", textDecorationLine: "line-through", textDecorationColor: "#E07B39", textDecorationThickness: "0.13em", textDecorationSkipInk: "none" }}
                     className="strike-after"
                   >
                     typing.
+                    <span className="hero-strike-mark" aria-hidden="true" />
                   </span>
                 </span>
               </span>
