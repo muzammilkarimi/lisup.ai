@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --background: #FDF6F0;
   --foreground: #26231F;
   --accent: #E07B39;
@@ -1595,7 +1595,8 @@ body {
 
   .hero-cta-row > a:hover,
   #site-navbar a[href*="github.com"]:hover,
-  #site-navbar a[href*="Lisup.Setup"]:hover {
+  #site-navbar a[href*="Lisup.Setup"]:hover,
+  #site-navbar a[href*="Lisup-Setup"]:hover {
     transform: translateY(-1px);
   }
 

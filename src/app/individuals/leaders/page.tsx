@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,34 +29,34 @@ export default function LeadersPage() {
       time: "9:00 AM",
       title: "Daily Morning Triage",
       description: "Sarah starts the morning unblocking the engineering team. Instead of spending 5 minutes framing an email-safe reminder, she dictates her raw instructions. Lisup processes it and updates her Slack draft in-place.",
-      appName: "Slack — #engineering",
+      appName: "Slack â€” #engineering",
       initialText: "hey engineering team we need the deployment pipeline reports by 5pm",
       rawSpeech: "make this professional and polite please",
       rewritten: "Hi team, please ensure all deployment pipeline reports are compiled and submitted by 5:00 PM today. Thank you!",
-      optimizingText: "⚡ POLISHING MESSAGE FOR THE ENG TEAM..."
+      optimizingText: "âš¡ POLISHING MESSAGE FOR THE ENG TEAM..."
     },
     strategic: {
       time: "1:00 PM",
       title: "Directional Pivot Announcement",
       description: "Mid-day project redirection requires motivating the product crew without sounding abrupt. Sarah highlights her blunt announcement, speaks her desired tone changes, and watches Lisup refine the Slack message.",
-      appName: "Slack — #product-announcements",
+      appName: "Slack â€” #product-announcements",
       initialText: "guys project alpha is dead focus on beta starting now",
       rawSpeech: "explain context, motivate team, keep it concise",
       rewritten: "Hi team, we're transitioning our focus from Project Alpha to prioritize Project Beta effective immediately. Let's redirect our efforts to hit our next milestones. Thanks for your agility!",
-      optimizingText: "⚡ STRUCTURING MOTIVATIONAL FOCUS ANNOUNCEMENT..."
+      optimizingText: "âš¡ STRUCTURING MOTIVATIONAL FOCUS ANNOUNCEMENT..."
     },
     ceo: {
       time: "4:30 PM",
       title: "Board & CEO Executive Briefing",
       description: "Before heading out, Sarah updates the executive sponsors. She dictates shorthand bullet summaries, and Lisup transforms them into formal executive slide summaries inside their status channel.",
-      appName: "Slack — #executive-sync",
+      appName: "Slack â€” #executive-sync",
       initialText: "revenue numbers are fine, launch was good, next steps tomorrow",
       rawSpeech: "format as high-level summary points for executive status updates",
       rewritten: `Executive Update:
-• Q3 Revenue remains fully on track
-• Product Launch completed successfully
-• Detailed roadmap planning scheduled for tomorrow morning`,
-      optimizingText: "⚡ FORMATTING EXECUTIVE BULLET SUMMARY..."
+â€¢ Q3 Revenue remains fully on track
+â€¢ Product Launch completed successfully
+â€¢ Detailed roadmap planning scheduled for tomorrow morning`,
+      optimizingText: "âš¡ FORMATTING EXECUTIVE BULLET SUMMARY..."
     }
   };
 
@@ -323,7 +323,7 @@ export default function LeadersPage() {
                       ) : animState === "rewriting" ? (
                         <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                       ) : animState === "done" ? (
-                        <span style={{ color: "#2C9A5E" }}>✓ Replaced in-place inside Slack!</span>
+                        <span style={{ color: "#2C9A5E" }}>âœ“ Replaced in-place inside Slack!</span>
                       ) : (
                         <span style={{ color: "#8E8880" }}>Click simulate button below to start...</span>
                       )}
@@ -337,7 +337,7 @@ export default function LeadersPage() {
                     <FiMessageSquare /> SLACK ACTIVE SESSION
                   </div>
                   <div style={{ fontSize: "11px", color: "#8E8880", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

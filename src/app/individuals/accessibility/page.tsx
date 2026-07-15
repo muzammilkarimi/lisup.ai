@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,34 +29,34 @@ export default function AccessibilityPage() {
       time: "10:30 AM",
       title: "Hands-Free Email Drafting",
       description: "James uses voice control exclusively. Instead of struggling with speech-to-text keyboards that capture filler words, he dictates a message naturally. Lisup clears fillers and formats it instantly.",
-      appName: "Mail — Compose Update",
+      appName: "Mail â€” Compose Update",
       initialText: "um so like i can't make it to the office today because my leg hurts",
       rawSpeech: "clean transcription and strip fillers",
       rewritten: "I won't be able to make it to the office today due to a leg injury. I'll be working remotely.",
-      optimizingText: "⚡ FILTERING SPEECH FILLERS AND CRAP..."
+      optimizingText: "âš¡ FILTERING SPEECH FILLERS AND CRAP..."
     },
     standup: {
       time: "1:00 PM",
       title: "Team Standup Briefing",
       description: "Drafting bulleted progress updates hands-free. James records a stream of consciousness description of his tasks, and Lisup structures them into a standard standup format.",
-      appName: "Slack — Standup Message",
+      appName: "Slack â€” Standup Message",
       initialText: "uh yesterday i worked on the bugs and today i'll do the homepage sprint is fine",
       rawSpeech: "format as standard team standup bullet points",
       rewritten: `Standup Update:
-• Yesterday: Completed critical bug fixes
-• Today: Working on homepage design elements
-• Status: Sprint remains fully on track`,
-      optimizingText: "⚡ STRUCTURING VOICE TO STANDUP LIST..."
+â€¢ Yesterday: Completed critical bug fixes
+â€¢ Today: Working on homepage design elements
+â€¢ Status: Sprint remains fully on track`,
+      optimizingText: "âš¡ STRUCTURING VOICE TO STANDUP LIST..."
     },
     calendar: {
       time: "4:15 PM",
       title: "Calendar Sync Invitation",
       description: "Responding to calendar invitations. James dictates a shorthand confirmation, highlights the block, and dictates a formal calendar email response.",
-      appName: "Mail — Compose RSVP",
+      appName: "Mail â€” Compose RSVP",
       initialText: "hey lets meet up next week tuesday afternoon around two works",
       rawSpeech: "create a formal meeting response calendar request",
       rewritten: "I would be happy to meet next Tuesday. Does 2:00 PM work for you? Let me send over a calendar invite.",
-      optimizingText: "⚡ COMPILING FORMAL CALENDAR RSVP..."
+      optimizingText: "âš¡ COMPILING FORMAL CALENDAR RSVP..."
     }
   };
 
@@ -256,7 +256,7 @@ export default function AccessibilityPage() {
                   {/* High Contrast Sidebar */}
                   <div className="mock-app-sidebar" style={{ background: "#18181A", borderRight: "1px solid #27272A", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#FFF", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      ✉ Accessibility
+                      âœ‰ Accessibility
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                       <div style={{ fontSize: "11.5px", color: activeTab === "health" ? "#F97316" : "#A1A1AA", fontWeight: activeTab === "health" ? 700 : 500 }}>Compose Mail</div>
@@ -320,7 +320,7 @@ export default function AccessibilityPage() {
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#10B981" }}>✓ Corrected in-place inside composer!</span>
+                          <span style={{ color: "#10B981" }}>âœ“ Corrected in-place inside composer!</span>
                         ) : (
                           <span style={{ color: "#52525B" }}>Click simulate button below...</span>
                         )}
@@ -335,7 +335,7 @@ export default function AccessibilityPage() {
                     <FiCheck /> EMAIL CLIENT SESSION ACTIVE
                   </div>
                   <div style={{ fontSize: "11px", color: "#52525B", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

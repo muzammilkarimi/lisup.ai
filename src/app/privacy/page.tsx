@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
                 2. Data We Collect & How We Use It
               </h2>
               <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.6, color: "#6B6560", marginBottom: "14px" }}>
-                * **Voice Recordings:** When you use the shortcut (Alt + Space) to record audio, that file is processed securely via secure APIs. Once transcription and AI-based styling are completed, the audio is permanently deleted from our servers.
+                * **Voice Recordings:** When you use the shortcut (Ctrl + Win) to record audio, that file is processed securely via secure APIs. Once transcription and AI-based styling are completed, the audio is permanently deleted from our servers.
               </p>
               <p className="font-hanken" style={{ fontSize: "15px", lineHeight: 1.6, color: "#6B6560", marginBottom: "14px" }}>
                 * **Contact Messages:** If you contact Lisup, we store the details you submit so we can respond to your request and provide support.

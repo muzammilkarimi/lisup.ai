@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,31 +29,31 @@ export default function LawyersPage() {
       time: "11:00 AM",
       title: "Contract Clause Drafting",
       description: "Robert is drafting an employment agreement. Instead of looking up non-solicitation boilerplates, he dictates the direct intent. Lisup maps it in-place to formal legal terminology inside the document.",
-      appName: "MS Word — Employment_Agreement.docx",
+      appName: "MS Word â€” Employment_Agreement.docx",
       initialText: "don't take our workers for a year after you leave",
       rawSpeech: "rewrite as a formal non-solicitation clause",
       rewritten: "The Contractor agrees that for a period of twelve (12) months following termination of this Agreement, they shall not directly or indirectly solicit, recruit, or hire any employee of the Company.",
-      optimizingText: "⚡ MAPPING TO ENFORCEABLE LEGAL COVENANT..."
+      optimizingText: "âš¡ MAPPING TO ENFORCEABLE LEGAL COVENANT..."
     },
     client: {
       time: "3:00 PM",
       title: "Client Case Status Update",
       description: "Communicating a court setback needs to sound reassuring but completely clear. Robert dictates his direct status update, and Lisup polishes the draft into a formal client status memo.",
-      appName: "MS Word — Client_Update_Memo.docx",
+      appName: "MS Word â€” Client_Update_Memo.docx",
       initialText: "judge said we need mediation before trial lets talk monday",
       rawSpeech: "professional client update outlining court mandated mediation",
       rewritten: "Dear Client, the court has ordered that both parties enter mediation prior to scheduling a trial date. Let's schedule a call on Monday to discuss our strategy. Best regards.",
-      optimizingText: "⚡ COMPILING FORMAL CLIENT STATUS MEMO..."
+      optimizingText: "âš¡ COMPILING FORMAL CLIENT STATUS MEMO..."
     },
     takeaway: {
       time: "5:30 PM",
       title: "Case Brief Analysis Takeaway",
       description: "Summarizing court rulings for research databases. Robert dictates the high-level outline, selects it, and lets Lisup rewrite the summary into standard case law takeaway formatting.",
-      appName: "MS Word — Research_Brief.docx",
+      appName: "MS Word â€” Research_Brief.docx",
       initialText: "smith lost because contract had no signatures case dismissed",
       rawSpeech: "format as standard legal case brief takeaway",
       rewritten: "Key Takeaway: The plaintiff's claim was dismissed due to the absence of valid signatures on the instrument, rendering the agreement unenforceable under the Statute of Frauds.",
-      optimizingText: "⚡ GENERATING PRECEDENT LEGAL BRIEF SUMMARY..."
+      optimizingText: "âš¡ GENERATING PRECEDENT LEGAL BRIEF SUMMARY..."
     }
   };
 
@@ -253,12 +253,12 @@ export default function LawyersPage() {
                   {/* MS Word Mock Sidebar */}
                   <div className="mock-app-sidebar" style={{ background: "#F0F1F5", borderRight: "1px solid #E0E2E7", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#1F2937", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      📁 Legal Folders
+                      ðŸ“ Legal Folders
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "clause" ? "#B45309" : "#4B5563", fontWeight: activeTab === "clause" ? 700 : 500 }}>📄 Employment_Agmt</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "client" ? "#B45309" : "#4B5563", fontWeight: activeTab === "client" ? 700 : 500 }}>📄 Client_Memo</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "takeaway" ? "#B45309" : "#4B5563", fontWeight: activeTab === "takeaway" ? 700 : 500 }}>📄 Research_Brief</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "clause" ? "#B45309" : "#4B5563", fontWeight: activeTab === "clause" ? 700 : 500 }}>ðŸ“„ Employment_Agmt</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "client" ? "#B45309" : "#4B5563", fontWeight: activeTab === "client" ? 700 : 500 }}>ðŸ“„ Client_Memo</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "takeaway" ? "#B45309" : "#4B5563", fontWeight: activeTab === "takeaway" ? 700 : 500 }}>ðŸ“„ Research_Brief</div>
                     </div>
                   </div>
 
@@ -317,7 +317,7 @@ export default function LawyersPage() {
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#2C9A5E" }}>✓ Legal terms replaced in-place inside MS Word!</span>
+                          <span style={{ color: "#2C9A5E" }}>âœ“ Legal terms replaced in-place inside MS Word!</span>
                         ) : (
                           <span style={{ color: "#8E93B0" }}>Click simulate button below...</span>
                         )}
@@ -332,7 +332,7 @@ export default function LawyersPage() {
                     <FiFileText /> MS WORD DOCUMENT ACTIVE
                   </div>
                   <div style={{ fontSize: "11px", color: "#8E93B0", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

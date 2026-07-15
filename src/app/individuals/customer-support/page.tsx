@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,31 +29,31 @@ export default function CustomerSupportPage() {
       time: "10:00 AM",
       title: "Refund Request Processing",
       description: "Mia starts the shift resolving high-priority billing tickets. Instead of typing out full template details manually, she dictates shorthand notes. Lisup maps it in-place into a professional refund notification.",
-      appName: "Zendesk — Ticket #4012",
+      appName: "Zendesk â€” Ticket #4012",
       initialText: "sorry delay refunded hit card in 3 days",
       rawSpeech: "make it formal and polite",
       rewritten: "Thank you for your patience. We have processed your refund, and the funds should appear in your account within 3 business days.",
-      optimizingText: "⚡ GENERATING POLITE REFUND TICKET..."
+      optimizingText: "âš¡ GENERATING POLITE REFUND TICKET..."
     },
     outage: {
       time: "1:30 PM",
       title: "Outage Recovery Response",
       description: "A database outage hits, causing backlog queues. Mia quickly updates multiple affected users. She highlights a flat technical description, speaks the tone instructions, and Lisup writes a clear, reassuring reply.",
-      appName: "Zendesk — Ticket #4029",
+      appName: "Zendesk â€” Ticket #4029",
       initialText: "server crashed database restored check now log back in",
       rawSpeech: "explain technical error, apologize for downtime, check customer state",
       rewritten: "We experienced a temporary database outage, which has now been fully resolved. Please try logging back in. Let us know if you run into any further issues, and we apologize for the interruption.",
-      optimizingText: "⚡ STRUCTURING REASSURING TECHNICAL RESPONSE..."
+      optimizingText: "âš¡ STRUCTURING REASSURING TECHNICAL RESPONSE..."
     },
     escalation: {
       time: "4:00 PM",
       title: "Engineering Escalation Ticket",
       description: "Before closing out the day, Mia hands off complex accounts. She writes direct shorthand logs, highlights them, and dictates a professional escalation note so the customer remains fully updated.",
-      appName: "Zendesk — Ticket #4041",
+      appName: "Zendesk â€” Ticket #4041",
       initialText: "can't help here transferring to tier two team will mail you",
       rawSpeech: "explain escalation politely, reassure customer",
       rewritten: "To resolve this complex issue, I am escalating your ticket to our Tier 2 technical team. One of our engineers will follow up with you directly via email shortly.",
-      optimizingText: "⚡ COMPILING CLIENT ESCALATION NOTES..."
+      optimizingText: "âš¡ COMPILING CLIENT ESCALATION NOTES..."
     }
   };
 
@@ -253,7 +253,7 @@ export default function CustomerSupportPage() {
                   {/* Zendesk Sidebar Mock */}
                   <div className="mock-app-sidebar" style={{ background: "#FAFEFC", borderRight: "1px solid #E2EFE7", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#1F2937", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      📥 Tickets Queue
+                      ðŸ“¥ Tickets Queue
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                       <div style={{ fontSize: "11.5px", color: activeTab === "refund" ? "#10B981" : "#4B5563", fontWeight: activeTab === "refund" ? 700 : 500 }}>Ticket #4012 (Billing)</div>
@@ -317,7 +317,7 @@ export default function CustomerSupportPage() {
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#2C9A5E" }}>✓ Reply injected directly inside Zendesk!</span>
+                          <span style={{ color: "#2C9A5E" }}>âœ“ Reply injected directly inside Zendesk!</span>
                         ) : (
                           <span style={{ color: "#8E9E94" }}>Click simulate button below...</span>
                         )}
@@ -332,7 +332,7 @@ export default function CustomerSupportPage() {
                     <FiCheckCircle /> ZENDESK CUSTOMER COMPOSER
                   </div>
                   <div style={{ fontSize: "11px", color: "#8E9E94", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

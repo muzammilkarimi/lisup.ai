@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
@@ -62,7 +62,7 @@ const SENTENCES = [
 const TONES = {
   Formal: "I wanted to confirm whether our call scheduled for tomorrow is still going ahead.",
   Casual: "Hey! Are we still good for the call tomorrow?",
-  Funny: "Knock knock — is tomorrow's call still alive, or did it quietly ghost us?",
+  Funny: "Knock knock â€” is tomorrow's call still alive, or did it quietly ghost us?",
   Polite: "Just a gentle note to check whether tomorrow's call still works for you.",
   Social: "Still on for tomorrow's call? Drop me a quick yes and we're set.",
 };
@@ -70,17 +70,17 @@ const TONES = {
 const WH_STEPS = [
   { status: "READY", text: "", prog: "12%" },
   {
-    status: "LISTENING…",
-    text: "um so i think we should ship the… the redesign by friday",
+    status: "LISTENINGâ€¦",
+    text: "um so i think we should ship theâ€¦ the redesign by friday",
     prog: "45%",
   },
   {
-    status: "CLEANING UP…",
+    status: "CLEANING UPâ€¦",
     text: "Let's ship the redesign by Friday.",
     prog: "78%",
   },
   {
-    status: "INJECTED ✓",
+    status: "INJECTED âœ“",
     text: "Let's ship the redesign by Friday.",
     prog: "100%",
   },
@@ -149,7 +149,7 @@ function MobileCommandSimulator() {
             <span style={{ fontWeight: 800 }}>B</span>
             <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
             <span style={{ textDecoration: "line-through" }}>S</span>
-            <span>↻</span>
+            <span>â†»</span>
             <span>::</span>
             <span>:=</span>
             <span>&lt;/&gt;</span>
@@ -197,7 +197,7 @@ function MobileTranscribeSimulator() {
       {/* Polished Card Container */}
       <div className="mobile-polished-card">
         <div className="mobile-polished-text font-hanken">
-          Let&apos;s reach out to Jenny from Legal—she may have mentioned the NDA isn&apos;t finalized yet, or possibly already sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals slide is updated before Friday&apos;s review. The link should be in Slack.
+          Let&apos;s reach out to Jenny from Legalâ€”she may have mentioned the NDA isn&apos;t finalized yet, or possibly already sent it. Let&apos;s also CC Dave. Finally, make sure the Q2 Goals slide is updated before Friday&apos;s review. The link should be in Slack.
         </div>
 
         {/* Bottom Toolbar */}
@@ -206,7 +206,7 @@ function MobileTranscribeSimulator() {
             <span style={{ fontWeight: 800 }}>B</span>
             <span style={{ fontStyle: "italic", fontFamily: "serif" }}>I</span>
             <span style={{ textDecoration: "line-through" }}>S</span>
-            <span>↻</span>
+            <span>â†»</span>
             <span>::</span>
             <span>:=</span>
             <span>&lt;/&gt;</span>
@@ -727,15 +727,15 @@ function LaptopDemo() {
                   <div style={{ display: "flex", flex: 1, background: "#fff" }}>
                     <div className="notion-sidebar font-hanken">
                       <div style={{ fontWeight: 800, fontSize: "12px", color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
-                        🧑‍💻 Muzammil&apos;s Notion
+                        ðŸ§‘â€ðŸ’» Muzammil&apos;s Notion
                       </div>
                       <div style={{ color: "#a29b91", fontSize: "10px", fontWeight: 700, marginTop: "6px" }}>PRIVATE</div>
-                      <div className="notion-sidebar-item active">📄 Product Spec</div>
-                      <div className="notion-sidebar-item">📝 Meeting Notes</div>
-                      <div className="notion-sidebar-item">🚀 Release Planner</div>
+                      <div className="notion-sidebar-item active">ðŸ“„ Product Spec</div>
+                      <div className="notion-sidebar-item">ðŸ“ Meeting Notes</div>
+                      <div className="notion-sidebar-item">ðŸš€ Release Planner</div>
                     </div>
                     <div className="notion-content font-hanken">
-                      <div className="notion-title">📄 Product Spec</div>
+                      <div className="notion-title">ðŸ“„ Product Spec</div>
                       <div className="notion-text-block">
                         We are developing the core landing page design details for the Lisup website. The site needs to showcase the voice-to-text widget.
                       </div>
@@ -757,9 +757,9 @@ function LaptopDemo() {
                   <div style={{ display: "flex", flex: 1, background: "#1e1e1e" }}>
                     <div className="vscode-sidebar">
                       <div style={{ color: "#d4d4d4", fontWeight: 700, fontSize: "10px", marginBottom: "4px" }}>EXPLORER</div>
-                      <div className="vscode-sidebar-item active">📄 page.tsx</div>
-                      <div className="vscode-sidebar-item">📄 layout.tsx</div>
-                      <div className="vscode-sidebar-item">📄 globals.css</div>
+                      <div className="vscode-sidebar-item active">ðŸ“„ page.tsx</div>
+                      <div className="vscode-sidebar-item">ðŸ“„ layout.tsx</div>
+                      <div className="vscode-sidebar-item">ðŸ“„ globals.css</div>
                     </div>
                     <div className="vscode-content">
                       <div className="vscode-line">
@@ -822,7 +822,7 @@ function LaptopDemo() {
                       {animState === "listening" && "LISTENING..."}
                       {animState === "cleaning" && "CLEANING..."}
                       {animState === "injecting" && "INJECTING..."}
-                      {animState === "done" && "INJECTED ✓"}
+                      {animState === "done" && "INJECTED âœ“"}
                     </span>
                   </div>
                 </div>
@@ -954,15 +954,15 @@ function LaptopDemo() {
           </h4>
           <ol className="font-jetbrains" style={{ fontSize: "11px", color: "#A29B91", paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "4px", listStyleType: "none", margin: 0, padding: 0 }}>
             <li>1. Highlight unpolished draft text</li>
-            <li>2. Copy text → Switch tabs to ChatGPT/AI app</li>
-            <li>3. Paste draft → Dictate rewrite command → Copy output</li>
-            <li>4. Switch tabs back → Paste &amp; overwrite</li>
+            <li>2. Copy text â†’ Switch tabs to ChatGPT/AI app</li>
+            <li>3. Paste draft â†’ Dictate rewrite command â†’ Copy output</li>
+            <li>4. Switch tabs back â†’ Paste &amp; overwrite</li>
           </ol>
         </div>
         <div style={{ width: "1px", height: "70px", background: "#ECE8E2" }} className="lz-hidemob"></div>
         <div style={{ flex: 1.2 }}>
           <h4 className="font-bricolage" style={{ fontWeight: 800, fontSize: "16px", color: "#E07B39", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
-            <span>⚡</span> Lisup In-Place Solution:
+            <span>âš¡</span> Lisup In-Place Solution:
           </h4>
           <p className="font-hanken" style={{ fontSize: "13.5px", color: "#6B6560", lineHeight: 1.45, margin: 0 }}>
             Zero context switching. Just highlight and copy the text once. Speak a command (e.g. &quot;make it formal&quot;) and Lisup rewrites the text in-place instantly inside Slack, Notion, or any app.
@@ -1610,7 +1610,7 @@ export default function Home() {
                   letterSpacing: ".02em",
                 }}
               >
-                Alt + Space &middot; speak anywhere
+                Ctrl + Win &middot; speak anywhere
               </span>
             </div>
             
@@ -1953,7 +1953,7 @@ export default function Home() {
                   01
                 </div>
                 <h3 className="font-bricolage" style={{ fontWeight: 700, fontSize: "34px", color: "#26231F", margin: "0 0 12px", letterSpacing: "-.02em" }}>
-                  Press Alt + Space
+                  Press Ctrl + Win
                 </h3>
                 <p style={{ fontSize: "18px", lineHeight: 1.6, color: "#6B6560", margin: 0, maxWidth: "440px" }}>
                   The widget appears over whatever you&apos;re doing &mdash; without ever stealing focus from your active app.
@@ -2576,7 +2576,7 @@ export default function Home() {
             Start talking.
           </h2>
           <p style={{ fontSize: "19px", lineHeight: 1.5, color: "rgba(255,255,255,.92)", margin: "24px auto 0", maxWidth: "480px" }}>
-            Free while in beta. Lives in your tray, launches on boot, ready the moment you press Alt + Space.
+            Free while in beta. Lives in your tray, launches on boot, ready the moment you press Ctrl + Win.
           </p>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginTop: "38px" }}>
             <a
@@ -2646,6 +2646,31 @@ export default function Home() {
                 height="72"
                 style={{
                   width: "auto",
+                  maxWidth: "100%",
+                  display: "block",
+                }}
+              />
+            </a>
+            <a
+              href="https://neeed.directory/products/lisup?utm_source=lisup"
+              target="_blank"
+              rel="noopener"
+              aria-label="Lisup featured on neeed.directory"
+              style={{
+                display: "inline-flex",
+                marginTop: "12px",
+                opacity: 0.9,
+                transition: "opacity .2s ease, transform .2s ease",
+              }}
+              className="listbulb-footer-badge"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://neeed.directory/badges/neeed-badge-light.svg"
+                alt="Featured on neeed.directory"
+                width="139"
+                style={{
+                  height: "auto",
                   maxWidth: "100%",
                   display: "block",
                 }}

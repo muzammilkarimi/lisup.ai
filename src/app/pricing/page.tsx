@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ import { FiCheck, FiChevronDown, FiLock } from "react-icons/fi";
 const FAQS = [
   {
     question: "How does Lisup write text in other apps?",
-    answer: "Lisup runs locally on your machine. When you trigger the shortcut (Alt + Space), it captures your speech, processes it through our context-aware refinement models, and then securely simulates keystrokes or uses system accessibility APIs to type the text directly into whichever document, code editor, or browser input you currently have focused."
+    answer: "Lisup runs locally on your machine. When you trigger the shortcut (Ctrl + Win), it captures your speech, processes it through our context-aware refinement models, and then securely simulates keystrokes or uses system accessibility APIs to type the text directly into whichever document, code editor, or browser input you currently have focused."
   },
   {
     question: "Is there a limit to how much I can talk?",

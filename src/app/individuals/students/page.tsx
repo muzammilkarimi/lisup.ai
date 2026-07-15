@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,35 +29,35 @@ export default function StudentsPage() {
       time: "9:30 AM",
       title: "Biology Lecture Capture",
       description: "During a fast-paced lecture, Ethan records raw, fragmented audio snippets directly into Google Docs. Rather than spending hours cleaning transcripts later, he highlights the block and dictates format updates in-place.",
-      appName: "Google Docs — Biology 101 Notes",
+      appName: "Google Docs â€” Biology 101 Notes",
       initialText: "photosynthesis splits water release oxygen carbon dioxide turns to sugar",
       rawSpeech: "format as bulleted lecture notes with bold definitions",
       rewritten: `Lecture Notes: Photosynthesis
-• Light reactions: Water molecules split to release oxygen.
-• Calvin cycle: Carbon dioxide is fixed to generate sugars.
-• Energy conversion: Light energy is stored as chemical compounds.`,
-      optimizingText: "⚡ STRUCTURING ACADEMIC LECTURE NOTES..."
+â€¢ Light reactions: Water molecules split to release oxygen.
+â€¢ Calvin cycle: Carbon dioxide is fixed to generate sugars.
+â€¢ Energy conversion: Light energy is stored as chemical compounds.`,
+      optimizingText: "âš¡ STRUCTURING ACADEMIC LECTURE NOTES..."
     },
     thesis: {
       time: "2:00 PM",
       title: "Thesis Paragraph Drafting",
       description: "Ethan starts writing his term paper thesis. Typing out formal academic prose directly is exhausting. He dictates a rough thematic brain-dump, selects it, and instructs Lisup to write high-level academic sentences.",
-      appName: "Google Docs — Research Paper Draft",
+      appName: "Google Docs â€” Research Paper Draft",
       initialText: "i want to write about how social media affects attention span in teens bad sleep and concentration",
       rawSpeech: "structure as an academic essay introduction paragraph",
       rewritten: "Recent studies indicate a strong correlation between excessive social media usage and reduced attention spans in adolescents. This paper examines the cognitive impact on teenage sleep patterns and daily concentration.",
-      optimizingText: "⚡ TRANSLATING TO FORMAL ACADEMIC PROSE..."
+      optimizingText: "âš¡ TRANSLATING TO FORMAL ACADEMIC PROSE..."
     },
     flashcard: {
       time: "8:30 PM",
       title: "Active Study Prep",
       description: "Preparing study flashcards for final exams. Ethan dumps messy facts from a textbook, highlights the block, and dictates card specifications to generate clean Q&A flashcards instantly.",
-      appName: "Google Docs — Flashcards Study Guide",
+      appName: "Google Docs â€” Flashcards Study Guide",
       initialText: "mitochondria power house of cell ATP production double membrane",
       rawSpeech: "create a concise Q&A flashcard",
       rewritten: `Q: What is the main function and structure of the mitochondria?
 A: Often called the powerhouse of the cell, it produces ATP (energy) and features a double-membrane structure.`,
-      optimizingText: "⚡ GENERATING STUDY GUIDE FLASHCARD..."
+      optimizingText: "âš¡ GENERATING STUDY GUIDE FLASHCARD..."
     }
   };
 
@@ -257,19 +257,19 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
                   {/* Google Docs Sidebar mock folders */}
                   <div className="mock-app-sidebar" style={{ background: "#FAFBFD", borderRight: "1px solid #E2E7EF", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#1F2937", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      📂 Semester Notes
+                      ðŸ“‚ Semester Notes
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "notes" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "notes" ? 700 : 500 }}>🌿 Biology 101</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "thesis" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "thesis" ? 700 : 500 }}>📝 Research Paper</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "flashcard" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "flashcard" ? 700 : 500 }}>⚡ Exam Study</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "notes" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "notes" ? 700 : 500 }}>ðŸŒ¿ Biology 101</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "thesis" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "thesis" ? 700 : 500 }}>ðŸ“ Research Paper</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "flashcard" ? "#6366F1" : "#4B5563", fontWeight: activeTab === "flashcard" ? 700 : 500 }}>âš¡ Exam Study</div>
                     </div>
                   </div>
 
                   {/* Google Docs Page Canvas */}
                   <div style={{ padding: "28px", display: "flex", flexDirection: "column", justifyContent: "flex-start", position: "relative" }}>
                     <div className="font-bricolage" style={{ fontSize: "17px", fontWeight: 800, color: "#1F2937", marginBottom: "14px" }}>
-                      {activeTab === "notes" ? "🌿 Biology 101 Notes" : activeTab === "thesis" ? "📝 Thesis Draft" : "⚡ Study Flashcards"}
+                      {activeTab === "notes" ? "ðŸŒ¿ Biology 101 Notes" : activeTab === "thesis" ? "ðŸ“ Thesis Draft" : "âš¡ Study Flashcards"}
                     </div>
                     
                     <div style={{ border: "1px solid #E2E7EF", borderRadius: "8px", padding: "16px", background: "#FFFFFF", minHeight: "140px", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.01)" }}>
@@ -321,7 +321,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#2C9A5E" }}>✓ Content structured in-place inside Google Docs!</span>
+                          <span style={{ color: "#2C9A5E" }}>âœ“ Content structured in-place inside Google Docs!</span>
                         ) : (
                           <span style={{ color: "#8E9BB0" }}>Click simulate button below...</span>
                         )}
@@ -336,7 +336,7 @@ A: Often called the powerhouse of the cell, it produces ATP (energy) and feature
                     <FiBookOpen /> GOOGLE DOCS EDITOR ACTIVE
                   </div>
                   <div style={{ fontSize: "11px", color: "#8E9BB0", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

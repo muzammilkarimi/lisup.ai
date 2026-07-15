@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,35 +29,35 @@ export default function SalesPage() {
       time: "9:00 AM",
       title: "CRM Call Log Logging",
       description: "Directly after a client discovery call, Mark dictates rough conversational details directly into the CRM notes field. Lisup structures his thoughts into formatted parameters in-place.",
-      appName: "Salesforce — Lead: John Doe",
+      appName: "Salesforce â€” Lead: John Doe",
       initialText: "john wants 50 seats needs demo next week budget is 5k",
       rawSpeech: "make this a structured CRM update",
       rewritten: `Deal Update:
-• Contact: John Doe
-• Seat Count: 50 seats
-• Action: Schedule demo next week
-• Budget: $5,000`,
-      optimizingText: "⚡ MAPPING CRM FIELDS AND LOGS..."
+â€¢ Contact: John Doe
+â€¢ Seat Count: 50 seats
+â€¢ Action: Schedule demo next week
+â€¢ Budget: $5,000`,
+      optimizingText: "âš¡ MAPPING CRM FIELDS AND LOGS..."
     },
     outreach: {
       time: "1:00 PM",
       title: "LinkedIn Outreach Follow-up",
       description: "Following up with leads. Mark speaks the core value proposition of Lisup for teams, highlights the draft, and instructs Lisup to compose a polite, high-converting cold email outreach block.",
-      appName: "Salesforce — Email Composer",
+      appName: "Salesforce â€” Email Composer",
       initialText: "saw your linkedin post let's chat about lisup for team integrations",
       rawSpeech: "write a professional B2B sales outreach follow up",
       rewritten: "Hi John, I noticed your recent LinkedIn post regarding sales efficiency. I'd love to schedule a brief 10-minute demo to share how Lisup helps team integration workflows.",
-      optimizingText: "⚡ GENERATING B2B OUTREACH DRAFT..."
+      optimizingText: "âš¡ GENERATING B2B OUTREACH DRAFT..."
     },
     close: {
       time: "4:30 PM",
       title: "Pricing Discount Close",
       description: "Mia needs to close a deal by Friday. She highlights her raw proposal notes, dictates the discount incentives, and lets Lisup write a formal pricing close offer.",
-      appName: "Salesforce — Quote Notes",
+      appName: "Salesforce â€” Quote Notes",
       initialText: "can do 15 percent discount if you sign by friday",
       rawSpeech: "formalize discount offer and request signature",
       rewritten: "We are pleased to offer a 15% discount on your subscription, contingent upon signature of the agreement by this Friday. Please let us know if this works.",
-      optimizingText: "⚡ COMPILING FINAL PRICING PROPOSAL..."
+      optimizingText: "âš¡ COMPILING FINAL PRICING PROPOSAL..."
     }
   };
 
@@ -257,7 +257,7 @@ export default function SalesPage() {
                   {/* Salesforce Sidebar mock options */}
                   <div className="mock-app-sidebar" style={{ background: "#F8FCFE", borderRight: "1px solid #E0EAF0", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#1F2937", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      ☁ Salesforce CRM
+                      â˜ Salesforce CRM
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                       <div style={{ fontSize: "11.5px", color: activeTab === "logging" ? "#0284C7" : "#4B5563", fontWeight: activeTab === "logging" ? 700 : 500 }}>Lead call notes</div>
@@ -321,7 +321,7 @@ export default function SalesPage() {
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#2C9A5E" }}>✓ CRM note values replaced in-place!</span>
+                          <span style={{ color: "#2C9A5E" }}>âœ“ CRM note values replaced in-place!</span>
                         ) : (
                           <span style={{ color: "#8EA9B0" }}>Click simulate button below...</span>
                         )}
@@ -336,7 +336,7 @@ export default function SalesPage() {
                     <FiTrendingUp /> CRM CLIENT PORTAL ACTIVE
                   </div>
                   <div style={{ fontSize: "11px", color: "#8EA9B0", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>

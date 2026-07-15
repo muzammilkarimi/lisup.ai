@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -29,34 +29,34 @@ export default function CreatorsPage() {
       time: "11:00 AM",
       title: "Content Brainstorming Session",
       description: "Leo starts planning his next video. Instead of organizing bullet points manually, he speaks a chaotic train of thought into Notion. Lisup parses it and formats it into structured concepts instantly.",
-      appName: "Notion — 💡 Video Briefs",
+      appName: "Notion â€” ðŸ’¡ Video Briefs",
       initialText: "video idea how AI is changing coding workflows in 2026 let's focus on in place rewriting",
       rawSpeech: "format as a video concept with bullet points",
       rewritten: `Video Concept: AI Coding Workflows in 2026
-• Focus: In-place voice dictation
-• Goal: Zero context-switching
-• Tech: Natural language editing`,
-      optimizingText: "⚡ FORMATTING NOTION BULLETIN BLOCKS..."
+â€¢ Focus: In-place voice dictation
+â€¢ Goal: Zero context-switching
+â€¢ Tech: Natural language editing`,
+      optimizingText: "âš¡ FORMATTING NOTION BULLETIN BLOCKS..."
     },
     script: {
       time: "2:30 PM",
       title: "Hook Drafting & Copywriting",
       description: "Writing engaging video intro hooks can take dozens of typings and deletions. Leo highlights a flat introductory sentence, dictates a creative directive, and lets Lisup write the high-impact copy.",
-      appName: "Notion — 📝 Intro Scripts",
+      appName: "Notion â€” ðŸ“ Intro Scripts",
       initialText: "imagine sitting in front of a screen typing is slow why not speak and edit directly inside notion",
       rawSpeech: "make this a hook for a YouTube script, sound excited",
-      rewritten: "What if you could think at the speed of light, and watch your thoughts write themselves directly inside Notion—no keyboards, no typos, just polished ideas?",
-      optimizingText: "⚡ INJECTING DYNAMIC CREATIVE HOOK..."
+      rewritten: "What if you could think at the speed of light, and watch your thoughts write themselves directly inside Notionâ€”no keyboards, no typos, just polished ideas?",
+      optimizingText: "âš¡ INJECTING DYNAMIC CREATIVE HOOK..."
     },
     newsletter: {
       time: "5:00 PM",
       title: "Weekly Newsletter Hook",
       description: "End of the day newsletter writing. Leo dictates a quick conversational synopsis of his discoveries, and Lisup polishes it into a high-click newsletter intro block.",
-      appName: "Notion — 🚀 Weekly Newsletter",
+      appName: "Notion â€” ðŸš€ Weekly Newsletter",
       initialText: "hey subscribers check out the new tool lisup for writing",
       rawSpeech: "write a catchy preview paragraph for my weekly newsletter",
-      rewritten: "Hey writers! This week we're exploring Lisup—an in-place voice rewriting tool that turns messy dictation into polished copy, right where your cursor is.",
-      optimizingText: "⚡ REWRITING NEWSLETTER SUMMARY..."
+      rewritten: "Hey writers! This week we're exploring Lisupâ€”an in-place voice rewriting tool that turns messy dictation into polished copy, right where your cursor is.",
+      optimizingText: "âš¡ REWRITING NEWSLETTER SUMMARY..."
     }
   };
 
@@ -256,19 +256,19 @@ export default function CreatorsPage() {
                   {/* Notion Sidebar Mock */}
                   <div className="mock-app-sidebar" style={{ background: "#FAF8FC", borderRight: "1px solid #EBE5F0", padding: "20px 14px" }}>
                     <div className="font-hanken" style={{ fontSize: "12px", fontWeight: 800, color: "#26231F", display: "flex", alignItems: "center", gap: "6px", marginBottom: "14px" }}>
-                      📝 Creative Hub
+                      ðŸ“ Creative Hub
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "brainstorm" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "brainstorm" ? 700 : 500 }}>💡 Video Briefs</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "script" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "script" ? 700 : 500 }}>📝 Intro Scripts</div>
-                      <div style={{ fontSize: "11.5px", color: activeTab === "newsletter" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "newsletter" ? 700 : 500 }}>🚀 Newsletters</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "brainstorm" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "brainstorm" ? 700 : 500 }}>ðŸ’¡ Video Briefs</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "script" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "script" ? 700 : 500 }}>ðŸ“ Intro Scripts</div>
+                      <div style={{ fontSize: "11.5px", color: activeTab === "newsletter" ? "#8B5CF6" : "#6B6560", fontWeight: activeTab === "newsletter" ? 700 : 500 }}>ðŸš€ Newsletters</div>
                     </div>
                   </div>
 
                   {/* Notion Workspace */}
                   <div style={{ padding: "28px", display: "flex", flexDirection: "column", justifyContent: "flex-start", position: "relative" }}>
                     <div className="font-bricolage" style={{ fontSize: "22px", fontWeight: 800, color: "#26231F", marginBottom: "14px" }}>
-                      {activeTab === "brainstorm" ? "💡 Video Briefs" : activeTab === "script" ? "📝 Intro Scripts" : "🚀 Weekly Newsletter"}
+                      {activeTab === "brainstorm" ? "ðŸ’¡ Video Briefs" : activeTab === "script" ? "ðŸ“ Intro Scripts" : "ðŸš€ Weekly Newsletter"}
                     </div>
                     
                     <div className="font-hanken" style={{ fontSize: "14px", lineHeight: 1.6, color: "#26231F", whiteSpace: "pre-line" }}>
@@ -318,7 +318,7 @@ export default function CreatorsPage() {
                         ) : animState === "rewriting" ? (
                           <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                         ) : animState === "done" ? (
-                          <span style={{ color: "#2C9A5E" }}>✓ Updated Notion blocks in-place!</span>
+                          <span style={{ color: "#2C9A5E" }}>âœ“ Updated Notion blocks in-place!</span>
                         ) : (
                           <span style={{ color: "#8B868F" }}>Click simulation button below...</span>
                         )}
@@ -333,7 +333,7 @@ export default function CreatorsPage() {
                     <FiFileText /> NOTION ACTIVE DOCUMENT
                   </div>
                   <div style={{ fontSize: "11px", color: "#8B868F", fontStyle: "italic" }}>
-                    Alt + Space to Dictate
+                    Ctrl + Win to Dictate
                   </div>
                 </div>
               </div>
