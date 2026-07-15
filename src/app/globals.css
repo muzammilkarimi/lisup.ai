@@ -145,7 +145,6 @@ body {
 .hover-bg-darkorange:hover {
   background: var(--accent-hover) !important;
 }
-
 .hover-bg-white:hover {
   background: #fff !important;
 }

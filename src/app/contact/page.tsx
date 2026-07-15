@@ -12,6 +12,21 @@ export default function ContactPage() {
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitHovered, setIsSubmitHovered] = useState(false);
+
+  const fieldStyle = {
+    width: "100%",
+    padding: "16px 20px",
+    borderRadius: "18px",
+    border: "1px solid rgba(255,255,255,0.7)",
+    background: "#F8EEE7",
+    boxShadow: "inset 8px 8px 16px rgba(194, 153, 126, 0.18), inset -8px -8px 16px rgba(255, 255, 255, 0.9)",
+    outline: "none",
+    fontSize: "14.5px",
+    color: "#26231F",
+    fontFamily: "var(--font-hanken)",
+    transition: "box-shadow 0.2s, border-color 0.2s, background 0.2s"
+  } as const;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,11 +120,11 @@ export default function ContactPage() {
           
           <div
             style={{
-              background: "#fff",
-              border: "1.5px solid #ECE8E2",
-              borderRadius: "28px",
-              padding: "48px 40px",
-              boxShadow: "0 4px 30px rgba(0,0,0,0.01)",
+              background: "#F8EEE7",
+              border: "1px solid rgba(255,255,255,0.72)",
+              borderRadius: "34px",
+              padding: "52px 42px",
+              boxShadow: "24px 24px 56px rgba(190, 145, 112, 0.22), -24px -24px 56px rgba(255, 255, 255, 0.82)",
               position: "relative"
             }}
           >
@@ -143,7 +158,7 @@ export default function ContactPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "26px" }}>
                 
                 {/* Name */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -156,18 +171,7 @@ export default function ContactPage() {
                     placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "14px 18px",
-                      borderRadius: "12px",
-                      border: "1.5px solid #F0D5C1",
-                      background: "#fff",
-                      outline: "none",
-                      fontSize: "14.5px",
-                      color: "#26231F",
-                      fontFamily: "var(--font-hanken)",
-                      transition: "border-color 0.2s"
-                    }}
+                    style={fieldStyle}
                   />
                 </div>
 
@@ -182,18 +186,7 @@ export default function ContactPage() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "14px 18px",
-                      borderRadius: "12px",
-                      border: "1.5px solid #F0D5C1",
-                      background: "#fff",
-                      outline: "none",
-                      fontSize: "14.5px",
-                      color: "#26231F",
-                      fontFamily: "var(--font-hanken)",
-                      transition: "border-color 0.2s"
-                    }}
+                    style={fieldStyle}
                   />
                 </div>
 
@@ -205,19 +198,7 @@ export default function ContactPage() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "14px 18px",
-                      borderRadius: "12px",
-                      border: "1.5px solid #F0D5C1",
-                      background: "#fff",
-                      outline: "none",
-                      fontSize: "14.5px",
-                      color: "#26231F",
-                      fontFamily: "var(--font-hanken)",
-                      transition: "border-color 0.2s",
-                      cursor: "pointer"
-                    }}
+                    style={{ ...fieldStyle, cursor: "pointer" }}
                   >
                     <option value="general">General Enquiry</option>
                     <option value="support">Technical Support</option>
@@ -237,19 +218,7 @@ export default function ContactPage() {
                     placeholder="Describe how we can help you..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "14px 18px",
-                      borderRadius: "12px",
-                      border: "1.5px solid #F0D5C1",
-                      background: "#fff",
-                      outline: "none",
-                      fontSize: "14.5px",
-                      color: "#26231F",
-                      fontFamily: "var(--font-hanken)",
-                      resize: "none",
-                      transition: "border-color 0.2s"
-                    }}
+                    style={{ ...fieldStyle, resize: "none", minHeight: "132px" }}
                   />
                 </div>
 
@@ -257,24 +226,31 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
+                  onMouseEnter={() => setIsSubmitHovered(true)}
+                  onMouseLeave={() => setIsSubmitHovered(false)}
                   style={{
                     width: "100%",
                     padding: "14px",
                     borderRadius: "999px",
                     border: "none",
-                    background: "#E07B39",
+                    backgroundColor: isSubmitting ? "#E7A77C" : isSubmitHovered ? "#C0631F" : "#E07B39",
+                    backgroundImage: isSubmitting ? "none" : isSubmitHovered ? "linear-gradient(145deg, #C0631F, #9F4C19)" : "linear-gradient(145deg, #F08B49, #D66A25)",
                     color: "#fff",
                     fontWeight: 700,
                     fontSize: "15px",
                     cursor: isSubmitting ? "not-allowed" : "pointer",
-                    boxShadow: "0 10px 20px -8px rgba(224,123,57,0.5)",
+                    boxShadow: isSubmitHovered && !isSubmitting ? "inset 5px 5px 10px rgba(92, 43, 12, 0.2), inset -5px -5px 10px rgba(255, 185, 127, 0.18)" : "10px 10px 22px rgba(184, 110, 62, 0.28), -10px -10px 22px rgba(255, 255, 255, 0.74)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "8px",
-                    transition: "background 0.2s"
+                    minHeight: "52px",
+                    appearance: "none",
+                    WebkitAppearance: "none",
+                    transition: "background-color 0.2s, background-image 0.2s, transform 0.2s",
+                    transform: isSubmitHovered && !isSubmitting ? "translateY(1px)" : "none",
+                    opacity: 1
                   }}
-                  className="hover-bg-darkorange"
                 >
                   {isSubmitting ? (
                     "Sending..."
