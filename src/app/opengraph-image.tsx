@@ -1,4 +1,4 @@
-﻿import { ImageResponse } from "next/og";
+import { ImageResponse } from "next/og";
 
 export const alt = "Lisup - Stop typing. Start talking.";
 export const size = {
@@ -19,7 +19,7 @@ export default function Image() {
           justifyContent: "space-between",
           background: "#FDF6F0",
           color: "#26231F",
-          padding: "64px 72px",
+          padding: "58px 72px 88px",
           position: "relative",
           overflow: "hidden",
           fontFamily: "Arial, sans-serif",
@@ -51,22 +51,20 @@ export default function Image() {
         />
 
         <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-          <div
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://www.lisupai.online/logo.png"
+            alt="Lisup logo"
+            width="58"
+            height="58"
             style={{
               width: "58px",
               height: "58px",
               borderRadius: "16px",
-              background: "#E07B39",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#fff",
-              fontSize: "34px",
-              fontWeight: 800,
+              objectFit: "cover",
+              boxShadow: "0 10px 24px rgba(224, 123, 57, 0.2)",
             }}
-          >
-            L
-          </div>
+          />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: "34px", fontWeight: 800, letterSpacing: "0" }}>
               Lisup
@@ -95,7 +93,7 @@ export default function Image() {
           </div>
           <div
             style={{
-              fontSize: "82px",
+              fontSize: "78px",
               lineHeight: 0.96,
               fontWeight: 900,
               letterSpacing: "0",
@@ -108,7 +106,7 @@ export default function Image() {
               fontSize: "28px",
               lineHeight: 1.35,
               color: "#6B6560",
-              marginTop: "26px",
+              marginTop: "22px",
               maxWidth: "780px",
             }}
           >
