@@ -22,8 +22,30 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://lisup.ai"),
   title: "Lisup - Stop typing. Start talking.",
-  description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages — fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
+  description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
+  openGraph: {
+    title: "Lisup - Stop typing. Start talking.",
+    description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
+    url: "https://lisup.ai",
+    siteName: "Lisup",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Lisup - Stop typing. Start talking.",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lisup - Stop typing. Start talking.",
+    description: "Voice to finished text, everywhere you write.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function RootLayout({
