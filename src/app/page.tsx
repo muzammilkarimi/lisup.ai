@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
@@ -1739,6 +1739,37 @@ export default function Home() {
               <span style={{ fontSize: "12px", color: "#A29B91", fontWeight: 500, letterSpacing: ".03em", opacity: 0.72 }}>
                 ANDROID SOON
               </span>
+            </div>
+            <div className="hero-trust-badges" aria-label="Featured on">
+              <a
+                href="https://saascity.io/live/lisup"
+                target="_blank"
+                rel="noopener"
+                aria-label="Lisup featured on SaaSCity"
+                className="hero-trust-badge"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://saascity.io/badges/featured-light.svg"
+                  alt="Featured on SaaSCity"
+                  width="150"
+                  height="54"
+                />
+              </a>
+              <a
+                href="https://www.listbulb.com/tools/lisupai"
+                target="_blank"
+                rel="noopener"
+                aria-label="Lisup featured on ListBulb"
+                className="hero-trust-badge"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://www.listbulb.com/featured-on-listbulb-light.svg"
+                  alt="Featured on ListBulb"
+                  height="72"
+                />
+              </a>
             </div>
           </div>
 

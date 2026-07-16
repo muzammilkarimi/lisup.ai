@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -23,56 +23,69 @@ export default function SiteFooter() {
           <p style={{ fontSize: "14.5px", lineHeight: 1.55, color: "#A29B91", margin: 0 }}>
             Your voice, perfected. Speak anywhere, get clean finished text in seconds.
           </p>
-          <a
-            href="https://www.listbulb.com/tools/lisupai"
-            target="_blank"
-            rel="noopener"
-            aria-label="Lisup featured on ListBulb"
-            style={{
-              display: "inline-flex",
-              marginTop: "22px",
-              opacity: 0.9,
-              transition: "opacity .2s ease, transform .2s ease",
-            }}
-            className="listbulb-footer-badge"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://www.listbulb.com/featured-on-listbulb-light.svg"
-              alt="Featured on ListBulb"
-              height="72"
-              style={{
-                width: "auto",
-                maxWidth: "100%",
-                display: "block",
-              }}
-            />
-          </a>
-          <a
-            href="https://neeed.directory/products/lisup?utm_source=lisup"
-            target="_blank"
-            rel="noopener"
-            aria-label="Lisup featured on neeed.directory"
-            style={{
-              display: "inline-flex",
-              marginTop: "12px",
-              opacity: 0.9,
-              transition: "opacity .2s ease, transform .2s ease",
-            }}
-            className="listbulb-footer-badge"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://neeed.directory/badges/neeed-badge-light.svg"
-              alt="Featured on neeed.directory"
-              width="139"
-              style={{
-                height: "auto",
-                maxWidth: "100%",
-                display: "block",
-              }}
-            />
-          </a>
+          <div className="footer-badge-panel" aria-label="Featured on directories">
+            <div className="font-jetbrains footer-badge-eyebrow">AS FEATURED ON</div>
+            <div className="footer-badge-grid">
+              <a
+                href="https://www.listbulb.com/tools/lisupai"
+                target="_blank"
+                rel="noopener"
+                aria-label="Lisup featured on ListBulb"
+                className="footer-featured-badge footer-featured-badge-large"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://www.listbulb.com/featured-on-listbulb-light.svg"
+                  alt="Featured on ListBulb"
+                  height="72"
+                />
+              </a>
+              <a
+                href="https://neeed.directory/products/lisup?utm_source=lisup"
+                target="_blank"
+                rel="noopener"
+                aria-label="Lisup featured on neeed.directory"
+                className="footer-featured-badge"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://neeed.directory/badges/neeed-badge-light.svg"
+                  alt="Featured on neeed.directory"
+                  width="139"
+                />
+              </a>
+              <a
+                href="https://saascity.io/live/lisup"
+                target="_blank"
+                rel="noopener"
+                aria-label="Lisup featured on SaaSCity"
+                className="footer-featured-badge"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://saascity.io/badges/featured-light.svg"
+                  alt="Featured on SaaSCity"
+                  width="150"
+                  height="54"
+                />
+              </a>
+              <a
+                href="https://www.producthunt.com/products/lisup?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-lisup"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Lisup featured on Product Hunt"
+                className="footer-featured-badge footer-featured-badge-wide"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1197630&theme=light&t=1784214274850"
+                  alt="Lisup - Stop typing. Start talking. | Product Hunt"
+                  width="250"
+                  height="54"
+                />
+              </a>
+            </div>
+          </div>
         </div>
         <div style={{ display: "flex", gap: "72px", flexWrap: "wrap" }} className="footer-links-grid">
           <div>

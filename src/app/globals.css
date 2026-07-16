@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --background: #FDF6F0;
   --foreground: #26231F;
   --accent: #E07B39;
@@ -129,6 +129,85 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 6px;
   border-radius: 6px;
+}
+
+.footer-badge-panel {
+  width: min(100%, 330px);
+  margin-top: 18px;
+}
+
+.footer-badge-eyebrow {
+  margin-bottom: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #8D8580;
+  letter-spacing: 0.12em;
+}
+
+.footer-badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.footer-featured-badge {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 8px;
+  border: 1px solid rgba(224, 123, 57, 0.16);
+  border-radius: 8px;
+  background: rgba(253, 246, 240, 0.96);
+  opacity: 0.9;
+  transition: opacity .2s ease, transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.footer-featured-badge:hover,
+.footer-featured-badge:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+  border-color: rgba(224, 123, 57, 0.42);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.footer-featured-badge:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.footer-featured-badge img {
+  width: auto;
+  max-width: 100%;
+  max-height: 28px;
+  display: block;
+}
+
+.footer-featured-badge-large img {
+  max-height: 32px;
+}
+
+.footer-featured-badge-wide {
+  width: 174px;
+}
+
+.footer-featured-badge-wide img {
+  width: 158px;
+  max-height: 34px;
+}
+
+@media (max-width: 560px) {
+  .footer-badge-panel {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+
+  .footer-badge-grid {
+    justify-content: center;
+  }
 }
 
 ::selection {
@@ -431,6 +510,62 @@ body {
 .hero-loaded .hero-platforms {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hero-trust-badges {
+  max-width: 430px;
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: 0.68s;
+}
+
+.hero-loaded .hero-trust-badges {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-trust-badge {
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border: 1px solid rgba(224, 123, 57, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 10px 24px rgba(224, 123, 57, 0.08);
+  opacity: 0.86;
+  transition: opacity .2s ease, transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.hero-trust-badge:hover,
+.hero-trust-badge:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px);
+  border-color: rgba(224, 123, 57, 0.38);
+  box-shadow: 0 12px 28px rgba(224, 123, 57, 0.14);
+}
+
+.hero-trust-badge:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.hero-trust-badge img {
+  width: auto;
+  max-width: 100%;
+  max-height: 30px;
+  display: block;
+}
+
+.hero-trust-badge:first-child img {
+  max-height: 32px;
 }
 
 .hero-widget-wrap {
@@ -1575,6 +1710,13 @@ body {
 
   .hero-platforms {
     margin-top: 20px !important;
+    justify-content: center !important;
+  }
+
+  .hero-trust-badges {
+    max-width: 330px !important;
+    margin: 14px auto 0 !important;
+    justify-content: center !important;
   }
 }
 
