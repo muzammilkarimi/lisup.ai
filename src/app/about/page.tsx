@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Navbar from "../Navbar";
 import SiteFooter from "../SiteFooter";
-import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
+import { WINDOWS_DOWNLOAD_LABEL } from "../download";
 import { FiUsers, FiCpu, FiCompass, FiShield, FiMic, FiArrowRight, FiGithub, FiInstagram, FiLinkedin } from "react-icons/fi";
 
 const PILLARS = [
@@ -20,7 +20,7 @@ const PILLARS = [
   {
     icon: <FiUsers size={24} />,
     title: "For Fast Thinkers",
-    description: "We design specifically for people whose thoughts move faster than their fingers can typeâ€”developers, creators, students, and leaders."
+    description: "We design specifically for people whose thoughts move faster than their fingers can type - developers, creators, students, and leaders."
   },
   {
     icon: <FiShield size={24} />,
@@ -114,7 +114,7 @@ export default function AboutPage() {
                 As an IIT Patna alumnus, I am building Lisup from a simple frustration: speaking is natural, but turning spoken ideas into clean writing still takes too much work. Lisup exists so people can think out loud and get useful, polished text wherever they already work.
               </p>
               <a
-                href={WINDOWS_DOWNLOAD_URL}
+                href="/download"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -146,7 +146,7 @@ export default function AboutPage() {
                     Founder of Lisup
                   </div>
                   <h3 className="font-bricolage" style={{ fontSize: "clamp(28px, 4vw, 38px)", lineHeight: 1, fontWeight: 800, color: "#26231F", margin: "0 0 10px", letterSpacing: "-.02em" }}>
-                    Muzammil A Karimi
+                    Muzammil Ahmad Karimi
                   </h3>
                   <p className="font-hanken" style={{ fontSize: "15px", color: "#6B6560", margin: "0 0 16px", lineHeight: 1.45 }}>
                     IIT Patna alumnus building a faster way to turn spoken ideas into finished writing.
@@ -215,7 +215,7 @@ export default function AboutPage() {
             </p>
             
             <p className="font-hanken" style={{ fontSize: "16px", lineHeight: 1.6, color: "#6B6560", marginBottom: "20px" }}>
-              We built Lisup to bridge that gap. By combining lightning-fast local voice capture with context-aware AI rewrite modules, Lisup allows you to dictate messy trains of thought and watch them transform into bulleted summaries, neat intro hooks, or code updatesâ€”directly where your cursor already is.
+              We built Lisup to bridge that gap. By combining lightning-fast local voice capture with context-aware AI rewrite modules, Lisup allows you to dictate messy trains of thought and watch them transform into bulleted summaries, neat intro hooks, or code updates - directly where your cursor already is.
             </p>
 
             <p className="font-hanken" style={{ fontSize: "16px", lineHeight: 1.6, color: "#6B6560", margin: 0 }}>
@@ -282,7 +282,7 @@ export default function AboutPage() {
             Be among the first to experience Lisup and experience early adopter benefits.
           </p>
           <a
-            href={WINDOWS_DOWNLOAD_URL}
+            href="/download"
             style={{
               display: "inline-flex",
               alignItems: "center",

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -54,7 +54,7 @@ def get_weather():
         "[LISUP] Generating python-flask mapping...",
         "[LISUP] Formatting code in-place..."
       ],
-      optimizingText: "âš¡ GENERATING FLASK ROUTE AND CACHE DICT..."
+      optimizingText: "Processing: GENERATING FLASK ROUTE AND CACHE DICT..."
     },
     docstring: {
       time: "1:30 PM",
@@ -83,7 +83,7 @@ def get_weather():
         "[LISUP] Compiling Docstring block...",
         "[LISUP] Injecting block in-place..."
       ],
-      optimizingText: "âš¡ COMPILING GOOGLE-STYLE DOCSTRING..."
+      optimizingText: "Processing: COMPILING GOOGLE-STYLE DOCSTRING..."
     },
     json: {
       time: "3:00 PM",
@@ -106,7 +106,7 @@ def get_weather():
         "[LISUP] Generating interface: Product",
         "[LISUP] Injecting type definitions..."
       ],
-      optimizingText: "âš¡ GENERATING TYPESCRIPT INTERFACE..."
+      optimizingText: "Processing: GENERATING TYPESCRIPT INTERFACE..."
     }
   };
 
@@ -300,7 +300,7 @@ def get_weather():
                     <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#27C93F" }}></div>
                   </div>
                   <span className="font-jetbrains" style={{ fontSize: "11px", color: "#71717A" }}>
-                    VS Code â€” {currentData.filename}
+                    VS Code - {currentData.filename}
                   </span>
                   <div style={{ width: "40px" }}></div>
                 </div>
@@ -373,7 +373,7 @@ def get_weather():
                       ) : animState === "rewriting" ? (
                         <span style={{ color: "#E07B39" }}>{currentData.optimizingText}</span>
                       ) : animState === "done" ? (
-                        <span style={{ color: "#10B981" }}>âœ“ Replaced in-place inside editor!</span>
+                        <span style={{ color: "#10B981" }}>Done: Replaced in-place inside editor!</span>
                       ) : (
                         <span style={{ color: "#71717A" }}>Click button below to run the simulation ...</span>
                       )}

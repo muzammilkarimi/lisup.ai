@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Navbar from "../Navbar";
 import SiteFooter from "../SiteFooter";
 import { FiSend, FiCheckCircle } from "react-icons/fi";
+import { trackEvent } from "../analytics-events";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -39,6 +40,7 @@ export default function ContactPage() {
           body: JSON.stringify({ name, email, category, message }),
         });
         if (res.ok) {
+          trackEvent("contact_form_submit", { topic: category });
           setIsSubmitted(true);
           setName("");
           setEmail("");
@@ -272,3 +274,5 @@ export default function ContactPage() {
     </div>
   );
 }
+
+

@@ -4,7 +4,10 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Navbar from "./Navbar";
 import SiteFooter from "./SiteFooter";
-import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "./download";
+import { WINDOWS_DOWNLOAD_LABEL } from "./download";
+import { FaqJsonLd } from "./JsonLd";
+import { PRODUCT_FAQS } from "./faqs";
+import { trackEvent } from "./analytics-events";
 import { 
   SiNotion, 
   SiSlack, 
@@ -1529,6 +1532,7 @@ export default function Home() {
       </div>
 
       {/* ===================== NAV ===================== */}
+      <FaqJsonLd faqs={PRODUCT_FAQS} />
       <Navbar />
 
           <section
@@ -1630,11 +1634,9 @@ export default function Home() {
                 <span>
                   Stop{" "}
                   <span
-                    style={{ position: "relative", display: "inline-block", textDecorationLine: "line-through", textDecorationColor: "#E07B39", textDecorationThickness: "0.13em", textDecorationSkipInk: "none" }}
                     className="strike-after"
                   >
                     typing.
-                    <span className="hero-strike-mark" aria-hidden="true" />
                   </span>
                 </span>
               </span>
@@ -1671,8 +1673,9 @@ export default function Home() {
               }}
             >
               <a
-                href={WINDOWS_DOWNLOAD_URL}
+                href="/download"
                 data-cursor
+                onClick={() => trackEvent("download_click", { location: "home_hero" })}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -1695,6 +1698,7 @@ export default function Home() {
               <button
                 data-cursor
                 onClick={() => {
+                  trackEvent("watch_demo_click", { location: "home_hero" });
                   const el = document.getElementById("demo-section");
                   if (el) {
                     el.scrollIntoView({ behavior: "smooth" });
@@ -2231,8 +2235,9 @@ export default function Home() {
                 </p>
               </div>
               <a
-                href={WINDOWS_DOWNLOAD_URL}
+                href="/download"
                 data-cursor
+                onClick={() => trackEvent("download_click", { location: "home_privacy" })}
                 onMouseMove={handleMagnetMove}
                 onMouseLeave={handleMagnetLeave}
                 style={{
@@ -2613,8 +2618,9 @@ export default function Home() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", marginTop: "38px" }}>
             <a
-              href={WINDOWS_DOWNLOAD_URL}
+              href="/download"
               data-cursor
+              onClick={() => trackEvent("download_click", { location: "home_final_cta" })}
               onMouseMove={handleMagnetMove}
               onMouseLeave={handleMagnetLeave}
               style={{
@@ -2639,7 +2645,29 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section style={{ padding: "88px 0", background: "#FFF9F4", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: "980px", margin: "0 auto", padding: "0 24px" }}>
+          <div className="font-jetbrains" style={{ fontSize: "11px", color: "#E07B39", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: "14px", textAlign: "center" }}>
+            Common questions
+          </div>
+          <h2 className="font-bricolage" style={{ fontSize: "clamp(34px, 5vw, 56px)", lineHeight: 1, letterSpacing: "-.04em", margin: "0 0 34px", textAlign: "center" }}>
+            Voice typing, privacy, and compatibility.
+          </h2>
+          <div className="home-faq-grid">
+            {PRODUCT_FAQS.map((faq) => (
+              <div key={faq.question} className="home-faq-item">
+                <h3 className="font-bricolage">{faq.question}</h3>
+                <p>{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       <SiteFooter />
     </div>
   );
 }
+
+
+
+

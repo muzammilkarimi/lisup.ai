@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { trackEvent } from "./analytics-events";
 
 export default function SiteFooter() {
   return (
@@ -32,6 +33,7 @@ export default function SiteFooter() {
                 rel="noopener"
                 aria-label="Lisup featured on ListBulb"
                 className="footer-featured-badge footer-featured-badge-large"
+                onClick={() => trackEvent("footer_badge_outbound_click", { badge: "listbulb" })}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -46,6 +48,7 @@ export default function SiteFooter() {
                 rel="noopener"
                 aria-label="Lisup featured on neeed.directory"
                 className="footer-featured-badge"
+                onClick={() => trackEvent("footer_badge_outbound_click", { badge: "neeed" })}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -60,6 +63,7 @@ export default function SiteFooter() {
                 rel="noopener"
                 aria-label="Lisup featured on SaaSCity"
                 className="footer-featured-badge"
+                onClick={() => trackEvent("footer_badge_outbound_click", { badge: "saascity" })}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -75,6 +79,7 @@ export default function SiteFooter() {
                 rel="noopener noreferrer"
                 aria-label="Lisup featured on Product Hunt"
                 className="footer-featured-badge footer-featured-badge-wide"
+                onClick={() => trackEvent("footer_badge_outbound_click", { badge: "producthunt" })}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -101,6 +106,13 @@ export default function SiteFooter() {
               </Link>
               <Link href="/#tones" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
                 Tones
+              </Link>
+              <Link href="/download" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                Download
+              </Link>
+
+              <Link href="/blog" data-cursor style={{ fontSize: "14px", color: "#C5BFB8", textDecoration: "none" }}>
+                Blog
               </Link>
             </div>
           </div>
@@ -148,3 +160,7 @@ export default function SiteFooter() {
     </footer>
   );
 }
+
+
+
+

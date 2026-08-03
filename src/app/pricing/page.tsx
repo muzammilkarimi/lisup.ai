@@ -1,10 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import Navbar from "../Navbar";
 import SiteFooter from "../SiteFooter";
-import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "../download";
+import { WINDOWS_DOWNLOAD_LABEL } from "../download";
 import { FiCheck, FiChevronDown, FiLock } from "react-icons/fi";
+import { FaqJsonLd } from "../JsonLd";
+import { trackEvent } from "../analytics-events";
 
 const FAQS = [
   {
@@ -67,6 +69,7 @@ export default function PricingPage() {
         }}
       ></div>
 
+      <FaqJsonLd faqs={FAQS} />
       <Navbar />
 
       {/* Hero Header */}
@@ -108,7 +111,10 @@ export default function PricingPage() {
           {/* Monthly / Annual Toggle */}
           <div style={{ display: "inline-flex", alignItems: "center", background: "#ECE8E2", padding: "4px", borderRadius: "999px", gap: "4px" }}>
             <button
-              onClick={() => setIsAnnual(false)}
+              onClick={() => {
+                trackEvent("pricing_toggle_click", { billing: "monthly" });
+                setIsAnnual(false);
+              }}
               className="font-bricolage"
               style={{
                 border: "none",
@@ -125,7 +131,10 @@ export default function PricingPage() {
               Monthly
             </button>
             <button
-              onClick={() => setIsAnnual(true)}
+              onClick={() => {
+                trackEvent("pricing_toggle_click", { billing: "annual" });
+                setIsAnnual(true);
+              }}
               className="font-bricolage"
               style={{
                 border: "none",
@@ -184,7 +193,8 @@ export default function PricingPage() {
               </div>
 
               <a
-                href={WINDOWS_DOWNLOAD_URL}
+                href="/download"
+                onClick={() => trackEvent("download_click", { location: "pricing_starter" })}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -344,6 +354,7 @@ export default function PricingPage() {
 
               <a
                 href="/contact"
+                onClick={() => trackEvent("pricing_contact_click", { plan: "teams" })}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
@@ -475,7 +486,8 @@ export default function PricingPage() {
             Download the Windows app today and start turning voice into finished text on your desktop.
           </p>
           <a
-            href={WINDOWS_DOWNLOAD_URL}
+            href="/download"
+            onClick={() => trackEvent("download_click", { location: "pricing_cta" })}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -501,3 +513,6 @@ export default function PricingPage() {
     </div>
   );
 }
+
+
+

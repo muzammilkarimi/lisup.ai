@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Bricolage_Grotesque, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { pageMetadata } from "./seo";
+import { SiteJsonLd } from "./JsonLd";
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -24,32 +25,19 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://www.lisupai.online"),
+export const metadata = pageMetadata({
   title: "Lisup - Stop typing. Start talking.",
   description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
-  openGraph: {
-    title: "Lisup - Stop typing. Start talking.",
-    description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
-    url: "https://www.lisupai.online",
-    siteName: "Lisup",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "Lisup - Stop typing. Start talking.",
-      },
-    ],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Lisup - Stop typing. Start talking.",
-    description: "Voice to finished text, everywhere you write.",
-    images: ["/opengraph-image"],
-  },
-};
+  path: "/",
+  keywords: [
+    "Lisup",
+    "AI voice typing",
+    "voice to text app",
+    "speech to text for Windows",
+    "AI dictation software",
+    "in-place voice writing",
+  ],
+});
 
 export default function RootLayout({
   children,
@@ -64,6 +52,7 @@ export default function RootLayout({
     >
       <body>
         {children}
+        <SiteJsonLd />
         <Analytics />
       </body>
       {googleAnalyticsId ? <GoogleAnalytics gaId={googleAnalyticsId} /> : null}

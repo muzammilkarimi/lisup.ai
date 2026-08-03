@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { WINDOWS_DOWNLOAD_LABEL, WINDOWS_DOWNLOAD_URL } from "./download";
+import { WINDOWS_DOWNLOAD_LABEL } from "./download";
+import { trackEvent } from "./analytics-events";
 import { 
   FiUsers, 
   FiCode, 
@@ -17,7 +18,8 @@ import {
   FiDownload,
   FiPlayCircle,
   FiLayers,
-  FiSliders
+  FiSliders,
+  FiEdit3
 } from "react-icons/fi";
 
 const INDIVIDUAL_ROLES = [
@@ -90,6 +92,18 @@ const RESOURCE_LINKS = [
     subtitle: "Switch writing style instantly",
     href: "/#tones",
     icon: <FiSliders size={15} />
+  },
+  {
+    title: "Download",
+    subtitle: "Install the Windows app",
+    href: "/download",
+    icon: <FiDownload size={15} />
+  },
+  {
+    title: "Blog",
+    subtitle: "Voice writing guides and SEO resources",
+    href: "/blog",
+    icon: <FiEdit3 size={15} />
   }
 ];
 
@@ -432,6 +446,20 @@ export default function Navbar() {
             </div>
           </div>
 
+          <Link
+            href="/blog"
+            data-cursor
+            className="font-bricolage"
+            style={{
+              fontSize: "14px",
+              color: "#26231F",
+              fontWeight: 600,
+              textDecoration: "none",
+              letterSpacing: ".01em",
+            }}
+          >
+            Blog
+          </Link>
           {/* PRICING */}
           <Link
             href="/pricing"
@@ -449,8 +477,9 @@ export default function Navbar() {
           </Link>
 
           <a
-            href={WINDOWS_DOWNLOAD_URL}
+            href="/download"
             data-cursor
+            onClick={() => trackEvent("download_click", { location: "navbar" })}
             onMouseMove={handleMagnetMove}
             onMouseLeave={handleMagnetLeave}
             style={{
@@ -571,6 +600,14 @@ export default function Navbar() {
           >
             Pricing
           </Link>
+          <Link
+            href="/blog"
+            onClick={() => setIsMobileDrawerOpen(false)}
+            className="font-bricolage"
+            style={{ fontSize: "20px", fontWeight: 700, color: "#26231F", textDecoration: "none" }}
+          >
+            Blog
+          </Link>
         </div>
 
         {/* Individuals list */}
@@ -616,8 +653,9 @@ export default function Navbar() {
         {/* Download free */}
         <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
           <a
-            href={WINDOWS_DOWNLOAD_URL}
+            href="/download"
             onClick={() => {
+              trackEvent("download_click", { location: "mobile_nav" });
               setIsMobileDrawerOpen(false);
             }}
             style={{
@@ -643,3 +681,4 @@ export default function Navbar() {
   </div>
 );
 }
+
