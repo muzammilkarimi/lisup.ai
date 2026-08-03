@@ -1,5 +1,6 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Bricolage_Grotesque, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -14,6 +15,8 @@ const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
+
+const googleAnalyticsId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
@@ -63,6 +66,7 @@ export default function RootLayout({
         {children}
         <Analytics />
       </body>
+      {googleAnalyticsId ? <GoogleAnalytics gaId={googleAnalyticsId} /> : null}
     </html>
   );
 }
