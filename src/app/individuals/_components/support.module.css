@@ -1,0 +1,300 @@
+.page {
+  background: #f4f1ec;
+}
+.hero {
+  padding: 40px 0 96px;
+}
+.heroGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 56px;
+  align-items: center;
+}
+.heroText {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e2ddd5;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: #2f9e6a;
+}
+.h1 {
+  font-weight: 800;
+  font-size: clamp(46px, 6.6vw, 88px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin: 22px 0;
+}
+.h1 span {
+  color: #c65a1e;
+}
+.lead {
+  font-size: 19px;
+  line-height: 1.55;
+  color: #6b6560;
+  max-width: 480px;
+  margin: 0;
+}
+
+/* Help desk mock */
+.desk {
+  flex: 1.2 1 520px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e2ddd5;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px -40px rgba(38, 35, 31, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+}
+.queue {
+  flex: 1 1 200px;
+  border-right: 1px solid #efeae3;
+  background: #faf8f5;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.queueLabel {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #6b6560;
+  padding: 4px 6px;
+}
+.ticket {
+  border-radius: 12px;
+  padding: 12px;
+  color: #6b6560;
+}
+.ticketActive {
+  background: #fff;
+  border: 1px solid #e07b39;
+  color: #26231f;
+}
+.ticket b {
+  display: block;
+  font-size: 13px;
+}
+.ticket:not(.ticketActive) b {
+  text-decoration: line-through;
+}
+.ticket small {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.solved {
+  color: #2f7d55;
+}
+.thread {
+  flex: 2 1 300px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.inbound {
+  align-self: flex-start;
+  max-width: 85%;
+  background: #f1ece5;
+  border-radius: 16px 16px 16px 4px;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.said {
+  font-size: 12px;
+  color: #6b6560;
+  text-align: right;
+}
+.reply {
+  align-self: flex-end;
+  max-width: 90%;
+  background: #26231f;
+  color: #fdf6f0;
+  border-radius: 16px 16px 4px 16px;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.by {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-weight: 700;
+  color: #a94e17;
+}
+.by i {
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: #e07b39;
+}
+
+/* Tone presets */
+.tones {
+  padding: 96px 0;
+  background: #fff;
+}
+.tonesHead {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 48px;
+}
+.tonesHead h2 {
+  margin-top: 14px;
+}
+.noteWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.note {
+  background: #f4f1ec;
+  border-radius: 999px;
+  padding: 14px 24px;
+  font-size: 15px;
+  text-align: center;
+}
+.toneGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+.tone {
+  border: 1px solid #e2ddd5;
+  border-radius: 20px;
+  padding: 26px;
+}
+.toneActive {
+  border: 2px solid #26231f;
+  background: #fdf6f0;
+}
+.toneTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toneName {
+  font-weight: 800;
+  font-size: 15px;
+  background: #f1ece5;
+  padding: 6px 12px;
+  border-radius: 99px;
+}
+.toneActive .toneName {
+  background: #26231f;
+  color: #fdf6f0;
+}
+.sel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #a94e17;
+}
+.tone p {
+  margin: 18px 0 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a443e;
+}
+.toneActive p {
+  color: #26231f;
+}
+
+/* Shift stubs */
+.shift {
+  padding: 96px 0;
+}
+.stubs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.stub {
+  display: flex;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e2ddd5;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.stubTime {
+  flex: 0 0 160px;
+  padding: 24px;
+  border-right: 2px dashed #e2ddd5;
+  background: #faf8f5;
+}
+.stubTime b {
+  display: block;
+  font-size: 13px;
+}
+.stubTime span {
+  font-size: 13px;
+  color: #6b6560;
+}
+.stubBody {
+  flex: 1 1 260px;
+  padding: 24px;
+}
+.stubBody h3 {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+.stubBody p {
+  margin: 0;
+  color: #6b6560;
+  font-size: 13px;
+}
+.stubState {
+  flex: 0 0 auto;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+}
+.badge {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 99px;
+  color: #2f7d55;
+  background: #e3f2e9;
+}
+.badgeHand {
+  color: #8a3f12;
+  background: #fbe5d6;
+}
+.chips {
+  margin-top: 40px;
+}
+
+.cta {
+  padding-bottom: 96px;
+}
+.ctaBand {
+  background: #26231f;
+  color: #fdf6f0;
+}
+.ctaKicker {
+  font-size: 13px;
+  color: #f0945a;
+}
+.ctaBand h2 {
+  margin-top: 12px;
+}

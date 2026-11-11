@@ -1,0 +1,231 @@
+.page {
+  background: #efeae2;
+}
+.hero {
+  padding: 32px 0 96px;
+}
+.heroGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 56px;
+  align-items: center;
+}
+.heroText {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+.h1 {
+  font-weight: 800;
+  font-size: clamp(46px, 6.6vw, 88px);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin: 18px 0 22px;
+}
+.h1 span {
+  font-family: var(--font-serif), serif;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: #5a4636;
+}
+.lead {
+  font-size: 19px;
+  line-height: 1.55;
+  color: #5e5852;
+  max-width: 480px;
+  margin: 0;
+}
+.fine {
+  font-size: 13px;
+  color: #6b6560;
+  margin: 20px 0 0;
+}
+
+/* Redline document */
+.doc {
+  flex: 1.1 1 480px;
+  min-width: 0;
+  background: #fff;
+  padding: clamp(28px, 4vw, 56px);
+  box-shadow: 0 40px 80px -40px rgba(38, 35, 31, 0.4), 0 0 0 1px #e2dcd2;
+  position: relative;
+  font-family: var(--font-serif), serif;
+}
+.stamp {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  border: 3px solid #c65a1e;
+  color: #c65a1e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 8px 12px;
+  transform: rotate(8deg);
+  opacity: 0.85;
+}
+.docMeta {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #6b6560;
+}
+.doc h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 18px 0 14px;
+}
+.clause {
+  font-size: 17px;
+  line-height: 1.75;
+  margin: 0;
+}
+.del {
+  text-decoration: line-through;
+  text-decoration-color: #c65a1e;
+  color: #9a8e82;
+  background: #fbe9dc;
+}
+.ins {
+  text-decoration: underline;
+  text-decoration-color: #2f7d55;
+  text-decoration-thickness: 2px;
+  background: #e8f3ec;
+}
+.comment {
+  margin-top: 28px;
+  border-left: 3px solid #e07b39;
+  background: #fdf6f0;
+  padding: 12px 16px;
+  font-family: var(--font-hanken), sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.comment b {
+  display: block;
+  margin-bottom: 4px;
+}
+.comment span {
+  color: #5e5852;
+}
+
+/* Documents */
+.docs {
+  padding: 96px 0;
+  background: #fff;
+}
+.docsHead {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px;
+}
+.docsHead h2 {
+  margin-top: 14px;
+}
+.docGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+}
+.docCard {
+  border: 1px solid #e2dcd2;
+  border-radius: 4px 18px 18px 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.docTab {
+  background: #efeae2;
+  padding: 10px 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.docTab span:last-child {
+  color: #a94e17;
+}
+.docBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.docBody h3 {
+  font-size: 20px;
+  margin: 0;
+}
+.docSaid {
+  margin: 0;
+  font-size: 14px;
+  color: #6b6560;
+}
+.docOut {
+  margin: 0;
+  font-family: var(--font-serif), serif;
+  font-size: 16px;
+  line-height: 1.6;
+  border-top: 1px solid #efeae2;
+  padding-top: 12px;
+}
+
+/* Terms */
+.terms {
+  padding: 96px 0;
+}
+.termsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+.termsTitle {
+  flex: 1 1 320px;
+}
+.termsTitle span {
+  color: #c65a1e;
+}
+.termsList {
+  flex: 1.4 1 480px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-serif), serif;
+}
+.term {
+  display: flex;
+  gap: 24px;
+  padding: 24px 0;
+  border-top: 1px solid #c9bfb2;
+}
+.term:last-child {
+  border-bottom: 1px solid #c9bfb2;
+}
+.sec {
+  font-size: 13px;
+  color: #a94e17;
+  flex: 0 0 40px;
+}
+.term h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+.term p {
+  margin: 0;
+  color: #5e5852;
+  line-height: 1.6;
+}
+
+.cta {
+  padding-bottom: 96px;
+}
+.ctaBand {
+  background: #26231f;
+  color: #fdf6f0;
+  border-radius: 28px;
+}
+.ctaBand h2 span {
+  font-family: var(--font-serif), serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #f0945a;
+}

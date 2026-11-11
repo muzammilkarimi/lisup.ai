@@ -1,0 +1,240 @@
+.hero {
+  padding: 40px 0 0;
+}
+.heroRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.heroTitle {
+  flex: 1 1 520px;
+}
+.h1 {
+  font-weight: 800;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  margin: 18px 0 0;
+}
+.h1 span {
+  color: #c65a1e;
+}
+.heroSide {
+  flex: 1 1 360px;
+  max-width: 480px;
+}
+.lead {
+  font-size: 19px;
+  line-height: 1.55;
+  color: #6b6560;
+  margin: 0;
+}
+.heroSide .ctaRow {
+  margin-top: 28px;
+}
+
+/* Pipeline board */
+.boardWrap {
+  margin-top: 56px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  gap: 14px;
+  min-width: 1000px;
+}
+.col {
+  background: #f3ebe1;
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.colHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 6px;
+}
+.colHead span:last-child {
+  color: #6b6560;
+}
+.deal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid #ece4d8;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.deal b {
+  display: block;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.dealSaid {
+  color: #6b6560;
+  margin: 6px 0 10px;
+  display: block;
+}
+.colWon {
+  background: #26231f;
+  color: #fdf6f0;
+}
+.colWon .colHead span:first-child {
+  color: #f0945a;
+}
+.colWon .colHead span:last-child {
+  color: #a89a8c;
+}
+.colWon .deal {
+  background: #2f2a26;
+  border-color: #3b322c;
+  position: relative;
+}
+.colWon .dealSaid {
+  color: #cdbfb0;
+  margin-bottom: 0;
+}
+.signed {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  border: 2px solid #6fcf97;
+  color: #6fcf97;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  transform: rotate(-8deg);
+}
+
+/* CRM form */
+.crm {
+  padding: 112px 0 96px;
+}
+.crmGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 56px;
+  align-items: center;
+}
+.crmText {
+  flex: 1 1 360px;
+}
+.crmText h2 {
+  margin: 14px 0 18px;
+}
+.crmText p {
+  font-size: 17px;
+  line-height: 1.55;
+  color: #6b6560;
+  margin: 0;
+}
+.form {
+  flex: 1.2 1 460px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #ece8e2;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -30px rgba(38, 35, 31, 0.3);
+}
+.formHead {
+  padding: 14px 20px;
+  border-bottom: 1px solid #ece8e2;
+  font-size: 12px;
+  color: #6b6560;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.formHead span:last-child {
+  color: #a94e17;
+}
+.fields {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 16px;
+}
+.fieldWide {
+  grid-column: 1 / -1;
+}
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b6560;
+  margin-bottom: 6px;
+}
+.value {
+  border: 1px solid #ece8e2;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff8ef;
+  line-height: 1.55;
+}
+
+/* Benefits strip */
+.benefits {
+  padding-bottom: 96px;
+}
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  border: 1px solid #e2d7ca;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+}
+.cell {
+  padding: 36px;
+  border-top: 1px solid #e2d7ca;
+}
+.cell:first-child {
+  border-top: 0;
+}
+@media (min-width: 960px) {
+  .cell {
+    border-top: 0;
+    border-left: 1px solid #e2d7ca;
+  }
+  .cell:first-child {
+    border-left: 0;
+  }
+}
+.verb {
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.03em;
+  color: #c65a1e;
+  line-height: 1;
+}
+.cell h3 {
+  font-size: 20px;
+  margin: 14px 0 8px;
+}
+.cell p {
+  margin: 0;
+  color: #6b6560;
+  line-height: 1.55;
+}
+.chips {
+  margin-top: 32px;
+  justify-content: center;
+}
+
+.cta {
+  padding-bottom: 96px;
+}
+.ctaBand {
+  background: #e07b39;
+  color: #1f1a17;
+}

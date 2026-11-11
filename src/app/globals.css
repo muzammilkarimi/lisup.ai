@@ -1187,56 +1187,6 @@ body {
 .hover-bg-fdf6f0-soft:hover {
   background: rgba(253, 246, 240, 0.75) !important;
 }
-
-/* Responsive Layout Grid for Individuals Subpages */
-.role-layout-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 48px;
-  align-items: start;
-}
-
-@media (max-width: 1024px) {
-  .role-layout-grid {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-  }
-}
-
-/* Mock Application grid columns and sidebar hide rules */
-.mock-app-grid {
-  display: grid;
-  grid-template-columns: 180px 1fr;
-}
-
-@media (max-width: 768px) {
-  .mock-app-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .mock-app-sidebar {
-    display: none !important;
-  }
-}
-
-/* Floating Widget Overlay inside the mock screen */
-.mock-lisup-widget-overlay {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 330px;
-  z-index: 10;
-  transition: all 0.3s ease;
-}
-
-@media (max-width: 640px) {
-  .mock-lisup-widget-overlay {
-    width: calc(100% - 24px) !important;
-    right: 12px !important;
-    left: 12px !important;
-    bottom: 12px !important;
-  }
-}
-
 /* Mobile Drawer Navigation Panel */
 .mobile-menu-btn {
   display: none;
