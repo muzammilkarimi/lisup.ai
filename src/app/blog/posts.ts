@@ -6,6 +6,7 @@ export type BlogPost = {
   date: string;
   readTime: string;
   coverTone: "orange" | "blue" | "green" | "purple" | "dark";
+  standalone?: boolean;
   keywords: string[];
   intro: string;
   sections: Array<{
@@ -354,6 +355,108 @@ const baseBlogPosts: BlogPost[] = [
         ]
       }
     ]
+  },
+  {
+    slug: "best-dictation-software-for-windows",
+    title: "Best dictation software for Windows: how to choose in 2026",
+    description: "A practical comparison of dictation software options for Windows, from built-in voice typing to AI dictation apps, with a checklist for choosing the right one.",
+    category: "Guides",
+    date: "2026-11-11",
+    readTime: "8 min read",
+    coverTone: "green",
+    standalone: true,
+    keywords: ["best dictation software", "dictation software for Windows", "best speech to text app", "free dictation software", "AI dictation"],
+    intro: "The best dictation software is the one you will actually use every day. For most people on Windows that means fast activation, accurate text, and output that needs almost no cleanup. This guide compares the main kinds of dictation tools and gives you a checklist to pick one.",
+    sections: [
+      {
+        heading: "The four kinds of dictation software.",
+        body: [
+          "Built-in voice typing is the free option. On Windows you press Win+H to dictate into most text fields. It is a good baseline and costs nothing, but it transcribes what you say as you say it, including filler words and false starts.",
+          "Browser dictation, such as voice typing in Google Docs, works well inside that one product. It does not follow you into email clients, chat apps, code editors, or your CRM.",
+          "Professional dictation suites like Dragon target specialist vocabulary, such as legal and medical work. They are powerful, usually paid, and built around command and correction workflows.",
+          "AI dictation apps like Lisup add a rewriting step. They listen, remove fillers, fix grammar, and match your tone, then insert the finished text where your cursor is."
+        ]
+      },
+      {
+        heading: "A seven-point checklist for choosing.",
+        body: [
+          "Accuracy on your own voice. Test with your accent, your vocabulary, and your real background noise. Ten minutes of testing beats any marketing claim.",
+          "Works everywhere you type. A tool that only works in its own editor adds a copy-paste step to every task. Check Slack, Gmail, Notion, VS Code, and your browser.",
+          "Cleanup quality. Good AI dictation removes filler words, repairs grammar, and keeps your meaning. Poor cleanup rewrites your meaning, so read the output carefully at first.",
+          "Speed and shortcut. Dictation only becomes a habit when it starts with one keypress and returns text in about a second or two.",
+          "Languages. If you switch between languages, confirm support for each one you use, not just the headline number.",
+          "Privacy. Look for clear statements on whether audio is stored, who processes it, and whether it is used for model training.",
+          "Price against usage. A free tier is enough to test. Pay only after dictation has become part of your daily routine."
+        ]
+      },
+      {
+        heading: "Where free dictation software is enough.",
+        body: [
+          "If you dictate a few sentences a week, Windows voice typing is probably enough. It is already installed, and it works in most apps.",
+          "The trade-off is cleanup time. Every filler word and run-on sentence is yours to fix by hand. For short messages that is fine. For long emails, documents, or support replies, the editing time adds up quickly."
+        ]
+      },
+      {
+        heading: "Where AI dictation is worth it.",
+        body: [
+          "AI dictation pays off when you write a lot and edit a lot. Think of support teams, developers writing pull request notes, students turning lecture thoughts into paragraphs, and anyone who answers dozens of messages a day.",
+          "The gain is not raw typing speed. It is that you stop doing the middle step of turning a messy spoken thought into a clean first draft. You speak, review, and send."
+        ]
+      },
+      {
+        heading: "How Lisup compares.",
+        body: [
+          "Lisup is a Windows-first AI dictation app. You press a shortcut, speak, and the cleaned-up text appears in the app you are already using, in 100+ languages. There is a free tier to try it before paying.",
+          "It is not the right fit for everyone. If you need deep specialist medical vocabulary or macOS today, check the alternatives first. Pricing and features of other vendors change often, so confirm current details on each vendor site before deciding.",
+          "The fastest way to decide is to run the same three tasks in each tool: one email reply, one chat message, and one paragraph of notes. Whichever needs the least editing wins."
+        ]
+      }
+    ]
+  },
+  {
+    slug: "voice-coding-with-ai-dictation",
+    title: "Voice coding with AI dictation: a practical starting guide",
+    description: "Learn what voice coding is, what dictation is good for in a developer workflow, and how to start without giving up your keyboard.",
+    category: "Developers",
+    date: "2026-11-11",
+    readTime: "7 min read",
+    coverTone: "dark",
+    standalone: true,
+    keywords: ["voice coding", "dictate code", "voice typing for developers", "AI dictation for developers"],
+    intro: "Voice coding does not have to mean speaking every bracket aloud. For most developers the biggest win is dictating the human language around code: comments, commit messages, pull request descriptions, specs, and answers in chat. This guide shows where voice helps and where the keyboard still wins.",
+    sections: [
+      {
+        heading: "What voice coding actually means.",
+        body: [
+          "There are two very different ideas under the same name. The first is speaking syntax, such as saying open paren or new line, to produce code character by character. It is slow to learn and mostly used by people who cannot type comfortably.",
+          "The second is using dictation for everything around the code. That is where most developers get immediate value, because a large share of a developer day is writing English, not code."
+        ]
+      },
+      {
+        heading: "The best places to start.",
+        body: [
+          "Pull request descriptions. Speak what changed, why, and how to test it. Clean it up with AI and paste it in.",
+          "Commit messages and code comments. Say the intent in one natural sentence and let the tool tidy the grammar.",
+          "Docstrings and README sections. Explaining a function aloud is often easier than writing the explanation.",
+          "Bug reports and Slack answers. Describe what you saw, what you expected, and the steps, then review before sending.",
+          "Specs and design notes. Talk through the idea first, then edit the draft instead of facing a blank page."
+        ]
+      },
+      {
+        heading: "What to keep on the keyboard.",
+        body: [
+          "Precise edits, refactors, and navigation are still faster with a keyboard and your editor shortcuts. Dictation is a drafting tool, not a replacement for your editor.",
+          "Always read dictated text for names of functions, variables, and libraries. Speech recognition can mishear technical terms, so review those before you commit."
+        ]
+      },
+      {
+        heading: "A simple setup for developers.",
+        body: [
+          "Pick a global shortcut that works in your editor, terminal, browser, and chat apps. With Lisup you press the shortcut, speak, and the cleaned text appears at the cursor in VS Code or any other app.",
+          "Start with one task a day, such as the pull request description. After a week, add commit messages and comments. Measure how much editing the output needs. If it is a quick read-through, the habit will stick."
+        ]
+      }
+    ]
   }
 ];
 
@@ -432,8 +535,8 @@ function expandedSectionsFor(post: BlogPost): BlogPost["sections"] {
 
 export const blogPosts: BlogPost[] = baseBlogPosts.map((post) => ({
   ...post,
-  readTime: readTimesByCategory[post.category] ?? post.readTime,
-  sections: [...post.sections, ...expandedSectionsFor(post)],
+  readTime: post.standalone ? post.readTime : (readTimesByCategory[post.category] ?? post.readTime),
+  sections: post.standalone ? post.sections : [...post.sections, ...expandedSectionsFor(post)],
 }));
 
 export const featuredBlogPost = blogPosts[0];

@@ -1657,7 +1657,7 @@ export default function Home() {
                 color: "#6B6560",
               }}
             >
-              Talk, stop, done. Lisup turns speech into finished text in 100+ languages &mdash; fillers gone, grammar fixed, in your tone. Everywhere on your machine.
+              AI voice dictation for Windows. Talk, stop, done. Lisup turns speech into finished text in 100+ languages &mdash; fillers gone, grammar fixed, in your tone. Everywhere on your machine.
             </p>
 
             <div

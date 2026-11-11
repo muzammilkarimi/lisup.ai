@@ -26,11 +26,14 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = pageMetadata({
-  title: "Lisup - Stop typing. Start talking.",
-  description: "Talk, stop, done. Lisup turns speech into finished text in 100+ languages - fillers gone, grammar fixed, in your tone. Everywhere on your machine.",
+  title: "Lisup - AI Voice Dictation Software for Windows | Speech to Text",
+  description: "Lisup is AI voice dictation for Windows. Talk, stop, done: speech becomes finished text in 100+ languages, with fillers removed and grammar fixed, in any app.",
   path: "/",
   keywords: [
     "Lisup",
+    "AI voice dictation",
+    "dictation software",
+    "best dictation software",
     "AI voice typing",
     "voice to text app",
     "speech to text for Windows",
